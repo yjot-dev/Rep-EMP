@@ -42,6 +42,10 @@ fun OpinionView(
 ){
     val state by progressVm.uiState.collectAsState()
     var commentary by remember { mutableStateOf("") }
+<<<<<<< HEAD
+=======
+    var isError by remember { mutableStateOf(false) }
+>>>>>>> master
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween,
@@ -81,7 +85,12 @@ fun OpinionView(
             maxLines = 6,
             modifier = Modifier
                 .verticalScroll(ScrollState(0))
+<<<<<<< HEAD
                 .fillMaxWidth(0.85f)
+=======
+                .fillMaxWidth(0.85f),
+            onIsError = { isError = it }
+>>>>>>> master
         )
         ButtonView(
             click = { onSendOpinion(commentary) },
@@ -89,6 +98,10 @@ fun OpinionView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
                 .fillMaxWidth(0.85f),
+<<<<<<< HEAD
+=======
+            enabled = !isError
+>>>>>>> master
         )
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_7)))
     }

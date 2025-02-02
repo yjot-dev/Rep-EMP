@@ -62,6 +62,12 @@ fun UserInfoView(
     var sendCode by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(false) }
     val code by remember { mutableStateOf(Random.nextInt(100000, 999999).toString()) }
+<<<<<<< HEAD
+=======
+    var isError1 by remember { mutableStateOf(false) }
+    var isError2 by remember { mutableStateOf(false) }
+    var isError3 by remember { mutableStateOf(false) }
+>>>>>>> master
     //Bloque asincronico para actualizar la foto
     val context = LocalContext.current
     var photoSelector by remember { mutableStateOf<Uri?>(null) }
@@ -120,7 +126,12 @@ fun UserInfoView(
             onNext = { focusRequest2.requestFocus() },
             validateCase = 2,
             labelId = R.string.text_field_user,
+<<<<<<< HEAD
             infoId = R.string.valid_user
+=======
+            infoId = R.string.valid_user,
+            onIsError = { isError1 = it }
+>>>>>>> master
         )
         TextFieldView(
             modifier = Modifier
@@ -131,7 +142,12 @@ fun UserInfoView(
             onNext = { focusRequest3.requestFocus() },
             validateCase = 3,
             labelId = R.string.text_field_email,
+<<<<<<< HEAD
             infoId = R.string.valid_email
+=======
+            infoId = R.string.valid_email,
+            onIsError = { isError2 = it }
+>>>>>>> master
         )
         TextFieldView(
             modifier = Modifier
@@ -143,7 +159,12 @@ fun UserInfoView(
             validateCase = 5,
             labelId = R.string.text_field_password,
             infoId = R.string.valid_password,
+<<<<<<< HEAD
             isPassword = true
+=======
+            isPassword = true,
+            onIsError = { isError3 = it }
+>>>>>>> master
         )
         ButtonView(
             modifier = Modifier
@@ -156,6 +177,10 @@ fun UserInfoView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
                 .fillMaxWidth(0.85f),
+<<<<<<< HEAD
+=======
+            enabled = !isError2,
+>>>>>>> master
             click = {
                 onSendCode(email, code)
                 sendCode = true
@@ -166,7 +191,11 @@ fun UserInfoView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
                 .fillMaxWidth(0.85f),
+<<<<<<< HEAD
             enabled = enabled,
+=======
+            enabled = enabled && !isError1 && !isError2 && !isError3,
+>>>>>>> master
             click = { onUpdate(user, email, password, convertToBase64(photo)) },
             text = stringResource(id = R.string.button_update)
         )

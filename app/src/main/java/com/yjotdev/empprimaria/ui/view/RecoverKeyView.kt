@@ -28,7 +28,11 @@ import kotlin.random.Random
 @Composable
 fun RecoverKeyView(
     modifier: Modifier = Modifier,
+<<<<<<< HEAD
     onChangePassword: (String) -> Unit,
+=======
+    onChangePassword: (String, String) -> Unit,
+>>>>>>> master
     onSendCode: (String, String) -> Unit
 ){
     Box(
@@ -47,7 +51,11 @@ fun RecoverKeyView(
 @Composable
 private fun ForegroundRecoverKey(
     modifier: Modifier = Modifier,
+<<<<<<< HEAD
     onChangePassword: (String) -> Unit,
+=======
+    onChangePassword: (String, String) -> Unit,
+>>>>>>> master
     onSendCode: (String, String) -> Unit
 ){
     var email by remember { mutableStateOf("") }
@@ -55,6 +63,11 @@ private fun ForegroundRecoverKey(
     var sendCode by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(false) }
     val code by remember { mutableStateOf(Random.nextInt(100000, 999999).toString()) }
+<<<<<<< HEAD
+=======
+    var isError1 by remember { mutableStateOf(false) }
+    var isError2 by remember { mutableStateOf(false) }
+>>>>>>> master
     //Muestra el dialogo para enviar el codigo
     if(sendCode){
         AlertDialogView(
@@ -79,7 +92,12 @@ private fun ForegroundRecoverKey(
             onValueChange = { email = it },
             validateCase = 3,
             labelId = R.string.text_field_email,
+<<<<<<< HEAD
             infoId = R.string.valid_email
+=======
+            infoId = R.string.valid_email,
+            onIsError = { isError1 = it }
+>>>>>>> master
         )
         ButtonView(
             modifier = Modifier
@@ -89,6 +107,10 @@ private fun ForegroundRecoverKey(
                 onSendCode(email, code)
                 sendCode = true
             },
+<<<<<<< HEAD
+=======
+            enabled = !isError1,
+>>>>>>> master
             text = stringResource(id = R.string.button_send_code)
         )
         TextFieldView(
@@ -98,14 +120,24 @@ private fun ForegroundRecoverKey(
             onValueChange = { password = it },
             validateCase = 5,
             labelId = R.string.text_field_password_new,
+<<<<<<< HEAD
             infoId = R.string.valid_password
+=======
+            infoId = R.string.valid_password,
+            onIsError = { isError2 = it }
+>>>>>>> master
         )
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
                 .fillMaxWidth(0.85f),
+<<<<<<< HEAD
             enabled = enabled,
             click = { onChangePassword(password) },
+=======
+            enabled = enabled && !isError2,
+            click = { onChangePassword(email, password) },
+>>>>>>> master
             text = stringResource(id = R.string.button_change_password)
         )
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_5)))
@@ -121,7 +153,11 @@ private fun PreviewRecoverKeyView(){
     EmprendimientoPrimariaTheme {
         RecoverKeyView(
             modifier = Modifier.fillMaxSize(),
+<<<<<<< HEAD
             onChangePassword = {},
+=======
+            onChangePassword = {_, _ ->},
+>>>>>>> master
             onSendCode = {_, _ ->}
         )
     }

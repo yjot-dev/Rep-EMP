@@ -11,8 +11,13 @@ android {
         applicationId = "com.yjotdev.empprimaria"
         minSdk = 24
         targetSdk = 35
+<<<<<<< HEAD
         versionCode = 1
         versionName = "1.0"
+=======
+        versionCode = 3
+        versionName = "3.1"
+>>>>>>> master
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -66,6 +71,11 @@ dependencies {
     implementation(libs.org.jetbrains.kotlinx.coroutines.android)
     implementation(libs.io.coil.kt.compose)
     implementation(libs.io.coil.kt.gif)
+<<<<<<< HEAD
+=======
+    implementation(libs.core.ktx)
+    implementation(libs.androidx.navigation.testing)
+>>>>>>> master
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

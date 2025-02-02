@@ -6,20 +6,37 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
+<<<<<<< HEAD
 activityCompose = "1.9.3"
 composeBom = "2024.12.01"
+=======
+activityCompose = "1.10.0"
+composeBom = "2025.01.00"
+>>>>>>> master
 navigationRuntimeKtx = "2.8.5"
 navigationCompose = "2.8.5"
 uiTextGoogleFonts = "1.7.6"
 retrofit = "2.9.0"
 kotlinxCoroutines = "1.8.1"
 coil = "2.7.0"
+<<<<<<< HEAD
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+=======
+coreKtxVersion = "1.6.1"
+navigationTesting = "2.8.5"
+
+[libraries]
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+
+>>>>>>> master
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -38,6 +55,11 @@ com-squareup-retrofit2-converter-gson = { group = "com.squareup.retrofit2", name
 org-jetbrains-kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 io-coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 io-coil-kt-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil" }
+<<<<<<< HEAD
+=======
+core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtxVersion" }
+androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigationTesting" }
+>>>>>>> master
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

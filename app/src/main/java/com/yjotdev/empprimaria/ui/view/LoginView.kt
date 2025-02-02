@@ -61,6 +61,11 @@ private fun ForegroundLogin(
     val focusRequest2 = remember { FocusRequester() }
     var userOrEmail by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+<<<<<<< HEAD
+=======
+    var isError1 by remember { mutableStateOf(false) }
+    var isError2 by remember { mutableStateOf(false) }
+>>>>>>> master
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceEvenly,
@@ -81,7 +86,12 @@ private fun ForegroundLogin(
             onNext = { focusRequest2.requestFocus() },
             validateCase = 1,
             labelId = R.string.text_field_user_email,
+<<<<<<< HEAD
             infoId = R.string.valid_user_email
+=======
+            infoId = R.string.valid_user_email,
+            onIsError = { isError1 = it }
+>>>>>>> master
         )
         TextFieldView(
             modifier = Modifier
@@ -93,13 +103,22 @@ private fun ForegroundLogin(
             validateCase = 5,
             isPassword = true,
             labelId = R.string.text_field_password,
+<<<<<<< HEAD
             infoId = R.string.valid_password
+=======
+            infoId = R.string.valid_password,
+            onIsError = { isError2 = it }
+>>>>>>> master
         )
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
                 .fillMaxWidth(0.85f),
             click = { onLogin(userOrEmail, password) },
+<<<<<<< HEAD
+=======
+            enabled = !isError1 && !isError2,
+>>>>>>> master
             text = stringResource(id = R.string.button_login)
         )
         ButtonView(

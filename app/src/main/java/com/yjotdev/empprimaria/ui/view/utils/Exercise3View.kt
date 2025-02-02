@@ -33,6 +33,10 @@ fun Exercise3View(
     var isEnabled by remember { mutableStateOf(false) }
     var isVisible by remember { mutableStateOf(true) }
     var responseText by remember { mutableStateOf("") }
+<<<<<<< HEAD
+=======
+    var isError by remember { mutableStateOf(false) }
+>>>>>>> master
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween,
@@ -52,18 +56,31 @@ fun Exercise3View(
             value = responseText,
             onValueChange = { text ->
                 responseText = text
+<<<<<<< HEAD
                 isCorrect = text == exercise3.answer
                 isEnabled = true
             },
             labelId = R.string.text_field_response,
             infoId = R.string.valid_response
+=======
+                isCorrect = text.lowercase() == exercise3.answer.lowercase()
+                isEnabled = true
+            },
+            labelId = R.string.text_field_response,
+            infoId = R.string.valid_response,
+            onIsError = { isError = it }
+>>>>>>> master
         )
         if(isVisible) {
             ButtonView(
                 modifier = Modifier
                     .height(dimensionResource(id = R.dimen.dm_5))
                     .fillMaxWidth(0.85f),
+<<<<<<< HEAD
                 enabled = isEnabled,
+=======
+                enabled = isEnabled && !isError,
+>>>>>>> master
                 click = {
                     onResponse(isCorrect)
                     if (isCorrect) isVisible = false

@@ -44,6 +44,14 @@ class UserClient {
         return response.isSuccessful
     }
 
+<<<<<<< HEAD
+=======
+    suspend fun changePasswordUser(user: UserModel): Boolean{
+        val response = getRetrofit().changePasswordUser(user)
+        return response.isSuccessful
+    }
+
+>>>>>>> master
     suspend fun deleteUser(id: Int): Boolean{
         val response = getRetrofit().deleteUser(id)
         return response.isSuccessful

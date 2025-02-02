@@ -2,6 +2,10 @@ package com.yjotdev.empprimaria.ui.view
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+<<<<<<< HEAD
+=======
+import androidx.compose.foundation.clickable
+>>>>>>> master
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,8 +16,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
+<<<<<<< HEAD
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+=======
+>>>>>>> master
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,6 +32,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
+<<<<<<< HEAD
+=======
+import androidx.compose.ui.res.stringResource
+>>>>>>> master
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.yjotdev.empprimaria.R
@@ -78,6 +89,7 @@ private fun MenuBar(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ){
+<<<<<<< HEAD
         IconButton(
             onClick = clickUserInfo,
             colors = IconButtonDefaults.iconButtonColors(
@@ -138,6 +150,48 @@ private fun MenuBar(
                 modifier = Modifier.size(dimensionResource(id = R.dimen.dm_5))
             )
         }
+=======
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.user_info),
+            contentDescription = stringResource(R.string.button_user_info),
+            tint = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier
+                .size(dimensionResource(id = R.dimen.dm_5))
+                .background(if(selector == 0) MaterialTheme.colorScheme.inversePrimary
+                            else Color.Unspecified)
+                .clickable { clickUserInfo() }
+        )
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.educational_modules),
+            contentDescription = stringResource(R.string.button_educational_modules),
+            tint = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier
+                .size(dimensionResource(id = R.dimen.dm_5))
+                .background(if(selector == 1) MaterialTheme.colorScheme.inversePrimary
+                            else Color.Unspecified)
+                .clickable { clickEducationalModules() }
+        )
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.practical_projects),
+            contentDescription = stringResource(R.string.button_practical_projects),
+            tint = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier
+                .size(dimensionResource(id = R.dimen.dm_5))
+                .background(if(selector == 2) MaterialTheme.colorScheme.inversePrimary
+                            else Color.Unspecified)
+                .clickable { clickPracticalProjects() }
+        )
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.tracking_and_support),
+            contentDescription = stringResource(R.string.button_tracking_and_support),
+            tint = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier
+                .size(dimensionResource(id = R.dimen.dm_5))
+                .background(if(selector == 3) MaterialTheme.colorScheme.inversePrimary
+                            else Color.Unspecified)
+                .clickable { clickTrackingAndSupport() }
+        )
+>>>>>>> master
     }
 }
 

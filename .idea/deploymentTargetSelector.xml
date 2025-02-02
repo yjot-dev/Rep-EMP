@@ -13,7 +13,23 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
+<<<<<<< HEAD
       <SelectionState runConfigName="PreviewUserInfoView">
+=======
+      <SelectionState runConfigName="createUser_RegisterView()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="logout_UserInfoView()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="navigateLoginToMenu()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="updateUser_UserInfoView()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="deleteUser_UserInfoView()">
+>>>>>>> master
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

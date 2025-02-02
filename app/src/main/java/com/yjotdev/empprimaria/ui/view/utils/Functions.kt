@@ -1,5 +1,6 @@
 package com.yjotdev.empprimaria.ui.view.utils
 
+<<<<<<< HEAD
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -8,6 +9,16 @@ import com.yjotdev.empprimaria.R
 import java.io.ByteArrayOutputStream
 
 fun validateText(context: Context, text: String, case: Int): String{
+=======
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
+import androidx.annotation.VisibleForTesting
+import java.io.ByteArrayOutputStream
+
+@VisibleForTesting
+fun validateText(text: String, case: Int): String{
+>>>>>>> master
     val messageRegex = Regex("^[A-Za-z.,\\s]{1,300}$")
     val userOrEmailRegex = Regex("^(?=.{3,50}$)([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,7}|[A-Za-z0-9._%+-]{3,50})$")
     val userRegex = Regex("^[a-zA-Z]{3,}$")
@@ -15,12 +26,21 @@ fun validateText(context: Context, text: String, case: Int): String{
     val passwordRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")
     val numberRegex = Regex("^[0-9]{6}$")
     return when(case){
+<<<<<<< HEAD
         0 -> if(!messageRegex.matches(text)) context.getString(R.string.error_fields) else ""
         1 -> if(!userOrEmailRegex.matches(text)) context.getString(R.string.error_fields) else ""
         2 -> if(!userRegex.matches(text)) context.getString(R.string.error_fields) else ""
         3 -> if(!emailRegex.matches(text)) context.getString(R.string.error_fields) else ""
         4 -> if(!numberRegex.matches(text)) context.getString(R.string.error_fields) else ""
         else -> if(!passwordRegex.matches(text)) context.getString(R.string.error_fields) else ""
+=======
+        0 -> if(!messageRegex.matches(text)) "error" else ""
+        1 -> if(!userOrEmailRegex.matches(text)) "error" else ""
+        2 -> if(!userRegex.matches(text)) "error" else ""
+        3 -> if(!emailRegex.matches(text)) "error" else ""
+        4 -> if(!numberRegex.matches(text)) "error" else ""
+        else -> if(!passwordRegex.matches(text)) "error" else ""
+>>>>>>> master
     }
 }
 

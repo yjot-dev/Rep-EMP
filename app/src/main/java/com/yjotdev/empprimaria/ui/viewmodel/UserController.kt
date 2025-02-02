@@ -99,6 +99,37 @@ class UserController {
         }
     }
     /**
+<<<<<<< HEAD
+=======
+     Este metodo cambia la clave del usuario de la BD
+     **/
+    fun changePassword(
+        context: Context,
+        email: String,
+        password: String
+    ){
+        val passwordUserToChange = UserModel(0, "", email, password)
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = userClient.changePasswordUser(passwordUserToChange)
+            withContext(Dispatchers.Main){
+                if (result) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.alert_user_changed_password),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.error_user_changed_password),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+    /**
+>>>>>>> master
     Este metodo elimina un usuario de la BD.
      **/
     fun delete(

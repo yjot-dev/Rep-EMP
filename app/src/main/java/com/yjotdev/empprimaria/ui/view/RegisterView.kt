@@ -54,6 +54,12 @@ private fun ForegroundRegister(
     var user by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+<<<<<<< HEAD
+=======
+    var isError1 by remember { mutableStateOf(false) }
+    var isError2 by remember { mutableStateOf(false) }
+    var isError3 by remember { mutableStateOf(false) }
+>>>>>>> master
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceEvenly,
@@ -69,7 +75,12 @@ private fun ForegroundRegister(
             onNext = { focusRequest2.requestFocus() },
             validateCase = 2,
             labelId = R.string.text_field_user,
+<<<<<<< HEAD
             infoId = R.string.valid_user
+=======
+            infoId = R.string.valid_user,
+            onIsError = { isError1 = it }
+>>>>>>> master
         )
         TextFieldView(
             modifier = Modifier
@@ -80,7 +91,12 @@ private fun ForegroundRegister(
             onNext = { focusRequest3.requestFocus() },
             validateCase = 3,
             labelId = R.string.text_field_email,
+<<<<<<< HEAD
             infoId = R.string.valid_email
+=======
+            infoId = R.string.valid_email,
+            onIsError = { isError2 = it }
+>>>>>>> master
         )
         TextFieldView(
             modifier = Modifier
@@ -92,13 +108,22 @@ private fun ForegroundRegister(
             validateCase = 5,
             labelId = R.string.text_field_password,
             infoId = R.string.valid_password,
+<<<<<<< HEAD
             isPassword = true
+=======
+            isPassword = true,
+            onIsError = { isError3 = it }
+>>>>>>> master
         )
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
                 .fillMaxWidth(0.85f),
             click = { onRegister(user, email, password) },
+<<<<<<< HEAD
+=======
+            enabled = !isError1 && !isError2 && !isError3,
+>>>>>>> master
             text = stringResource(id = R.string.button_create_user)
         )
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_5)))

@@ -2,7 +2,11 @@
     <string name="app_name">EMP</string>
     <string name="background_login">Imagen de fondo</string>
     <string name="foreground_login">Imagen de presentacion</string>
+<<<<<<< HEAD
     <string name="image_user_info">Información del usuario</string>
+=======
+    <string name="image_user_info">Foto del usuario</string>
+>>>>>>> master
     <string name="show_password">Contraseña visible</string>
     <string name="hide_password">Contraseña oculta</string>
     <string name="text_field_user_email">Usuario o Correo electrónico</string>
@@ -26,6 +30,13 @@
     <string name="button_send_opinion">Enviar opinión</string>
     <string name="button_verify_exercise">Verificar</string>
     <string name="button_next">Continuar</string>
+<<<<<<< HEAD
+=======
+    <string name="button_user_info">Informacion de usuario</string>
+    <string name="button_educational_modules">Modulos de educacion</string>
+    <string name="button_practical_projects">Proyectos practicos</string>
+    <string name="button_tracking_and_support">Seguimiento y soporte</string>
+>>>>>>> master
     <string name="alert_dialog_code">Verificación de código</string>
     <string name="alert_dialog_opinion">Opinion del usuario %1$s</string>
     <string name="error_user_login">Usuario, correo o contraseña incorrectos</string>
@@ -33,6 +44,11 @@
     <string name="alert_user_registered">Usuario registrado satisfactoriamente</string>
     <string name="error_user_updated">Error al actualizar usuario</string>
     <string name="alert_user_updated">Usuario actualizado satisfactoriamente</string>
+<<<<<<< HEAD
+=======
+    <string name="error_user_changed_password">Error al cambiar contraseña</string>
+    <string name="alert_user_changed_password">Contraseña actualizada satisfactoriamente</string>
+>>>>>>> master
     <string name="error_user_deleted">Error al eliminar usuario</string>
     <string name="alert_user_deleted">Usuario eliminado satisfactoriamente</string>
     <string name="error_email_sent">Error al enviar el correo</string>

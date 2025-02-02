@@ -5,6 +5,10 @@ import com.yjotdev.empprimaria.ui.model.UserModel
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+<<<<<<< HEAD
+=======
+import retrofit2.http.PATCH
+>>>>>>> master
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -19,6 +23,12 @@ interface UserInterface {
     @PUT("update_user/{id}")
     suspend fun updateUser(@Path("id") id:Int, @Body user:UserModel): Response<Unit>
 
+<<<<<<< HEAD
+=======
+    @PATCH("change_password/")
+    suspend fun changePasswordUser(@Body user:UserModel): Response<Unit>
+
+>>>>>>> master
     @DELETE("delete_user/{id}")
     suspend fun deleteUser(@Path("id") id:Int): Response<Unit>
 

@@ -103,11 +103,37 @@ const actualizar_usuario = async function(req, res) {
     }
 };
 
+<<<<<<< HEAD
+=======
+// Cambiar clave de usuario
+const cambiar_clave_usuario = async function(req, res) {
+    try {
+        const { correo, clave } = req.body
+
+        // Encriptar la clave
+        const claveHash = bcrypt.hashSync(clave, 10);
+
+        // Construir la consulta de cambio de clave
+        const sql = `UPDATE usuarios SET clave = ? WHERE correo = ?`;
+        const reg = await query(sql, [claveHash, correo]);
+
+        res.status(200).send(reg);
+    } catch(error) {
+        console.error("Error al cambiar clave de usuario: ", error);
+        res.status(500).send("Error del servidor");
+    }
+}
+
+>>>>>>> master
 // Insertar usuario
 const insertar_usuario = async function(req, res) {
     try {
         // Desestructura clave y recoge el resto de los datos
+<<<<<<< HEAD
         const { clave, ...resto } = req.body;
+=======
+        const { correo, clave, ...resto } = req.body;
+>>>>>>> master
 
         // Encriptar la clave
         const claveHash = bcrypt.hashSync(clave, 10);
@@ -115,6 +141,7 @@ const insertar_usuario = async function(req, res) {
         // Construir el objeto para insertar
         const usuarioNuevo = {
             ...resto,
+<<<<<<< HEAD
             clave: claveHash
         };
 
@@ -123,6 +150,24 @@ const insertar_usuario = async function(req, res) {
         const reg = await query(sql, usuarioNuevo);
 
         res.status(200).send(reg);
+=======
+            correo: correo,
+            clave: claveHash
+        };
+
+        // Consulta el correo electronico para verificar si existe
+        const sql1 = `SELECT * FROM usuarios WHERE correo = ?`;
+        const reg1 = await query(sql1, correo);
+        if(!isEmptyObject(reg1)){
+            return res.status(500).send("Error correo existente");
+        }
+
+        // Construir la consulta de inserción
+        const sql2 = `INSERT INTO usuarios SET ?`;
+        const reg2 = await query(sql2, usuarioNuevo);
+
+        res.status(200).send(reg2);
+>>>>>>> master
     } catch (error) {
         console.error("Error al insertar usuario: ", error);
         res.status(500).send("Error del servidor");
@@ -155,7 +200,11 @@ const enviar_correo = async function(req, res) {
             service: 'gmail', // Servicio usado 
             auth: { 
                 user: from, 
+<<<<<<< HEAD
                 pass: 'xxyz xxyz xxyz xxyz'
+=======
+                pass: 'pozy achq jhyi fmcl' 
+>>>>>>> master
             },
             tls: { rejectUnauthorized: false } // Desactiva la verificación SSL
         });
@@ -196,7 +245,11 @@ const enviar_comentario = async function(req, res){
             service: 'gmail', // Servicio usado 
             auth: { 
                 user: from, 
+<<<<<<< HEAD
                 pass: 'xxyz xxyz xxyz xxyz' 
+=======
+                pass: 'pozy achq jhyi fmcl' 
+>>>>>>> master
             },
             tls: { rejectUnauthorized: false } // Desactiva la verificación SSL
         });
@@ -223,8 +276,16 @@ const enviar_comentario = async function(req, res){
 module.exports = {
     seleccionar_usuario,
     actualizar_usuario,
+<<<<<<< HEAD
+=======
+    cambiar_clave_usuario,
+>>>>>>> master
     insertar_usuario,
     eliminar_usuario,
     enviar_correo,
     enviar_comentario
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> master

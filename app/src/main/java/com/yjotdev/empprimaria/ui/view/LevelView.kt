@@ -1,6 +1,10 @@
 package com.yjotdev.empprimaria.ui.view
 
 import androidx.compose.foundation.background
+<<<<<<< HEAD
+=======
+import androidx.compose.foundation.clickable
+>>>>>>> master
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +14,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+<<<<<<< HEAD
 import androidx.compose.material3.IconButton
+=======
+>>>>>>> master
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
@@ -128,6 +135,7 @@ fun LevelView(
             Spacer(modifier = Modifier.weight(0.1f))
         }else {
             Row(
+<<<<<<< HEAD
                 modifier = Modifier.fillMaxWidth(0.85f),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
@@ -146,11 +154,33 @@ fun LevelView(
                         modifier = Modifier.size(dimensionResource(id = R.dimen.dm_5))
                     )
                 }
+=======
+                modifier = Modifier.fillMaxWidth(0.95f),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ){
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.arrow_back),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier
+                        .size(dimensionResource(id = R.dimen.dm_5))
+                        .clickable {
+                            isTimerOff = true
+                            onCallback()
+                        }
+                )
+>>>>>>> master
                 LinearProgressIndicator(
                     modifier = Modifier.height(dimensionResource(id = R.dimen.dm_3)),
                     progress = { progressLevel },
                     color = colorLinearProgress,
+<<<<<<< HEAD
                     trackColor = colorResource(id = R.color.white)
+=======
+                    trackColor = colorResource(id = R.color.white),
+                    gapSize = dimensionResource(id = R.dimen.dm_0)
+>>>>>>> master
                 )
                 Text(
                     text = state.life.toString(),
@@ -162,7 +192,12 @@ fun LevelView(
                 Icon(
                     painter = painterResource(id = R.drawable.user_live),
                     contentDescription = null,
+<<<<<<< HEAD
                     tint = colorResource(id = R.color.red)
+=======
+                    tint = colorResource(id = R.color.red),
+                    modifier = Modifier.size(dimensionResource(id = R.dimen.dm_4))
+>>>>>>> master
                 )
             }
             when (nextExercise) {
@@ -230,7 +265,11 @@ fun LevelView(
 }
 
 @Preview(
+<<<<<<< HEAD
     showBackground = true,
+=======
+    showBackground = false,
+>>>>>>> master
     uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO
 )
 @Composable

@@ -1,5 +1,9 @@
 package com.yjotdev.empprimaria.ui.view.utils
 
+<<<<<<< HEAD
+=======
+import android.annotation.SuppressLint
+>>>>>>> master
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -28,7 +32,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+<<<<<<< HEAD
 import androidx.compose.ui.platform.LocalContext
+=======
+>>>>>>> master
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -66,7 +73,15 @@ fun ButtonView(
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
+<<<<<<< HEAD
             contentColor = MaterialTheme.colorScheme.secondary
+=======
+            contentColor = MaterialTheme.colorScheme.secondary,
+            disabledContainerColor = MaterialTheme.colorScheme.primaryContainer
+                .copy(0.7f),
+            disabledContentColor = MaterialTheme.colorScheme.secondary
+                .copy(0.7f)
+>>>>>>> master
         ),
         border = BorderStroke(
             width = dimensionResource(id = R.dimen.dm_2),
@@ -84,6 +99,10 @@ fun ButtonView(
     }
 }
 
+<<<<<<< HEAD
+=======
+@SuppressLint("VisibleForTests")
+>>>>>>> master
 @Composable
 fun TextFieldView(
     modifier: Modifier = Modifier,
@@ -95,6 +114,7 @@ fun TextFieldView(
     imeAction: ImeAction = ImeAction.Next,
     onNext: () -> Unit = {},
     validateCase: Int = 0,
+<<<<<<< HEAD
     @StringRes labelId: Int,
     @StringRes infoId: Int
 ){
@@ -102,6 +122,16 @@ fun TextFieldView(
     val keyboardController = LocalSoftwareKeyboardController.current
     var passwordVisible by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
+=======
+    onIsError: (Boolean) -> Unit,
+    @StringRes labelId: Int,
+    @StringRes infoId: Int
+){
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var passwordVisible by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
+    val errorId = R.string.error_fields
+>>>>>>> master
     TextField(
         modifier = modifier,
         enabled = enabled,
@@ -141,11 +171,26 @@ fun TextFieldView(
         value = value,
         onValueChange = { text ->
             onValueChange(text)
+<<<<<<< HEAD
             errorMessage = validateText(context, text, validateCase)
         },
         isError = errorMessage.isNotEmpty(),
         supportingText = {
             Text(errorMessage.ifEmpty { stringResource(id = infoId) })
+=======
+            errorMessage = validateText(text, validateCase)
+        },
+        isError = errorMessage.isNotEmpty(),
+        supportingText = {
+            Text(
+                if(errorMessage.isEmpty()){
+                    stringResource(id = infoId)
+                }else{
+                    stringResource(id = errorId)
+                }
+            )
+            onIsError(errorMessage.isNotEmpty())
+>>>>>>> master
         },
         keyboardOptions = KeyboardOptions(imeAction = imeAction),
         keyboardActions = KeyboardActions(
@@ -162,6 +207,10 @@ fun AlertDialogView(
     onConfirm: (String) -> Unit
 ){
     var code by remember { mutableStateOf("") }
+<<<<<<< HEAD
+=======
+    var isError by remember { mutableStateOf(false) }
+>>>>>>> master
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
@@ -180,7 +229,12 @@ fun AlertDialogView(
                 labelId = R.string.text_field_code,
                 infoId = R.string.valid_number,
                 validateCase = 4,
+<<<<<<< HEAD
                 imeAction = ImeAction.Done
+=======
+                imeAction = ImeAction.Done,
+                onIsError = { isError = it }
+>>>>>>> master
             )
         },
         confirmButton = {
@@ -189,6 +243,10 @@ fun AlertDialogView(
                     .height(dimensionResource(id = R.dimen.dm_5))
                     .fillMaxWidth(),
                 click = { onConfirm(code) },
+<<<<<<< HEAD
+=======
+                enabled = !isError,
+>>>>>>> master
                 text = stringResource(id = R.string.button_verify_code)
             )
         }
