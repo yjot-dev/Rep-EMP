@@ -1,0 +1,76 @@
+<resources>
+    <string name="app_name">EMP</string>
+    <string name="background_login">Imagen de fondo</string>
+    <string name="foreground_login">Imagen de presentacion</string>
+    <string name="image_user_info">Foto del usuario</string>
+    <string name="show_password">Contraseña visible</string>
+    <string name="hide_password">Contraseña oculta</string>
+    <string name="text_field_user_email">Usuario o Correo electrónico</string>
+    <string name="text_field_password">Contraseña</string>
+    <string name="text_field_user">Usuario</string>
+    <string name="text_field_email">Correo electrónico</string>
+    <string name="text_field_password_new">Nueva contraseña</string>
+    <string name="text_field_code">Código</string>
+    <string name="text_field_commentary">Comentario o sugerencia</string>
+    <string name="text_field_response">Respuesta</string>
+    <string name="button_login">Iniciar Sesión</string>
+    <string name="button_register">Registrarse</string>
+    <string name="button_recover_key">Recuperar Clave</string>
+    <string name="button_create_user">Crear usuario</string>
+    <string name="button_change_password">Cambiar clave</string>
+    <string name="button_update">Actualizar</string>
+    <string name="button_delete">Borrar cuenta</string>
+    <string name="button_send_code">Enviar código</string>
+    <string name="button_verify_code">Verificar código</string>
+    <string name="button_logout">Cerrar Sesión</string>
+    <string name="button_send_opinion">Enviar opinión</string>
+    <string name="button_verify_exercise">Verificar</string>
+    <string name="button_next">Continuar</string>
+    <string name="button_user_info">Informacion de usuario</string>
+    <string name="button_educational_modules">Modulos de educacion</string>
+    <string name="button_practical_projects">Proyectos practicos</string>
+    <string name="button_tracking_and_support">Seguimiento y soporte</string>
+    <string name="alert_dialog_code">Verificación de código</string>
+    <string name="alert_dialog_opinion">Opinion del usuario %1$s</string>
+    <string name="error_user_login">Usuario, correo o contraseña incorrectos</string>
+    <string name="error_user_registered">Error al registrar usuario</string>
+    <string name="alert_user_registered">Usuario registrado satisfactoriamente</string>
+    <string name="error_user_updated">Error al actualizar usuario</string>
+    <string name="alert_user_updated">Usuario actualizado satisfactoriamente</string>
+    <string name="error_user_changed_password">Error al cambiar contraseña</string>
+    <string name="alert_user_changed_password">Contraseña actualizada satisfactoriamente</string>
+    <string name="error_user_deleted">Error al eliminar usuario</string>
+    <string name="alert_user_deleted">Usuario eliminado satisfactoriamente</string>
+    <string name="error_email_sent">Error al enviar el correo</string>
+    <string name="alert_email_sent">Correo electrónico enviado satisfactoriamente</string>
+    <string name="body_email">
+        Hola %1$s, para verificar su identidad ingrese el siguiente código: %2$s
+    </string>
+    <string name="valid_user_email">El usuario o correo electrónico deben ser correctos.</string>
+    <string name="valid_user">El usuario debe tener minimo 3 letras, mayusculas o minusculas.</string>
+    <string name="valid_email">El correo electrónico debe ser correcto.</string>
+    <string name="valid_password">La contraseña debe tener minimo 8 caracteres, una letra y un número.</string>
+    <string name="valid_number">El código debe tener 6 números positivos.</string>
+    <string name="valid_commentary">El mensaje debe tener maximo 300 caracteres de texto.</string>
+    <string name="valid_response">La respuesta debe ser solo texto sin números.</string>
+    <string name="error_fields">El campo de texto esta incorrecto.</string>
+    <string name="unit">Unidad %1$s</string>
+    <string name="level">Nivel %1$s</string>
+    <string name="subtitle_unit1">Conceptos que debemos conocer antes de emprender</string>
+    <string name="my_progress">Mi progreso</string>
+    <string name="my_experience">Experiencia</string>
+    <plurals name="points">
+        <item quantity="one">%1$d punto</item>
+        <item quantity="other">%1$d puntos</item>
+    </plurals>
+    <string name="my_time_spent">Tiempo invertido</string>
+    <plurals name="minutes">
+        <item quantity="one">%1$d minuto</item>
+        <item quantity="other">%1$d minutos</item>
+    </plurals>
+    <string name="my_course_completed">Curso completado</string>
+    <string name="my_percent">%1$d%%</string>
+    <string name="some_opinion">¿Alguna opinion?</string>
+    <string name="my_score">Puntaje</string>
+    <string name="game_over">Juego terminado</string>
+</resources>
