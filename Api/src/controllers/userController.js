@@ -182,7 +182,7 @@ const enviar_correo = async function(req, res) {
             service: 'gmail', // Servicio usado 
             auth: { 
                 user: from, 
-                pass: 'pozy achq jhyi fmcl' 
+                pass: 'xxyz xxyz xxyz xxyz' 
             },
             tls: { rejectUnauthorized: false } // Desactiva la verificación SSL
         });
@@ -223,7 +223,7 @@ const enviar_comentario = async function(req, res){
             service: 'gmail', // Servicio usado 
             auth: { 
                 user: from, 
-                pass: 'pozy achq jhyi fmcl' 
+                pass: 'xxyz xxyz xxyz xxyz' 
             },
             tls: { rejectUnauthorized: false } // Desactiva la verificación SSL
         });
