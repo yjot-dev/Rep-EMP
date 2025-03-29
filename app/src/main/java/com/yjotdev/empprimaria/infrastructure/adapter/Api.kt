@@ -4,9 +4,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import dagger.hilt.android.qualifiers.ApplicationContext
 import android.content.Context
-import com.yjotdev.empprimaria.BuildConfig
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import com.yjotdev.empprimaria.BuildConfig
 import com.yjotdev.empprimaria.domain.port.UserRepository
 import com.yjotdev.empprimaria.domain.port.EmailRepository
 
