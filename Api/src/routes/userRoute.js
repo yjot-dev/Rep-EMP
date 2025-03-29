@@ -1,15 +1,13 @@
-'use strict'
-const { Router } = require('express');
+import { Router } from 'express';
 const api = Router();
-var userController = require('../controllers/userController');
+import { seleccionar_usuario, insertar_usuario, actualizar_usuario, cambiar_clave_usuario, eliminar_usuario, enviar_correo, enviar_comentario } from '../controllers/userController.js';
 
+api.post('/find_user/', seleccionar_usuario);
+api.post('/insert_user/', insertar_usuario);
+api.put('/update_user/:id', actualizar_usuario);
+api.patch('/change_password/', cambiar_clave_usuario);
+api.delete('/delete_user/:id', eliminar_usuario);
+api.post('/send_email/', enviar_correo);
+api.post('/send_commentary/', enviar_comentario);
 
-api.post('/find_user/', userController.seleccionar_usuario);
-api.post('/insert_user/', userController.insertar_usuario);
-api.put('/update_user/:id', userController.actualizar_usuario);
-api.patch('/change_password/', userController.cambiar_clave_usuario);
-api.delete('/delete_user/:id', userController.eliminar_usuario);
-api.post('/send_email/', userController.enviar_correo);
-api.post('/send_commentary/', userController.enviar_comentario);
-
-module.exports = api;
+export { api };

@@ -1,13 +1,10 @@
-'use strict'
-const util = require('util');
-const connection = require('../bd/db');
-const query = util.promisify(connection.query).bind(connection);
-const bcrypt = require('bcrypt');
-const nodemailer = require('nodemailer');
+import pool from '../bd/db.js';
+import bcrypt from 'bcrypt';
+import nodemailer from 'nodemailer';
 
 // Verifica si el objeto esta vacio
 function isEmptyObject(obj) {
-    return !Object.keys(obj).length;
+    return !Object.keys(obj) || Object.keys(obj).length === 0;
 };
 
 // Seleccionar usuario
@@ -15,39 +12,28 @@ const seleccionar_usuario = async function(req, res) {
     try {
         const { nombre, correo, clave } = req.body;
 
-        // Consulta para obtener la clave encriptada del usuario
-        const sql1 = `SELECT clave FROM usuarios WHERE correo = ? OR nombre = ?`;
-        const reg1 = await query(sql1, [correo, nombre]);
+        // Consulta para obtener el usuario por nombre o correo
+        const sql1 = `SELECT * FROM usuarios WHERE correo = ? OR nombre = ?`;
+        const reg1 = await pool.query(sql1, [correo, nombre]);
         
         if (isEmptyObject(reg1)) {
-            return res.status(500).send("Error clave no encontrada");
+            return res.status(404).send("Error usuario no encontrado");
         }
 
-        const data = Object.values(JSON.parse(JSON.stringify(reg1)));
-        const claveHash = data[0].clave;
+        const usuario = (reg1[0])[0];
 
         // Comparar la clave ingresada con la clave encriptada almacenada
-        const esLaClave = bcrypt.compareSync(clave, claveHash);
+        const esLaClave = await bcrypt.compare(clave, usuario.clave);
         if (!esLaClave) {
             return res.status(401).send("Error clave incorrecta");
         }
 
-        // Consulta para obtener los datos del usuario
-        const sql2 = `SELECT * FROM usuarios WHERE (correo = ? OR nombre = ?) AND clave = ?`;
-        const reg2 = await query(sql2, [correo, nombre, claveHash]);
-
-        if (isEmptyObject(reg2)) {
-            return res.status(500).send("Error usuario no encontrado");
-        }
-
-        const user = reg2[0];
-
         // Convertir el campo foto (MediumBlob) a una cadena Base64
-        if (user.foto) { 
-            user.foto = Buffer.from(user.foto).toString('base64');
+        if (usuario.foto) {
+            usuario.foto = Buffer.from(usuario.foto).toString('base64');
         }
 
-        res.status(200).send(user);
+        res.status(200).send(usuario);
     } catch (error) {
         console.error("Error al seleccionar usuario: ", error);
         res.status(500).send("Error del servidor");
@@ -63,19 +49,18 @@ const actualizar_usuario = async function(req, res) {
 
         // Consulta para obtener la clave del usuario
         const sql1 = `SELECT clave FROM usuarios WHERE id = ?`;
-        const reg1 = await query(sql1, [id]);
-
+        const reg1 = await pool.query(sql1, [id]);
+        
         if (isEmptyObject(reg1)) {
             return res.status(500).send("Error clave no encontrada");
         }
 
-        const data = Object.values(JSON.parse(JSON.stringify(reg1)));
-        const claveHash = data[0].clave;
+        const claveHash = (reg1[0])[0].clave;
 
         // Comparar la clave ingresada con la clave hash almacenada
-        const esLaClave = bcrypt.compareSync(clave, claveHash);
+        const esLaClave = await bcrypt.compare(clave, claveHash);
         if (!esLaClave) {
-            clave = bcrypt.hashSync(clave, 10);
+            clave = await bcrypt.hash(clave, 10);
         }else{
             clave = claveHash
         }
@@ -94,7 +79,7 @@ const actualizar_usuario = async function(req, res) {
 
         // Construir la consulta de actualización
         const sql2 = `UPDATE usuarios SET ? WHERE id = ?`;
-        const reg2 = await query(sql2, [usuarioEditado, id]);
+        const reg2 = await pool.query(sql2, [usuarioEditado, id]);
 
         res.status(200).send(reg2);
     } catch (error) {
@@ -109,11 +94,11 @@ const cambiar_clave_usuario = async function(req, res) {
         const { correo, clave } = req.body
 
         // Encriptar la clave
-        const claveHash = bcrypt.hashSync(clave, 10);
+        const claveHash = await bcrypt.hash(clave, 10);
 
         // Construir la consulta de cambio de clave
         const sql = `UPDATE usuarios SET clave = ? WHERE correo = ?`;
-        const reg = await query(sql, [claveHash, correo]);
+        const reg = await pool.query(sql, [claveHash, correo]);
 
         res.status(200).send(reg);
     } catch(error) {
@@ -129,7 +114,7 @@ const insertar_usuario = async function(req, res) {
         const { correo, clave, ...resto } = req.body;
 
         // Encriptar la clave
-        const claveHash = bcrypt.hashSync(clave, 10);
+        const claveHash = await bcrypt.hash(clave, 10);
 
         // Construir el objeto para insertar
         const usuarioNuevo = {
@@ -140,14 +125,14 @@ const insertar_usuario = async function(req, res) {
 
         // Consulta el correo electronico para verificar si existe
         const sql1 = `SELECT * FROM usuarios WHERE correo = ?`;
-        const reg1 = await query(sql1, correo);
-        if(!isEmptyObject(reg1)){
+        const reg1 = await pool.query(sql1, correo);
+        if(reg1[0].length > 0){
             return res.status(500).send("Error correo existente");
         }
 
         // Construir la consulta de inserción
         const sql2 = `INSERT INTO usuarios SET ?`;
-        const reg2 = await query(sql2, usuarioNuevo);
+        const reg2 = await pool.query(sql2, usuarioNuevo);
 
         res.status(200).send(reg2);
     } catch (error) {
@@ -163,7 +148,7 @@ const eliminar_usuario = async function(req, res) {
 
         // Construir la consulta de eliminación
         const sql = `DELETE FROM usuarios WHERE id = ?`;
-        const reg = await query(sql, [id]);
+        const reg = await pool.query(sql, [id]);
 
         res.status(200).send(reg);
     } catch (error) {
@@ -198,7 +183,7 @@ const enviar_correo = async function(req, res) {
 
         // Consulta el correo electronico para verificar si existe
         const sql = `SELECT * FROM usuarios WHERE correo = ?`;
-        const reg = await query(sql, to);
+        const reg = await pool.query(sql, to);
         if(isEmptyObject(reg)){
             return res.status(500).send("Error correo no encontrado");
         }
@@ -247,7 +232,7 @@ const enviar_comentario = async function(req, res){
     }
 };
 
-module.exports = {
+export {
     seleccionar_usuario,
     actualizar_usuario,
     cambiar_clave_usuario,
