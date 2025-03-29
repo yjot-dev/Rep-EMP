@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.ui.view.utils
+package com.yjotdev.empprimaria.application.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,12 +35,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.data.Stories
-import com.yjotdev.empprimaria.ui.model.StoryModel
-import com.yjotdev.empprimaria.ui.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.ui.viewmodel.ProgressViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
+import com.yjotdev.empprimaria.R
+import com.yjotdev.empprimaria.domain.utils.data.Stories
+import com.yjotdev.empprimaria.application.mvvm.model.StoryModel
+import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable
 fun StoryView(
@@ -245,7 +246,7 @@ private fun PreviewStoryView(){
     EmprendimientoPrimariaTheme {
         StoryView(
             modifier = Modifier.fillMaxSize(),
-            progressVm = ProgressViewModel(),
+            progressVm = viewModel(),
             story = Stories.data[0],
             numLevel = 1,
             totalLevels = 5,

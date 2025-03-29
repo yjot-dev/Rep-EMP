@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.ui.view
+package com.yjotdev.empprimaria.application.mvvm.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,16 +23,13 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.data.Exercise1
-import com.yjotdev.empprimaria.data.Exercise2
-import com.yjotdev.empprimaria.data.Exercise3
-import com.yjotdev.empprimaria.data.Stories
-import com.yjotdev.empprimaria.ui.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.ui.view.utils.ButtonView
-import com.yjotdev.empprimaria.ui.view.utils.StoryView
-import com.yjotdev.empprimaria.ui.view.utils.TitleView
-import com.yjotdev.empprimaria.ui.viewmodel.ProgressViewModel
+import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.application.composable.ButtonView
+import com.yjotdev.empprimaria.application.composable.StoryView
+import com.yjotdev.empprimaria.application.composable.TitleView
+import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable
 fun UnitsView(
@@ -106,9 +103,9 @@ fun UnitsView(
             "1.1" -> LevelView(
                 modifier = Modifier.fillMaxSize(),
                 progressVm = progressVm,
-                exercise1 = Exercise1.data[0],
-                exercise2 = Exercise2.data[0],
-                exercise3 = Exercise3.data[0],
+                exercise1 = progressVm.exercise1[0],
+                exercise2 = progressVm.exercise2[0],
+                exercise3 = progressVm.exercise3[0],
                 numLevel = 1,
                 totalLevels = totalLevels,
                 onCallback = { level = "0" }
@@ -116,9 +113,9 @@ fun UnitsView(
             "1.2" -> LevelView(
                 modifier = Modifier.fillMaxSize(),
                 progressVm = progressVm,
-                exercise1 = Exercise1.data[1],
-                exercise2 = Exercise2.data[1],
-                exercise3 = Exercise3.data[1],
+                exercise1 = progressVm.exercise1[1],
+                exercise2 = progressVm.exercise2[1],
+                exercise3 = progressVm.exercise3[1],
                 numLevel = 2,
                 totalLevels = totalLevels,
                 onCallback = { level = "0" }
@@ -126,9 +123,9 @@ fun UnitsView(
             "1.3" -> LevelView(
                 modifier = Modifier.fillMaxSize(),
                 progressVm = progressVm,
-                exercise1 = Exercise1.data[2],
-                exercise2 = Exercise2.data[2],
-                exercise3 = Exercise3.data[2],
+                exercise1 = progressVm.exercise1[2],
+                exercise2 = progressVm.exercise2[2],
+                exercise3 = progressVm.exercise3[2],
                 numLevel = 3,
                 totalLevels = totalLevels,
                 onCallback = { level = "0" }
@@ -136,9 +133,9 @@ fun UnitsView(
             "1.4" -> LevelView(
                 modifier = Modifier.fillMaxSize(),
                 progressVm = progressVm,
-                exercise1 = Exercise1.data[3],
-                exercise2 = Exercise2.data[3],
-                exercise3 = Exercise3.data[3],
+                exercise1 = progressVm.exercise1[3],
+                exercise2 = progressVm.exercise2[3],
+                exercise3 = progressVm.exercise3[3],
                 numLevel = 4,
                 totalLevels = totalLevels,
                 onCallback = { level = "0" }
@@ -146,7 +143,7 @@ fun UnitsView(
             "1.5" -> StoryView(
                 modifier = Modifier.fillMaxSize(),
                 progressVm = progressVm,
-                story = Stories.data[0],
+                story = progressVm.story[0],
                 numLevel = 5,
                 totalLevels = totalLevels,
                 onCallback = { level = "0" }
@@ -164,7 +161,7 @@ private fun PreviewUnitsView(){
     EmprendimientoPrimariaTheme {
         UnitsView(
             modifier = Modifier.fillMaxSize(),
-            progressVm = ProgressViewModel()
+            progressVm = viewModel()
         )
     }
 }

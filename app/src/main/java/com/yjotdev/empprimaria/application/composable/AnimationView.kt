@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.ui.view.utils
+package com.yjotdev.empprimaria.application.composable
 
 import android.os.Build.VERSION.SDK_INT
 import androidx.annotation.DrawableRes
@@ -31,7 +31,7 @@ import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import coil.size.Size
 import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.ui.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 
 @Composable
 fun AnimationView(

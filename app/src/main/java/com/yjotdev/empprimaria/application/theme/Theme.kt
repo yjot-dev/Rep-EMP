@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.ui.theme
+package com.yjotdev.empprimaria.application.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.ui.model
+package com.yjotdev.empprimaria.application.mvvm.model
 
 /**
 Modelo para usar en el ejercicio 2.

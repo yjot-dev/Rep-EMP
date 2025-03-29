@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.ui.view
+package com.yjotdev.empprimaria.application.mvvm.view
 
 import android.graphics.Bitmap
 import android.net.Uri
@@ -11,9 +11,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,23 +34,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
-import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.ui.model.UserModel
-import com.yjotdev.empprimaria.ui.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.ui.view.utils.AlertDialogView
-import com.yjotdev.empprimaria.ui.view.utils.ButtonView
-import com.yjotdev.empprimaria.ui.view.utils.TextFieldView
-import com.yjotdev.empprimaria.ui.view.utils.convertToBitmap
-import com.yjotdev.empprimaria.ui.view.utils.convertToBase64
 import kotlin.random.Random
+import com.yjotdev.empprimaria.R
+import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
+import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.application.composable.AlertDialogView
+import com.yjotdev.empprimaria.application.composable.ButtonView
+import com.yjotdev.empprimaria.application.composable.TextFieldView
 
 @Composable
 fun UserInfoView(
     modifier: Modifier = Modifier,
-    userInfo: UserModel,
+    progressVm: ProgressViewModel,
     onLogout: () -> Unit,
     onUpdate: (String, String, String, String) -> Unit,
     onDelete: () -> Unit,
@@ -55,10 +58,12 @@ fun UserInfoView(
     val focusRequest1 = remember { FocusRequester() }
     val focusRequest2 = remember { FocusRequester() }
     val focusRequest3 = remember { FocusRequester() }
+    val scrollState = rememberScrollState()
+    val userInfo by progressVm.userInfo.collectAsState()
     var user by remember { mutableStateOf(userInfo.nombre) }
     var email by remember { mutableStateOf(userInfo.correo) }
     var password by remember { mutableStateOf(userInfo.clave) }
-    var photo by remember { mutableStateOf(convertToBitmap(userInfo.foto)) }
+    var photo by remember { mutableStateOf(progressVm.getBitmap()) }
     var sendCode by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(false) }
     val code by remember { mutableStateOf(Random.nextInt(100000, 999999).toString()) }
@@ -90,12 +95,13 @@ fun UserInfoView(
                     enabled = true
                     sendCode = false
                 }
-            }
+            },
+            progressVm = progressVm
         )
     }
     Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.SpaceEvenly,
+        modifier = modifier.verticalScroll(scrollState),
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         if(photo == null)
@@ -104,6 +110,7 @@ fun UserInfoView(
                 contentDescription = stringResource(id = R.string.image_user_info),
                 modifier = Modifier
                     .size(dimensionResource(id = R.dimen.dm_8))
+                    .padding(vertical = dimensionResource(id = R.dimen.dm_1))
                     .clickable { launchPhotoSelector.launch("image/*") }
             )
         else
@@ -112,12 +119,15 @@ fun UserInfoView(
                 contentDescription = stringResource(id = R.string.image_user_info),
                 modifier = Modifier
                     .size(dimensionResource(id = R.dimen.dm_8))
+                    .padding(vertical = dimensionResource(id = R.dimen.dm_1))
                     .clickable { launchPhotoSelector.launch("image/*") }
             )
         TextFieldView(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
+                .padding(vertical = dimensionResource(id = R.dimen.dm_1))
                 .focusRequester(focusRequest1),
+            progressVm = progressVm,
             value = user,
             onValueChange = { user = it },
             onNext = { focusRequest2.requestFocus() },
@@ -129,7 +139,9 @@ fun UserInfoView(
         TextFieldView(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
+                .padding(vertical = dimensionResource(id = R.dimen.dm_1))
                 .focusRequester(focusRequest2),
+            progressVm = progressVm,
             value = email,
             onValueChange = { email = it },
             onNext = { focusRequest3.requestFocus() },
@@ -141,7 +153,9 @@ fun UserInfoView(
         TextFieldView(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
+                .padding(vertical = dimensionResource(id = R.dimen.dm_1))
                 .focusRequester(focusRequest3),
+            progressVm = progressVm,
             value = password,
             onValueChange = { password = it },
             imeAction = ImeAction.Done,
@@ -154,14 +168,16 @@ fun UserInfoView(
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
-                .fillMaxWidth(0.85f),
+                .fillMaxWidth(0.85f)
+                .padding(vertical = dimensionResource(id = R.dimen.dm_1)),
             click = onLogout,
             text = stringResource(id = R.string.button_logout)
         )
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
-                .fillMaxWidth(0.85f),
+                .fillMaxWidth(0.85f)
+                .padding(vertical = dimensionResource(id = R.dimen.dm_1)),
             enabled = !isError2,
             click = {
                 onSendCode(email, code)
@@ -172,15 +188,17 @@ fun UserInfoView(
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
-                .fillMaxWidth(0.85f),
+                .fillMaxWidth(0.85f)
+                .padding(vertical = dimensionResource(id = R.dimen.dm_1)),
             enabled = enabled && !isError1 && !isError2 && !isError3,
-            click = { onUpdate(user, email, password, convertToBase64(photo)) },
+            click = { onUpdate(user, email, password, progressVm.getBase64()) },
             text = stringResource(id = R.string.button_update)
         )
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
-                .fillMaxWidth(0.85f),
+                .fillMaxWidth(0.85f)
+                .padding(vertical = dimensionResource(id = R.dimen.dm_1)),
             enabled = enabled,
             click = onDelete,
             text = stringResource(id = R.string.button_delete)
@@ -197,7 +215,7 @@ private fun PreviewUserInfoView(){
     EmprendimientoPrimariaTheme {
         UserInfoView(
             modifier = Modifier.fillMaxSize(),
-            userInfo = UserModel(),
+            progressVm = viewModel(),
             onLogout = {},
             onUpdate = {_, _, _, _ ->},
             onDelete = {},
@@ -215,7 +233,8 @@ private fun PreviewAlertDialog2(){
     EmprendimientoPrimariaTheme {
         AlertDialogView(
             onDismiss = {},
-            onConfirm = {}
+            onConfirm = {},
+            progressVm = viewModel()
         )
     }
 }

@@ -1,6 +1,6 @@
-package com.yjotdev.empprimaria.data
+package com.yjotdev.empprimaria.domain.utils.data
 
-import com.yjotdev.empprimaria.mvvm.model.Exercise2Model
+import com.yjotdev.empprimaria.application.mvvm.model.Exercise2Model
 
 /**
  * Elegir opcion correcta

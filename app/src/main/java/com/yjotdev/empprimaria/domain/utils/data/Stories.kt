@@ -1,6 +1,6 @@
-package com.yjotdev.empprimaria.data
+package com.yjotdev.empprimaria.domain.utils.data
 
-import com.yjotdev.empprimaria.mvvm.model.StoryModel
+import com.yjotdev.empprimaria.application.mvvm.model.StoryModel
 
 object Stories {
     val data = listOf(

@@ -15,7 +15,7 @@ import com.yjotdev.empprimaria.domain.port.EmailRepository
 * 192.168.1.20 -> IP para probar API desde dispositivo fisico
 */
 @Singleton
-class HttpsClient @Inject constructor(
+class Api @Inject constructor(
     @ApplicationContext context: Context
 ) {
     private val uri = "https://192.168.1.20:443/api/"

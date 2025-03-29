@@ -1,7 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -12,8 +14,8 @@ android {
         applicationId = "com.yjotdev.empprimaria"
         minSdk = 24
         targetSdk = 35
-        versionCode = 3
-        versionName = "3.1"
+        versionCode = 4
+        versionName = "3.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -21,26 +23,30 @@ android {
         }
     }
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+            isDebuggable = true
+            buildConfigField("Boolean", "DEBUG_MODE", "true")
+        }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("Boolean", "DEBUG_MODE", "false")
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        buildConfig = true
     }
     packaging {
         resources {
@@ -49,8 +55,12 @@ android {
     }
 }
 
-dependencies {
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-Xlint:deprecation")
+}
 
+dependencies {
+    //UI
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -59,17 +69,28 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlin.metadata.jvm)
+    //Navigation
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.androidx.navigation.testing)
+    //Retrofit
     implementation(libs.com.squareup.retrofit2)
-    implementation(libs.com.squareup.retrofit2.converter.gson)
-    implementation(libs.org.jetbrains.kotlinx.coroutines.android)
+    implementation(libs.com.squareup.retrofit2.gson)
+    //Coil
     implementation(libs.io.coil.kt.compose)
     implementation(libs.io.coil.kt.gif)
     implementation(libs.core.ktx)
-    implementation(libs.androidx.navigation.testing)
-
+    //Logging Interceptor
+    implementation(libs.squareup.okhttp3.logging.interceptor)
+    //Hilt
+    implementation(libs.dagger.hilt.android)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.hilt.navigation.compose)
+    ksp(libs.dagger.hilt.compiler)
+    //Test
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

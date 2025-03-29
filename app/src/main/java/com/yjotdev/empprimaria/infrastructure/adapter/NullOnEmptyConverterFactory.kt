@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.infrastructure
+package com.yjotdev.empprimaria.infrastructure.adapter
 
 import okhttp3.ResponseBody
 import retrofit2.Converter

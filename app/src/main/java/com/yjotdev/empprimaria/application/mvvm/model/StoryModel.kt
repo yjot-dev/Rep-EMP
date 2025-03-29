@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.ui.model
+package com.yjotdev.empprimaria.application.mvvm.model
 
 data class StoryModel(
     val paragraph: String = "",

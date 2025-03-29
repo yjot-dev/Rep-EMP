@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.ui.view
+package com.yjotdev.empprimaria.application.mvvm.view
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -27,17 +27,16 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.ui.model.UserModel
-import com.yjotdev.empprimaria.ui.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.ui.view.utils.BackgroundView
-import com.yjotdev.empprimaria.ui.viewmodel.ProgressViewModel
+import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.application.composable.BackgroundView
+import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable
 fun MenuView(
     modifier: Modifier = Modifier,
     progressVm: ProgressViewModel,
-    userInfo: UserModel,
     onLogout: () -> Unit,
     onUpdate: (String, String, String, String) -> Unit,
     onDelete: () -> Unit,
@@ -53,7 +52,6 @@ fun MenuView(
         ForegroundMenu(
             modifier = Modifier.fillMaxSize(),
             progressVm = progressVm,
-            userInfo = userInfo,
             onLogout = onLogout,
             onUpdate = onUpdate,
             onDelete = onDelete,
@@ -125,7 +123,6 @@ private fun MenuBar(
 private fun ForegroundMenu(
     modifier: Modifier = Modifier,
     progressVm: ProgressViewModel,
-    userInfo: UserModel,
     onLogout: () -> Unit,
     onUpdate: (String, String, String, String) -> Unit,
     onDelete: () -> Unit,
@@ -153,7 +150,7 @@ private fun ForegroundMenu(
         when(selector){
             0 -> UserInfoView(
                 modifier = Modifier.fillMaxSize(),
-                userInfo = userInfo,
+                progressVm = progressVm,
                 onLogout = onLogout,
                 onUpdate = onUpdate,
                 onDelete = onDelete,
@@ -169,6 +166,7 @@ private fun ForegroundMenu(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(ScrollState(0)),
+                progressVm = progressVm,
                 isPreview = isPreview
             )
             3 -> OpinionView(
@@ -189,12 +187,7 @@ private fun PreviewMenuView(){
     EmprendimientoPrimariaTheme {
         MenuView(
             modifier = Modifier.fillMaxSize(),
-            progressVm = ProgressViewModel(),
-            userInfo = UserModel(
-                nombre = "Yasser",
-                correo = "2010guabo@gmail.com",
-                clave = "Yjot1997"
-            ),
+            progressVm = viewModel(),
             onLogout = {},
             onUpdate = {_, _, _, _ ->},
             onDelete = {},

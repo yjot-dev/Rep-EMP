@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.ui.view
+package com.yjotdev.empprimaria.application.mvvm.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,29 +34,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.data.Exercise1
-import com.yjotdev.empprimaria.data.Exercise2
-import com.yjotdev.empprimaria.data.Exercise3
-import com.yjotdev.empprimaria.ui.model.Exercise1Model
-import com.yjotdev.empprimaria.ui.model.Exercise2Model
-import com.yjotdev.empprimaria.ui.model.Exercise3Model
-import com.yjotdev.empprimaria.ui.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.ui.view.utils.AnimationView
-import com.yjotdev.empprimaria.ui.view.utils.Exercise1View
-import com.yjotdev.empprimaria.ui.view.utils.ButtonView
-import com.yjotdev.empprimaria.ui.view.utils.Exercise2View
-import com.yjotdev.empprimaria.ui.view.utils.Exercise3View
-import com.yjotdev.empprimaria.ui.viewmodel.ProgressViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
+import com.yjotdev.empprimaria.R
+import com.yjotdev.empprimaria.application.mvvm.model.Exercise1Model
+import com.yjotdev.empprimaria.application.mvvm.model.Exercise2Model
+import com.yjotdev.empprimaria.application.mvvm.model.Exercise3Model
+import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
+import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.application.composable.AnimationView
+import com.yjotdev.empprimaria.application.composable.Exercise1View
+import com.yjotdev.empprimaria.application.composable.ButtonView
+import com.yjotdev.empprimaria.application.composable.Exercise2View
+import com.yjotdev.empprimaria.application.composable.Exercise3View
 
 @Composable
 fun LevelView(
     modifier: Modifier = Modifier,
     progressVm: ProgressViewModel,
-    exercise1: Exercise1Model,
-    exercise2: Exercise2Model,
-    exercise3: Exercise3Model,
+    exercise1: Exercise1Model = progressVm.exercise1[0],
+    exercise2: Exercise2Model = progressVm.exercise2[0],
+    exercise3: Exercise3Model = progressVm.exercise3[0],
     numLevel: Int,
     totalLevels: Int,
     onCallback: () -> Unit
@@ -199,6 +197,7 @@ fun LevelView(
                     Exercise3View(
                         modifier = if(isVisible) Modifier.weight(0.6f)
                                    else Modifier.weight(0.7f),
+                        progressVm = progressVm,
                         exercise3 = exercise3
                     ) { isCorrect ->
                         if(isCorrect) {
@@ -237,10 +236,7 @@ private fun PreviewLevelView(){
     EmprendimientoPrimariaTheme {
         LevelView(
             modifier = Modifier.fillMaxSize(),
-            progressVm = ProgressViewModel(),
-            exercise1 = Exercise1.data[0],
-            exercise2 = Exercise2.data[0],
-            exercise3 = Exercise3.data[0],
+            progressVm = viewModel(),
             numLevel = 1,
             totalLevels = 5,
             onCallback = {}

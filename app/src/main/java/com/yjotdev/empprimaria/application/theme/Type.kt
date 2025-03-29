@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.ui.theme
+package com.yjotdev.empprimaria.application.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.FontFamily

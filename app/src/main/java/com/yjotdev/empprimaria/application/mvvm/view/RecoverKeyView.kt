@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.ui.view
+package com.yjotdev.empprimaria.application.mvvm.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,17 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.ui.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.ui.view.utils.BackgroundView
-import com.yjotdev.empprimaria.ui.view.utils.AlertDialogView
-import com.yjotdev.empprimaria.ui.view.utils.ButtonView
-import com.yjotdev.empprimaria.ui.view.utils.TextFieldView
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlin.random.Random
+import com.yjotdev.empprimaria.R
+import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.application.composable.BackgroundView
+import com.yjotdev.empprimaria.application.composable.AlertDialogView
+import com.yjotdev.empprimaria.application.composable.ButtonView
+import com.yjotdev.empprimaria.application.composable.TextFieldView
+import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable
 fun RecoverKeyView(
     modifier: Modifier = Modifier,
+    progressVm: ProgressViewModel,
     onChangePassword: (String, String) -> Unit,
     onSendCode: (String, String) -> Unit
 ){
@@ -38,6 +41,7 @@ fun RecoverKeyView(
         BackgroundView(modifier = Modifier.fillMaxSize())
         ForegroundRecoverKey(
             modifier = Modifier.fillMaxSize(),
+            progressVm = progressVm,
             onChangePassword = onChangePassword,
             onSendCode = onSendCode
         )
@@ -47,6 +51,7 @@ fun RecoverKeyView(
 @Composable
 private fun ForegroundRecoverKey(
     modifier: Modifier = Modifier,
+    progressVm: ProgressViewModel,
     onChangePassword: (String, String) -> Unit,
     onSendCode: (String, String) -> Unit
 ){
@@ -66,7 +71,8 @@ private fun ForegroundRecoverKey(
                     enabled = true
                     sendCode = false
                 }
-            }
+            },
+            progressVm = progressVm
         )
     }
     Column(
@@ -77,6 +83,7 @@ private fun ForegroundRecoverKey(
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_5)))
         TextFieldView(
             modifier = Modifier.fillMaxWidth(0.85f),
+            progressVm = progressVm,
             value = email,
             onValueChange = { email = it },
             validateCase = 3,
@@ -92,11 +99,12 @@ private fun ForegroundRecoverKey(
                 onSendCode(email, code)
                 sendCode = true
             },
-            enabled = !isError1,
+            enabled = !isError1 && email.isNotEmpty(),
             text = stringResource(id = R.string.button_send_code)
         )
         TextFieldView(
             modifier = Modifier.fillMaxWidth(0.85f),
+            progressVm = progressVm,
             enabled = enabled,
             value = password,
             onValueChange = { password = it },
@@ -109,7 +117,7 @@ private fun ForegroundRecoverKey(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
                 .fillMaxWidth(0.85f),
-            enabled = enabled && !isError2,
+            enabled = enabled && !isError2 && password.isNotEmpty(),
             click = { onChangePassword(email, password) },
             text = stringResource(id = R.string.button_change_password)
         )
@@ -126,6 +134,7 @@ private fun PreviewRecoverKeyView(){
     EmprendimientoPrimariaTheme {
         RecoverKeyView(
             modifier = Modifier.fillMaxSize(),
+            progressVm = viewModel(),
             onChangePassword = {_, _ ->},
             onSendCode = {_, _ ->}
         )
@@ -141,7 +150,8 @@ private fun PreviewAlertDialog1(){
     EmprendimientoPrimariaTheme {
         AlertDialogView(
             onDismiss = {},
-            onConfirm = {}
+            onConfirm = {},
+            progressVm = viewModel(),
         )
     }
 }

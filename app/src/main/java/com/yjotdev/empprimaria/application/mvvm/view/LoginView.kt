@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.ui.view
+package com.yjotdev.empprimaria.application.mvvm.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -23,15 +23,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.ui.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.ui.view.utils.BackgroundView
-import com.yjotdev.empprimaria.ui.view.utils.ButtonView
-import com.yjotdev.empprimaria.ui.view.utils.TextFieldView
+import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.application.composable.BackgroundView
+import com.yjotdev.empprimaria.application.composable.ButtonView
+import com.yjotdev.empprimaria.application.composable.TextFieldView
+import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable
 fun LoginView(
     modifier: Modifier = Modifier,
+    progressVm: ProgressViewModel,
     onLogin: (String, String) -> Unit,
     onRegister: () -> Unit,
     onRecoverKey: () -> Unit,
@@ -43,6 +46,7 @@ fun LoginView(
         BackgroundView(modifier = Modifier.fillMaxSize())
         ForegroundLogin(
             modifier = Modifier.fillMaxSize(),
+            progressVm = progressVm,
             onLogin = onLogin,
             onRegister = onRegister,
             onRecoverKey = onRecoverKey
@@ -53,6 +57,7 @@ fun LoginView(
 @Composable
 private fun ForegroundLogin(
     modifier: Modifier = Modifier,
+    progressVm: ProgressViewModel,
     onLogin: (String, String) -> Unit,
     onRegister: () -> Unit,
     onRecoverKey: () -> Unit,
@@ -78,6 +83,7 @@ private fun ForegroundLogin(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
                 .focusRequester(focusRequest1),
+            progressVm = progressVm,
             value = userOrEmail,
             onValueChange = { userOrEmail = it },
             onNext = { focusRequest2.requestFocus() },
@@ -90,6 +96,7 @@ private fun ForegroundLogin(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
                 .focusRequester(focusRequest2),
+            progressVm = progressVm,
             value = password,
             onValueChange = { password = it },
             imeAction = ImeAction.Done,
@@ -104,7 +111,8 @@ private fun ForegroundLogin(
                 .height(dimensionResource(id = R.dimen.dm_5))
                 .fillMaxWidth(0.85f),
             click = { onLogin(userOrEmail, password) },
-            enabled = !isError1 && !isError2,
+            enabled = !isError1 && !isError2 &&
+                    userOrEmail.isNotEmpty() && password.isNotEmpty(),
             text = stringResource(id = R.string.button_login)
         )
         ButtonView(
@@ -133,6 +141,7 @@ private fun PreviewLoginView(){
     EmprendimientoPrimariaTheme{
         LoginView(
             modifier = Modifier.fillMaxSize(),
+            progressVm = viewModel(),
             onLogin = { _, _ -> },
             onRegister = {},
             onRecoverKey = {}

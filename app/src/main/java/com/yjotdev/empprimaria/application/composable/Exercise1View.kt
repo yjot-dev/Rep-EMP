@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.ui.view.utils
+package com.yjotdev.empprimaria.application.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,9 +20,9 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.data.Exercise1
-import com.yjotdev.empprimaria.ui.model.Exercise1Model
-import com.yjotdev.empprimaria.ui.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.domain.utils.data.Exercise1
+import com.yjotdev.empprimaria.application.mvvm.model.Exercise1Model
+import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 
 @Composable
 fun Exercise1View(

@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.ui.view
+package com.yjotdev.empprimaria.application.mvvm.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,9 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -21,17 +18,19 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.data.Projects
-import com.yjotdev.empprimaria.ui.model.ProjectModel
-import com.yjotdev.empprimaria.ui.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.ui.view.utils.TextView
-import com.yjotdev.empprimaria.ui.view.utils.TitleView
+import com.yjotdev.empprimaria.application.mvvm.model.ProjectModel
+import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.application.composable.TextView
+import com.yjotdev.empprimaria.application.composable.TitleView
+import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable
 fun ProjectListView(
     modifier: Modifier = Modifier,
+    progressVm: ProgressViewModel,
     isPreview: Boolean = false
 ){
     Column(
@@ -39,8 +38,7 @@ fun ProjectListView(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        val projectList by remember { mutableStateOf(Projects.list) }
-        projectList.forEach { project ->
+        progressVm.projectList.forEach { project ->
             ProjectView(
                 project = project,
                 isPreview = isPreview
@@ -98,6 +96,7 @@ private fun PreviewProjectListView(){
     EmprendimientoPrimariaTheme {
         ProjectListView(
             modifier = Modifier.fillMaxSize(),
+            progressVm = viewModel(),
             isPreview = true
         )
     }

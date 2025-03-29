@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.application.mvvm.model
+package com.yjotdev.empprimaria.domain.entity
 
 import com.google.gson.annotations.SerializedName
 
@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 Modelo para enviar y recibir los datos del usuario
 en la BD.
  **/
-data class UserModel(
+data class UserEntity(
     @SerializedName("id") val id: Int = 0,
     @SerializedName("nombre") val nombre: String = "",
     @SerializedName("correo") val correo: String = "",

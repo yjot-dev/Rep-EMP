@@ -9,11 +9,13 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yjotdev.empprimaria.ui.theme.EmprendimientoPrimariaTheme
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import com.yjotdev.empprimaria.application.navigation.PermissionView
+import com.yjotdev.empprimaria.application.navigation.ViewRoutes
+import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 
 @RunWith(AndroidJUnit4::class)
 class RegisterViewInstrumentedTest {

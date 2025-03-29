@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.ui.view
+package com.yjotdev.empprimaria.application.mvvm.view
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -27,12 +27,13 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.ui.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.ui.view.utils.ButtonView
-import com.yjotdev.empprimaria.ui.view.utils.TextFieldView
-import com.yjotdev.empprimaria.ui.view.utils.TitleView
-import com.yjotdev.empprimaria.ui.viewmodel.ProgressViewModel
+import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.application.composable.ButtonView
+import com.yjotdev.empprimaria.application.composable.TextFieldView
+import com.yjotdev.empprimaria.application.composable.TitleView
+import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable
 fun OpinionView(
@@ -75,6 +76,7 @@ fun OpinionView(
             title = stringResource(id = R.string.some_opinion)
         )
         TextFieldView(
+            progressVm = progressVm,
             value = commentary,
             onValueChange = { commentary = it },
             labelId = R.string.text_field_commentary,
@@ -175,7 +177,7 @@ private fun PreviewTrackingAndSupportView(){
     EmprendimientoPrimariaTheme {
         OpinionView(
             modifier = Modifier.fillMaxSize(),
-            progressVm = ProgressViewModel(),
+            progressVm = viewModel(),
             onSendOpinion = {}
         )
     }

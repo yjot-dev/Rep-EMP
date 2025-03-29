@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria
+package com.yjotdev.empprimaria.application.navigation
 
 import android.content.Context
 import android.content.pm.PackageManager
@@ -12,12 +12,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable
 fun PermissionView(
     navController: NavHostController = rememberNavController(),
+    viewModel: ProgressViewModel = viewModel(),
     onCode: (String) -> Unit = {}
 ){
     val context = LocalContext.current
@@ -29,6 +32,7 @@ fun PermissionView(
     if(hasPermissions){
         NavigationView(
             navController = navController,
+            viewModel = viewModel,
             onCode = { code -> onCode(code) }
         )
     }else{

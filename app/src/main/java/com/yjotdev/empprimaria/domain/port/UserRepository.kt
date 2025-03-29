@@ -1,34 +1,26 @@
 package com.yjotdev.empprimaria.domain.port
 
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
-import com.yjotdev.empprimaria.application.mvvm.model.EmailModel
-import com.yjotdev.empprimaria.application.mvvm.model.UserModel
+import com.yjotdev.empprimaria.domain.entity.UserEntity
 
-interface UserInterface {
+interface UserRepository {
     @POST("find_user/")
-    suspend fun findUser(@Body user: UserModel): Response<UserModel>
+    suspend fun findUser(@Body user: UserEntity): UserEntity
 
     @POST("insert_user/")
-    suspend fun insertUser(@Body user:UserModel): Response<Unit>
+    suspend fun insertUser(@Body user: UserEntity)
 
     @PUT("update_user/{id}")
-    suspend fun updateUser(@Path("id") id:Int, @Body user:UserModel): Response<Unit>
+    suspend fun updateUser(@Path("id") id:Int, @Body user: UserEntity)
 
     @PATCH("change_password/")
-    suspend fun changePasswordUser(@Body user:UserModel): Response<Unit>
+    suspend fun changePasswordUser(@Body user: UserEntity)
 
     @DELETE("delete_user/{id}")
-    suspend fun deleteUser(@Path("id") id:Int): Response<Unit>
-
-    @POST("send_email/")
-    suspend fun sendEmail(@Body email: EmailModel): Response<Unit>
-
-    @POST("send_commentary/")
-    suspend fun sendCommentary(@Body email:EmailModel): Response<Unit>
+    suspend fun deleteUser(@Path("id") id:Int)
 }
