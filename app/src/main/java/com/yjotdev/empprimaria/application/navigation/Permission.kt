@@ -12,7 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
@@ -20,7 +20,7 @@ import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 @Composable
 fun PermissionView(
     navController: NavHostController = rememberNavController(),
-    viewModel: ProgressViewModel = viewModel(),
+    viewModel: ProgressViewModel = hiltViewModel(),
     onCode: (String) -> Unit = {}
 ){
     val context = LocalContext.current

@@ -1,13 +1,12 @@
 package com.yjotdev.empprimaria
 
 import android.content.Context
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTextReplacement
-import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -15,20 +14,34 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import dagger.hilt.android.testing.HiltAndroidRule
+import org.junit.Before
+import javax.inject.Inject
+import dagger.hilt.android.testing.HiltAndroidTest
 import com.yjotdev.empprimaria.application.navigation.PermissionView
 import com.yjotdev.empprimaria.application.navigation.ViewRoutes
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 
+@HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class UserInfoViewInstrumentedTest {
-    @get:Rule
-    val composeTestRule = createComposeRule()
+
+    @get:Rule(order = 0)
+    var hiltRule: HiltAndroidRule = HiltAndroidRule(this)
+
+    @get:Rule(order = 1)
+    val composeTestRule = createAndroidComposeRule<MainActivity>()
+
+    @Inject
+    lateinit var navController: TestNavHostController // NavController del Test
+
+    @Before
+    fun setup() {
+        hiltRule.inject() // Inicializa Hilt
+    }
     // Contexto del test de la app.
     private val context: Context = ApplicationProvider.getApplicationContext()
-    // NavController del Test
-    private val navController = TestNavHostController(context).apply {
-        navigatorProvider.addNavigator(ComposeNavigator())
-    }
+
     private lateinit var code: String
 
     @Test
@@ -48,7 +61,7 @@ class UserInfoViewInstrumentedTest {
         //Escribe clave de usuario
         composeTestRule.onNodeWithText(
             context.getString(R.string.text_field_password)
-        ).performTextInput("Yjot2025")
+        ).performTextInput("Yjot1997")
         //Hace click en el boton Iniciar Sesión
         composeTestRule.onNodeWithText(
             context.getString(R.string.button_login)
