@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.Packaging
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -8,14 +10,14 @@ plugins {
 
 android {
     namespace = "com.yjotdev.empprimaria"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.yjotdev.empprimaria"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 4
-        versionName = "3.3"
+        versionName = "3.4"
         testInstrumentationRunner = "com.yjotdev.empprimaria.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -25,7 +27,6 @@ android {
         debug {
             applicationIdSuffix = ".debug"
             isDebuggable = true
-            buildConfigField("Boolean", "DEBUG_MODE", "true")
         }
         release {
             isMinifyEnabled = true
@@ -33,7 +34,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("Boolean", "DEBUG_MODE", "false")
+            ndk {
+                debugSymbolLevel = "FULL"
+            }
         }
     }
     compileOptions {
@@ -47,9 +50,12 @@ android {
         compose = true
         buildConfig = true
     }
-    packaging {
+    fun Packaging.() {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+        jniLibs {
+            useLegacyPackaging = false
         }
     }
 }
