@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.application.composable
+package com.yjotdev.empprimaria.application.components
 
 import android.annotation.SuppressLint
 import androidx.annotation.StringRes

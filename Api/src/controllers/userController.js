@@ -8,7 +8,7 @@ function isEmptyObject(obj) {
 };
 
 // Seleccionar usuario
-const seleccionar_usuario = async function(req, res) {
+const findUser = async function(req, res) {
     try {
         const { nombre, correo, clave } = req.body;
 
@@ -41,7 +41,7 @@ const seleccionar_usuario = async function(req, res) {
 };
 
 // Actualizar usuario
-const actualizar_usuario = async function(req, res) {
+const updateUser = async function(req, res) {
     try {
         const id = req.params.id;
         // Desestructura clave y foto, y recoge el resto de los datos
@@ -89,7 +89,7 @@ const actualizar_usuario = async function(req, res) {
 };
 
 // Cambiar clave de usuario
-const cambiar_clave_usuario = async function(req, res) {
+const changePasswordUser = async function(req, res) {
     try {
         const { correo, clave } = req.body
 
@@ -108,7 +108,7 @@ const cambiar_clave_usuario = async function(req, res) {
 }
 
 // Insertar usuario
-const insertar_usuario = async function(req, res) {
+const insertUser = async function(req, res) {
     try {
         // Desestructura clave y recoge el resto de los datos
         const { correo, clave, ...resto } = req.body;
@@ -142,7 +142,7 @@ const insertar_usuario = async function(req, res) {
 };
 
 // Eliminar usuario
-const eliminar_usuario = async function(req, res) {
+const deleteUser = async function(req, res) {
     try{
         const id = req.params.id
 
@@ -158,7 +158,7 @@ const eliminar_usuario = async function(req, res) {
 }
 
 // Enviar email a usuario
-const enviar_correo = async function(req, res) {
+const sendEmail = async function(req, res) {
     try { 
         const from = 'emprendimiento2020g7h2@gmail.com'
         
@@ -199,7 +199,7 @@ const enviar_correo = async function(req, res) {
 };
 
 // Enviar comentario a empresa
-const enviar_comentario = async function(req, res){
+const sendComment = async function(req, res){
     try { 
         const from = 'emprendimiento2020g7h2@gmail.com'
         
@@ -233,11 +233,11 @@ const enviar_comentario = async function(req, res){
 };
 
 export {
-    seleccionar_usuario,
-    actualizar_usuario,
-    cambiar_clave_usuario,
-    insertar_usuario,
-    eliminar_usuario,
-    enviar_correo,
-    enviar_comentario
+    findUser,
+    updateUser,
+    changePasswordUser,
+    insertUser,
+    deleteUser,
+    sendEmail,
+    sendComment
 };

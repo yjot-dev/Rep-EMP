@@ -21,10 +21,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlin.random.Random
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.application.composable.BackgroundView
-import com.yjotdev.empprimaria.application.composable.AlertDialogView
-import com.yjotdev.empprimaria.application.composable.ButtonView
-import com.yjotdev.empprimaria.application.composable.TextFieldView
+import com.yjotdev.empprimaria.application.components.BackgroundView
+import com.yjotdev.empprimaria.application.components.AlertDialogView
+import com.yjotdev.empprimaria.application.components.ButtonView
+import com.yjotdev.empprimaria.application.components.TextFieldView
 import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable

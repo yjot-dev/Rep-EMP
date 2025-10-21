@@ -7,8 +7,8 @@ import android.content.Context
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.yjotdev.empprimaria.BuildConfig
-import com.yjotdev.empprimaria.domain.port.UserRepository
-import com.yjotdev.empprimaria.domain.port.EmailRepository
+import com.yjotdev.empprimaria.infrastructure.datasource.UserApi
+import com.yjotdev.empprimaria.infrastructure.datasource.EmailApi
 
 /*
 * 10.0.2.2 -> IP para probar API desde emulador
@@ -26,20 +26,20 @@ class Api @Inject constructor(
     }
 
     /** API Tabla Usuario **/
-    fun getUserRetrofit(): UserRepository = Retrofit.Builder()
+    fun getUserRetrofit(): UserApi = Retrofit.Builder()
         .baseUrl(uri)
         .client(httpsClient)
         .addConverterFactory(NullOnEmptyConverterFactory())
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-        .create(UserRepository::class.java)
+        .create(UserApi::class.java)
 
     /** API Tabla Email **/
-    fun getEmailRetrofit(): EmailRepository = Retrofit.Builder()
+    fun getEmailRetrofit(): EmailApi = Retrofit.Builder()
         .baseUrl(uri)
         .client(httpsClient)
         .addConverterFactory(NullOnEmptyConverterFactory())
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-        .create(EmailRepository::class.java)
+        .create(EmailApi::class.java)
 }

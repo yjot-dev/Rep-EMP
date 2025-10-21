@@ -1,9 +1,8 @@
-package com.yjotdev.empprimaria.application.composable
+package com.yjotdev.empprimaria.application.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,68 +18,58 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.domain.utils.data.Exercise1
-import com.yjotdev.empprimaria.application.mvvm.model.Exercise1Model
+import com.yjotdev.empprimaria.domain.utils.data.Exercise3
+import com.yjotdev.empprimaria.domain.entity.Exercise3Entity
+import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 
 @Composable
-fun Exercise1View(
+fun Exercise3View(
     modifier: Modifier = Modifier,
-    exercise1: Exercise1Model,
-    isPreview: Boolean = false,
+    progressVm: ProgressViewModel,
+    exercise3: Exercise3Entity,
     onResponse: (Boolean) -> Unit
 ) {
     var isCorrect by remember { mutableStateOf(false) }
     var isEnabled by remember { mutableStateOf(false) }
     var isVisible by remember { mutableStateOf(true) }
+    var responseText by remember { mutableStateOf("") }
+    var isError by remember { mutableStateOf(false) }
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Row(
-            modifier = Modifier.fillMaxWidth(0.85f),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            GifImage(
-                idImage = R.drawable.person_one,
-                isPreview = isPreview
-            )
-            TextView(
-                modifier = Modifier
-                    .background(
-                        color = MaterialTheme.colorScheme.surface
-                            .copy(alpha = 0.8f),
-                        shape = ShapeDefaults.Large
-                    )
-                    .fillMaxWidth(0.85f),
-                text = exercise1.question
-            )
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(0.85f),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            exercise1.answer.forEach { answer ->
-                ButtonView(
-                    modifier = Modifier.height(dimensionResource(id = R.dimen.dm_5)),
-                    click = {
-                        isCorrect = answer.second
-                        isEnabled = true
-                    },
-                    text = answer.first
+        TextView(
+            modifier = Modifier
+                .background(
+                    color = MaterialTheme.colorScheme.surface
+                        .copy(alpha = 0.8f),
+                    shape = ShapeDefaults.Large
                 )
-            }
-        }
+                .fillMaxWidth(0.85f),
+            text = exercise3.question
+        )
+        TextFieldView(
+            progressVm = progressVm,
+            value = responseText,
+            onValueChange = { text ->
+                responseText = text
+                isCorrect = text.lowercase() == exercise3.answer.lowercase()
+                isEnabled = true
+            },
+            labelId = R.string.text_field_response,
+            infoId = R.string.valid_response,
+            onIsError = { isError = it }
+        )
         if(isVisible) {
             ButtonView(
                 modifier = Modifier
                     .height(dimensionResource(id = R.dimen.dm_5))
                     .fillMaxWidth(0.85f),
-                enabled = isEnabled,
+                enabled = isEnabled && !isError,
                 click = {
                     onResponse(isCorrect)
                     if (isCorrect) isVisible = false
@@ -99,10 +88,10 @@ fun Exercise1View(
 @Composable
 private fun PreviewExercise1View() {
     EmprendimientoPrimariaTheme {
-        Exercise1View(
+        Exercise3View(
             modifier = Modifier.fillMaxSize(),
-            exercise1 = Exercise1.data[0],
-            isPreview = true,
+            progressVm = viewModel(),
+            exercise3 = Exercise3.data[0],
             onResponse = {}
         )
     }

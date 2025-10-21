@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.application.composable
+package com.yjotdev.empprimaria.application.components
 
 import android.os.Build.VERSION.SDK_INT
 import androidx.annotation.DrawableRes

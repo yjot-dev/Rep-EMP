@@ -1,8 +1,10 @@
 package com.yjotdev.empprimaria.application.navigation
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,8 +17,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -29,6 +37,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.yjotdev.empprimaria.R
+import com.yjotdev.empprimaria.application.components.LoadingScreen
 import com.yjotdev.empprimaria.application.mvvm.view.LoginView
 import com.yjotdev.empprimaria.application.mvvm.view.MenuView
 import com.yjotdev.empprimaria.application.mvvm.view.RecoverKeyView
@@ -48,6 +57,11 @@ fun NavigationView(
     )
     //Obtiene datos del viewmodel
     val userInfo by viewModel.userInfo.collectAsState()
+    val state by viewModel.uiState.collectAsState()
+    //Variables reactivas locales
+    var passwordR by remember { mutableStateOf("") }
+    var operationId by remember { mutableIntStateOf(0) }
+    //UI
     Scaffold(
         topBar = {
             TitleBar(
@@ -58,6 +72,13 @@ fun NavigationView(
             )
         }
     ) { innerPadding ->
+        ObserveViewModelState(
+            viewModel = viewModel,
+            navController = navController,
+            context = context,
+            operationId = operationId,
+            passwordR = passwordR
+        )
         NavHost(
             navController = navController,
             startDestination = ViewRoutes.Login.name,
@@ -66,178 +87,100 @@ fun NavigationView(
             modifier = Modifier.padding(innerPadding)
         ){
             composable(route = ViewRoutes.Login.name) {
-                LoginView(
+                Box(
                     modifier = Modifier.fillMaxSize(),
-                    progressVm = viewModel,
-                    onLogin = { userOrEmail, password ->
-                        viewModel.findUser(userOrEmail, password){ user ->
-                            if(user.id != 0){
-                                viewModel.setUserInfo(user.copy(clave = password))
-                                navController.navigate(ViewRoutes.Menu.name){
-                                    popUpTo(ViewRoutes.Login.name){ inclusive = true }
-                                }
-                            }else{
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.error_user_login),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                    },
-                    onRegister = { navController.navigate(ViewRoutes.Register.name) },
-                    onRecoverKey = { navController.navigate(ViewRoutes.RecoverKey.name) }
-                )
+                    contentAlignment = Alignment.Center
+                ){
+                    LoginView(
+                        modifier = Modifier.fillMaxSize(),
+                        progressVm = viewModel,
+                        onLogin = { userOrEmail, password ->
+                            viewModel.findUser(userOrEmail, userOrEmail, password)
+                            operationId = 1
+                            passwordR = password
+                        },
+                        onRegister = { navController.navigate(ViewRoutes.Register.name) },
+                        onRecoverKey = { navController.navigate(ViewRoutes.RecoverKey.name) }
+                    )
+                    if(state.isLoading) LoadingScreen()
+                }
             }
             composable(route = ViewRoutes.Register.name) {
-                RegisterView(
+                Box(
                     modifier = Modifier.fillMaxSize(),
-                    progressVm = viewModel,
-                    onRegister = { user, email, password ->
-                        viewModel.insertUser(user, email, password){ result ->
-                            if (result) {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.alert_user_registered),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.error_user_registered),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                    contentAlignment = Alignment.Center
+                ){
+                    RegisterView(
+                        modifier = Modifier.fillMaxSize(),
+                        progressVm = viewModel,
+                        onRegister = { user, email, password ->
+                            viewModel.insertUser(user, email, password)
+                            operationId = 2
                         }
-                    }
-                )
+                    )
+                    if(state.isLoading) LoadingScreen()
+                }
             }
             composable(route = ViewRoutes.RecoverKey.name) {
-                RecoverKeyView(
+                Box(
                     modifier = Modifier.fillMaxSize(),
-                    progressVm = viewModel,
-                    onChangePassword = { email, password ->
-                        viewModel.changePassword(email, password){ result ->
-                            if (result) {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.alert_user_changed_password),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.error_user_changed_password),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                    contentAlignment = Alignment.Center
+                ){
+                    RecoverKeyView(
+                        modifier = Modifier.fillMaxSize(),
+                        progressVm = viewModel,
+                        onChangePassword = { email, password ->
+                            viewModel.changePassword(email, password)
+                            operationId = 3
+                        },
+                        onSendCode = { email, code ->
+                            onCode(code)
+                            val subject = context.getString(R.string.alert_dialog_code)
+                            val text = context.getString(R.string.body_email, "Usuario", code)
+                            viewModel.sendCodeByEmail(email, subject, text)
+                            operationId = 4
                         }
-                    },
-                    onSendCode = { email, code ->
-                        onCode(code)
-                        val subject = context.getString(R.string.alert_dialog_code)
-                        val text = context.getString(R.string.body_email, "Usuario", code)
-                        viewModel.sendCodeByEmail(email, subject, text){ result ->
-                            if (result) {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.alert_email_sent),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.error_email_sent),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                    }
-                )
+                    )
+                    if(state.isLoading) LoadingScreen()
+                }
             }
             composable(route = ViewRoutes.Menu.name) {
                 val id = userInfo.id
-                val nombre = userInfo.nombre
-                MenuView(
+                val nombre = userInfo.name
+                Box(
                     modifier = Modifier.fillMaxSize(),
-                    progressVm = viewModel,
-                    onLogout = { navController.navigate(ViewRoutes.Login.name){
-                        popUpTo(ViewRoutes.Menu.name){ inclusive = true }}
-                        viewModel.reset()
-                    },
-                    onUpdate = { user, email, password, photo ->
-                        viewModel.updateUser(id, user, email, password, photo){ result ->
-                            if (result) {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.alert_user_updated),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.error_user_updated),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                    contentAlignment = Alignment.Center
+                ){
+                    MenuView(
+                        modifier = Modifier.fillMaxSize(),
+                        progressVm = viewModel,
+                        onLogout = { navController.navigate(ViewRoutes.Login.name){
+                            popUpTo(ViewRoutes.Menu.name){ inclusive = true }}
+                            viewModel.resetViewModel()
+                        },
+                        onUpdate = { user, email, password, photo ->
+                            viewModel.updateUser(id, user, email, password, photo)
+                            operationId = 5
+                        },
+                        onDelete = {
+                            viewModel.deleteUser(id)
+                            operationId = 6
+                        },
+                        onSendCode = { email, code ->
+                            onCode(code)
+                            val subject = context.getString(R.string.alert_dialog_code)
+                            val text = context.getString(R.string.body_email, nombre, code)
+                            viewModel.sendCodeByEmail(email, subject, text)
+                            operationId = 7
+                        },
+                        onSendOpinion = { text ->
+                            val subject = context.getString(R.string.alert_dialog_opinion, nombre.uppercase())
+                            viewModel.sendCommentaryByEmail(subject, text)
+                            operationId = 8
                         }
-                    },
-                    onDelete = {
-                        viewModel.deleteUser(id){ result ->
-                            if (result) {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.alert_user_deleted),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.error_user_deleted),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                    },
-                    onSendCode = { email, code ->
-                        onCode(code)
-                        val subject = context.getString(R.string.alert_dialog_code)
-                        val text = context.getString(R.string.body_email, nombre, code)
-                        viewModel.sendCodeByEmail(email, subject, text){ result ->
-                            if (result) {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.alert_email_sent),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.error_email_sent),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                    },
-                    onSendOpinion = { text ->
-                        val subject = context.getString(R.string.alert_dialog_opinion, nombre.uppercase())
-                        viewModel.sendCommentaryByEmail(subject, text){ result ->
-                            if (result) {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.alert_email_sent),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.error_email_sent),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                    }
-                )
+                    )
+                    if(state.isLoading) LoadingScreen()
+                }
             }
         }
     }
@@ -278,5 +221,146 @@ private fun TitleBar(
                 titleContentColor = MaterialTheme.colorScheme.secondary
             )
         )
+    }
+}
+
+@Composable
+private fun ObserveViewModelState(
+    viewModel: ProgressViewModel,
+    navController: NavHostController,
+    context: Context,
+    operationId: Int,
+    passwordR: String
+){
+    val state by viewModel.uiState.collectAsState()
+    LaunchedEffect(
+        key1 = state.operationCompletedCount
+    ) {
+        // No ejecutar si operationCompletedCount es 0 (estado inicial)
+        if (state.operationCompletedCount == 0) return@LaunchedEffect
+
+        when(operationId){
+            1 -> {
+                state.user?.let { user ->
+                    if(state.wasFound) viewModel.clearFlags()
+                    viewModel.setUserInfo(user.copy(password = passwordR))
+                    navController.navigate(ViewRoutes.Menu.name){
+                        popUpTo(ViewRoutes.Login.name){ inclusive = true }
+                    }
+                } ?: run {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.error_user_login),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            2 -> {
+                if (state.wasInserted) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.alert_user_registered),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.error_user_registered),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            3 -> {
+                if (state.wasUpdated) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.alert_user_changed_password),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.error_user_changed_password),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            4 -> {
+                if (state.wasEmailed) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.alert_email_sent),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.error_email_sent),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            5 -> {
+                if (state.wasUpdated) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.alert_user_updated),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.error_user_updated),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            6 -> {
+                if (state.wasDeleted) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.alert_user_deleted),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.error_user_deleted),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            7 -> {
+                if (state.wasEmailed) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.alert_email_sent),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.error_email_sent),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            8 -> {
+                if (state.wasEmailed) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.alert_email_sent),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.error_email_sent),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+        viewModel.clearFlags()
     }
 }

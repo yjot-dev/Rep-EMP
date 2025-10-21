@@ -3,9 +3,7 @@ package com.yjotdev.empprimaria.application.mvvm.viewmodel
 import android.graphics.Bitmap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,6 +11,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import com.yjotdev.empprimaria.application.mvvm.model.ProgressModel
+import com.yjotdev.empprimaria.application.utils.ImageUtils.convertToBitmap
+import com.yjotdev.empprimaria.application.utils.ImageUtils.convertToBase64
+import com.yjotdev.empprimaria.domain.core.Result
 import com.yjotdev.empprimaria.domain.entity.EmailEntity
 import com.yjotdev.empprimaria.domain.entity.UserEntity
 import com.yjotdev.empprimaria.domain.usecase.email.SendCommentaryUseCase
@@ -50,6 +51,11 @@ class ProgressViewModel @Inject constructor(
     val story = Stories.data
     val projectList = Projects.list
 
+    override fun onCleared() {
+        super.onCleared()
+        resetViewModel()
+    }
+
     /** Este metodo actualiza el estado de la variable experience **/
     fun setExperience(experience: Int){
         _uiState.update { state ->
@@ -83,10 +89,10 @@ class ProgressViewModel @Inject constructor(
         _userInfo.update { state ->
             state.copy(
                 id = userInfo.id,
-                nombre = userInfo.nombre,
-                correo = userInfo.correo,
-                clave = userInfo.clave,
-                foto = userInfo.foto
+                name = userInfo.name,
+                email = userInfo.email,
+                password = userInfo.password,
+                photo = userInfo.photo
             )
         }
     }
@@ -97,43 +103,74 @@ class ProgressViewModel @Inject constructor(
 
     /** Este metodo convierte una foto en base64 a un objeto Bitmap **/
     fun getBitmap(): Bitmap? =
-        Validation.convertToBitmap(userInfo.value.foto)
+        convertToBitmap(userInfo.value.photo)
 
     /** Este metodo convierte un objeto Bitmap a una foto en base64 **/
     fun getBase64(): String =
-        Validation.convertToBase64(getBitmap())
+        convertToBase64(getBitmap())
+
+    fun clearFlags() {
+        _uiState.update { state ->
+            state.copy(wasFound = false, wasInserted = false,
+                wasUpdated = false, wasDeleted = false, wasEmailed = false)
+        }
+    }
 
     /** Este metodo obtiene los datos del usuario en la BD **/
-    fun findUser(
-        userOrEmail: String,
-        password: String,
-        result: (UserEntity) -> Unit
-    ){
+    fun findUser(name: String, email: String, password: String){
+        _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            val user = try{
-                val userToFind = UserEntity(0, userOrEmail, userOrEmail, password)
-                withContext(Dispatchers.IO) { findUserUseCase(userToFind) }
-            }catch(e: Exception){
-                UserEntity()
+            val result = findUserUseCase(name, email, password)
+            when (result) {
+                is Result.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            user = result.data,
+                            wasFound = true,
+                            operationCompletedCount = it.operationCompletedCount + 1
+                        )
+                    }
+                }
+                is Result.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            user = null,
+                            wasFound = false,
+                            operationCompletedCount = it.operationCompletedCount + 1
+                        )
+                    }
+                }
             }
-            result(user)
         }
     }
 
     /** Este metodo ingresa los datos de un nuevo usuario en la BD **/
-    fun insertUser(
-        user: String,
-        email: String,
-        password: String,
-        result: (Boolean) -> Unit
-    ){
+    fun insertUser(name: String, email: String, password: String){
+        _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch{
-            try{
-                val userToInsert = UserEntity(0, user, email, password)
-                withContext(Dispatchers.IO) { insertUserUseCase(userToInsert) }
-                result(true)
-            }catch(e: Exception){
-                result(false)
+            val userToInsert = UserEntity(0, name, email, password)
+            val result = insertUserUseCase(userToInsert)
+            when (result) {
+                is Result.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            wasInserted = true,
+                            operationCompletedCount = it.operationCompletedCount + 1
+                        )
+                    }
+                }
+                is Result.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            wasInserted = false,
+                            operationCompletedCount = it.operationCompletedCount + 1
+                        )
+                    }
+                }
             }
         }
     }
@@ -141,92 +178,154 @@ class ProgressViewModel @Inject constructor(
     /** Este metodo actualiza los datos de un usuario existente en la BD **/
     fun updateUser(
         id: Int,
-        user: String,
+        name: String,
         email: String,
         password: String,
-        photo: String,
-        result: (Boolean) -> Unit
+        photo: String
     ){
+        _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch{
-            try{
-                val userToUpdate = UserEntity(id, user, email, password, photo)
-                withContext(Dispatchers.IO) { updateUserUseCase(id, userToUpdate) }
-                result(true)
-            }catch(e: Exception){
-                result(false)
+            val userToUpdate = UserEntity(id, name, email, password, photo)
+            val result = updateUserUseCase(id, userToUpdate)
+            when (result) {
+                is Result.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            wasUpdated = true,
+                            operationCompletedCount = it.operationCompletedCount + 1
+                        )
+                    }
+                }
+                is Result.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            wasUpdated = false,
+                            operationCompletedCount = it.operationCompletedCount + 1
+                        )
+                    }
+                }
             }
         }
     }
 
     /** Este metodo cambia la clave del usuario de la BD **/
-    fun changePassword(
-        email: String,
-        password: String,
-        result: (Boolean) -> Unit
-    ){
+    fun changePassword(email: String, password: String){
+        _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch{
-            try{
-                val passwordUserToChange = UserEntity(0, "", email, password)
-                withContext(Dispatchers.IO) { changePasswordUserUseCase(passwordUserToChange) }
-                result(true)
-            }catch(e: Exception){
-                result(false)
+            val result = changePasswordUserUseCase(email, password)
+            when (result) {
+                is Result.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            wasUpdated = true,
+                            operationCompletedCount = it.operationCompletedCount + 1
+                        )
+                    }
+                }
+                is Result.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            wasUpdated = false,
+                            operationCompletedCount = it.operationCompletedCount + 1
+                        )
+                    }
+                }
             }
         }
     }
 
     /** Este metodo elimina un usuario de la BD **/
-    fun deleteUser(
-        id: Int,
-        result: (Boolean) -> Unit
-    ){
+    fun deleteUser(id: Int){
+        _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch{
-            try{
-                withContext(Dispatchers.IO) { deleteUserUseCase(id) }
-                result(true)
-            }catch(e: Exception){
-                result(false)
+            val result = deleteUserUseCase(id)
+            when (result) {
+                is Result.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            wasDeleted = true,
+                            operationCompletedCount = it.operationCompletedCount + 1
+                        )
+                    }
+                }
+                is Result.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            wasDeleted = false,
+                            operationCompletedCount = it.operationCompletedCount + 1
+                        )
+                    }
+                }
             }
         }
     }
 
     /** Este metodo envia un correo al usuario con el código de verificación **/
-    fun sendCodeByEmail(
-        to: String,
-        subject: String,
-        text: String,
-        result: (Boolean) -> Unit
-    ){
+    fun sendCodeByEmail(to: String, subject: String, text: String){
+        _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch{
-            try{
-                val email = EmailEntity(to, subject, text)
-                withContext(Dispatchers.IO) { sendEmailUseCase(email) }
-                result(true)
-            }catch(e: Exception){
-                result(false)
+            val email = EmailEntity(to, subject, text)
+            val result = sendEmailUseCase(email)
+            when (result) {
+                is Result.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            wasEmailed = true,
+                            operationCompletedCount = it.operationCompletedCount + 1
+                        )
+                    }
+                }
+                is Result.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            wasEmailed = false,
+                            operationCompletedCount = it.operationCompletedCount + 1
+                        )
+                    }
+                }
             }
         }
     }
 
     /** Este metodo envia un comentario del usuario al correo de la empresa **/
-    fun sendCommentaryByEmail(
-        subject: String,
-        text: String,
-        result: (Boolean) -> Unit
-    ){
+    fun sendCommentaryByEmail(subject: String, text: String){
+        _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch{
-            try{
-                val email = EmailEntity("", subject, text)
-                withContext(Dispatchers.IO) { sendCommentaryUseCase(email) }
-                result(true)
-            }catch(e: Exception){
-                result(false)
+            val email = EmailEntity("", subject, text)
+            val result = sendCommentaryUseCase(email)
+            when (result) {
+                is Result.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            wasEmailed = true,
+                            operationCompletedCount = it.operationCompletedCount + 1
+                        )
+                    }
+                }
+                is Result.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            wasEmailed = false,
+                            operationCompletedCount = it.operationCompletedCount + 1
+                        )
+                    }
+                }
             }
         }
     }
 
     /** Este metodo reinicia el estado del ProgressViewModel **/
-    fun reset(){
+    fun resetViewModel(){
         _uiState.value = ProgressModel()
         _userInfo.value = UserEntity()
     }

@@ -30,9 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.application.composable.ButtonView
-import com.yjotdev.empprimaria.application.composable.TextFieldView
-import com.yjotdev.empprimaria.application.composable.TitleView
+import com.yjotdev.empprimaria.application.components.ButtonView
+import com.yjotdev.empprimaria.application.components.TextFieldView
+import com.yjotdev.empprimaria.application.components.TitleView
 import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable

@@ -1,6 +1,6 @@
-package com.yjotdev.empprimaria.application.mvvm.model
+package com.yjotdev.empprimaria.domain.entity
 
-data class StoryModel(
+data class StoryEntity(
     val paragraph: String = "",
     val question: String = "",
     val answer: List<Pair<String, Boolean>> = listOf(),

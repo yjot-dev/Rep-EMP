@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.application.composable
+package com.yjotdev.empprimaria.application.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -39,7 +39,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.domain.utils.data.Stories
-import com.yjotdev.empprimaria.application.mvvm.model.StoryModel
+import com.yjotdev.empprimaria.domain.entity.StoryEntity
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
@@ -47,7 +47,7 @@ import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 fun StoryView(
     modifier: Modifier = Modifier,
     progressVm: ProgressViewModel,
-    story: List<StoryModel>,
+    story: List<StoryEntity>,
     numLevel: Int,
     totalLevels: Int,
     onCallback: () -> Unit
@@ -154,7 +154,7 @@ fun StoryView(
 }
 
 @Composable
-private fun SectionView(section: StoryModel, onResponse: (Boolean) -> Unit){
+private fun SectionView(section: StoryEntity, onResponse: (Boolean) -> Unit){
     var isCorrect by remember { mutableStateOf(false) }
     var isEnabled by remember { mutableStateOf(false) }
     var isVisible by remember { mutableStateOf(true) }

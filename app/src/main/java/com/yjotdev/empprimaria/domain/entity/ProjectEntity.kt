@@ -1,9 +1,9 @@
-package com.yjotdev.empprimaria.application.mvvm.model
+package com.yjotdev.empprimaria.domain.entity
 
 /**
 Modelo para la lista de proyectos.
  **/
-data class ProjectModel(
+data class ProjectEntity(
     val title: String,
     val imagePath: String,
     val description: String

@@ -21,10 +21,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.application.mvvm.model.ProjectModel
+import com.yjotdev.empprimaria.domain.entity.ProjectEntity
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.application.composable.TextView
-import com.yjotdev.empprimaria.application.composable.TitleView
+import com.yjotdev.empprimaria.application.components.TextView
+import com.yjotdev.empprimaria.application.components.TitleView
 import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable
@@ -48,7 +48,7 @@ fun ProjectListView(
 }
 
 @Composable
-private fun ProjectView(project: ProjectModel, isPreview: Boolean){
+private fun ProjectView(project: ProjectEntity, isPreview: Boolean){
     TitleView(
         modifier = Modifier
             .height(dimensionResource(id = R.dimen.dm_5))

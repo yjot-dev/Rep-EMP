@@ -42,9 +42,9 @@ import kotlin.random.Random
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.application.composable.AlertDialogView
-import com.yjotdev.empprimaria.application.composable.ButtonView
-import com.yjotdev.empprimaria.application.composable.TextFieldView
+import com.yjotdev.empprimaria.application.components.AlertDialogView
+import com.yjotdev.empprimaria.application.components.ButtonView
+import com.yjotdev.empprimaria.application.components.TextFieldView
 
 @Composable
 fun UserInfoView(
@@ -60,9 +60,9 @@ fun UserInfoView(
     val focusRequest3 = remember { FocusRequester() }
     val scrollState = rememberScrollState()
     val userInfo by progressVm.userInfo.collectAsState()
-    var user by remember { mutableStateOf(userInfo.nombre) }
-    var email by remember { mutableStateOf(userInfo.correo) }
-    var password by remember { mutableStateOf(userInfo.clave) }
+    var user by remember { mutableStateOf(userInfo.name) }
+    var email by remember { mutableStateOf(userInfo.email) }
+    var password by remember { mutableStateOf(userInfo.password) }
     var photo by remember { mutableStateOf(progressVm.getBitmap()) }
     var sendCode by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(false) }

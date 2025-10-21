@@ -1,13 +1,13 @@
 package com.yjotdev.empprimaria.domain.utils.data
 
-import com.yjotdev.empprimaria.application.mvvm.model.Exercise1Model
+import com.yjotdev.empprimaria.domain.entity.Exercise1Entity
 
 /**
  * Verdadero o falso
  **/
 object Exercise1 {
     val data = listOf(
-        Exercise1Model(
+        Exercise1Entity(
             question = "Elija verdadero o falso \n" +
                     "El ingreso es la cantidad de bienes obtenidos por el " +
                     "precio de venta de un producto o servicio.",
@@ -16,7 +16,7 @@ object Exercise1 {
                 Pair("Falso", false)
             )
         ),
-        Exercise1Model(
+        Exercise1Entity(
             question = "Elija verdadero o falso \n" +
                     "El costo es la cantidad de bienes obtenidos por el " +
                     "precio de venta de un producto o servicio.",
@@ -25,7 +25,7 @@ object Exercise1 {
                 Pair("Falso", true)
             )
         ),
-        Exercise1Model(
+        Exercise1Entity(
             question = "Elija verdadero o falso \n" +
                     "Los costos son todos los desembolsos que hace la empresa para producir un " +
                     "bien o servicio que generará un beneficio económico, dentro de un ejercicio " +
@@ -35,7 +35,7 @@ object Exercise1 {
                 Pair("Falso", false)
             )
         ),
-        Exercise1Model(
+        Exercise1Entity(
             question = "Elija verdadero o falso \n" +
                     "Los gastos son todos los desembolsos que hace la empresa para producir un " +
                     "bien o servicio que generará un beneficio económico, dentro de un ejercicio " +
@@ -45,7 +45,7 @@ object Exercise1 {
                 Pair("Falso", true)
             )
         ),
-        Exercise1Model(
+        Exercise1Entity(
             question = "Elija verdadero o falso \n" +
                     "Un gasto es el desembolso que debe hacer el emprendimiento para poder " +
                     "llevar a cabo sus actividades, y que no se relacionen directamente con la fabri" +
@@ -55,7 +55,7 @@ object Exercise1 {
                 Pair("Falso", false)
             )
         ),
-        Exercise1Model(
+        Exercise1Entity(
             question = "Elija verdadero o falso \n" +
                     "Una inversión es el desembolso que debe hacer el emprendimiento para poder " +
                     "llevar a cabo sus actividades, y que no se relacionen directamente con la fabri" +
@@ -65,7 +65,7 @@ object Exercise1 {
                 Pair("Falso", true)
             )
         ),
-        Exercise1Model(
+        Exercise1Entity(
             question = "Elija verdadero o falso \n" +
                     "La inversión consiste en asignar un capital a una actividad que genere un em" +
                     "prendimiento y permita alcanzar los objetivos propuestos.",
@@ -74,7 +74,7 @@ object Exercise1 {
                 Pair("Falso", false)
             )
         ),
-        Exercise1Model(
+        Exercise1Entity(
             question = "Elija verdadero o falso \n" +
                     "El ingreso consiste en asignar un capital a una actividad que genere un em" +
                     "prendimiento y permita alcanzar los objetivos propuestos.",

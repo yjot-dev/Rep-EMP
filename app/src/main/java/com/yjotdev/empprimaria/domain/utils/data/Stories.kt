@@ -1,11 +1,11 @@
 package com.yjotdev.empprimaria.domain.utils.data
 
-import com.yjotdev.empprimaria.application.mvvm.model.StoryModel
+import com.yjotdev.empprimaria.domain.entity.StoryEntity
 
 object Stories {
     val data = listOf(
         listOf(
-            StoryModel(
+            StoryEntity(
                 paragraph = "Steve Jobs fue un emprendedor visionario y carismático " +
                         "que dejó una huella indeleble en la industria tecnológica. " +
                         "Junto con Steve Wozniak y Ronald Wayne, Jobs fundó Apple Computer, " +
@@ -18,7 +18,7 @@ object Stories {
                     Pair("1978", false)
                 )
             ),
-            StoryModel(
+            StoryEntity(
                 paragraph = "Jobs jugó un papel crucial en el desarrollo de productos " +
                     "icónicos como el Apple I, Apple II, iMac, iPod, iPhone y iPad. " +
                     "Estos productos revolucionaron sus respectivos mercados y cambiaron " +
@@ -31,7 +31,7 @@ object Stories {
                     Pair("Chat-GPT", false)
                 )
             ),
-            StoryModel(
+            StoryEntity(
                 paragraph = "Además de Apple, Jobs también adquirió Pixar en 1986, que se convirtió " +
                         "en una exitosa compañía de animación, produciendo películas como \"Toy Story\" y" +
                         " \"Buscando a Nemo\".",

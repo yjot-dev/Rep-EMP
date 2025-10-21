@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.application.composable
+package com.yjotdev.empprimaria.application.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,23 +20,20 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.domain.utils.data.Exercise2
-import com.yjotdev.empprimaria.application.mvvm.model.Exercise2Model
+import com.yjotdev.empprimaria.domain.utils.data.Exercise1
+import com.yjotdev.empprimaria.domain.entity.Exercise1Entity
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 
 @Composable
-fun Exercise2View(
+fun Exercise1View(
     modifier: Modifier = Modifier,
-    exercise2: Exercise2Model,
+    exercise1: Exercise1Entity,
     isPreview: Boolean = false,
     onResponse: (Boolean) -> Unit
 ) {
     var isCorrect by remember { mutableStateOf(false) }
     var isEnabled by remember { mutableStateOf(false) }
     var isVisible by remember { mutableStateOf(true) }
-    val half = exercise2.answer.size / 2
-    val firstHalf = exercise2.answer.take(half)
-    val secondHalf = exercise2.answer.drop(half)
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween,
@@ -48,7 +45,7 @@ fun Exercise2View(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             GifImage(
-                idImage = R.drawable.person_two,
+                idImage = R.drawable.person_one,
                 isPreview = isPreview
             )
             TextView(
@@ -59,44 +56,23 @@ fun Exercise2View(
                         shape = ShapeDefaults.Large
                     )
                     .fillMaxWidth(0.85f),
-                text = exercise2.question
+                text = exercise1.question
             )
         }
-        Column(
-            verticalArrangement = Arrangement
-                .spacedBy(dimensionResource(id = R.dimen.dm_2))
+        Row(
+            modifier = Modifier.fillMaxWidth(0.85f),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
         ){
-            Row(
-                modifier = Modifier.fillMaxWidth(0.85f),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                firstHalf.forEach { answer ->
-                    ButtonView(
-                        modifier = Modifier.height(dimensionResource(id = R.dimen.dm_5)),
-                        click = {
-                            isCorrect = answer.second
-                            isEnabled = true
-                        },
-                        text = answer.first
-                    )
-                }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(0.85f),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                secondHalf.forEach { answer ->
-                    ButtonView(
-                        modifier = Modifier.height(dimensionResource(id = R.dimen.dm_5)),
-                        click = {
-                            isCorrect = answer.second
-                            isEnabled = true
-                        },
-                        text = answer.first
-                    )
-                }
+            exercise1.answer.forEach { answer ->
+                ButtonView(
+                    modifier = Modifier.height(dimensionResource(id = R.dimen.dm_5)),
+                    click = {
+                        isCorrect = answer.second
+                        isEnabled = true
+                    },
+                    text = answer.first
+                )
             }
         }
         if(isVisible) {
@@ -123,9 +99,9 @@ fun Exercise2View(
 @Composable
 private fun PreviewExercise1View() {
     EmprendimientoPrimariaTheme {
-        Exercise2View(
+        Exercise1View(
             modifier = Modifier.fillMaxSize(),
-            exercise2 = Exercise2.data[0],
+            exercise1 = Exercise1.data[0],
             isPreview = true,
             onResponse = {}
         )

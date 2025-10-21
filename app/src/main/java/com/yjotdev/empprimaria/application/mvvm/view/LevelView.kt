@@ -37,24 +37,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
 import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.application.mvvm.model.Exercise1Model
-import com.yjotdev.empprimaria.application.mvvm.model.Exercise2Model
-import com.yjotdev.empprimaria.application.mvvm.model.Exercise3Model
+import com.yjotdev.empprimaria.domain.entity.Exercise1Entity
+import com.yjotdev.empprimaria.domain.entity.Exercise2Entity
+import com.yjotdev.empprimaria.domain.entity.Exercise3Entity
 import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.application.composable.AnimationView
-import com.yjotdev.empprimaria.application.composable.Exercise1View
-import com.yjotdev.empprimaria.application.composable.ButtonView
-import com.yjotdev.empprimaria.application.composable.Exercise2View
-import com.yjotdev.empprimaria.application.composable.Exercise3View
+import com.yjotdev.empprimaria.application.components.AnimationView
+import com.yjotdev.empprimaria.application.components.Exercise1View
+import com.yjotdev.empprimaria.application.components.ButtonView
+import com.yjotdev.empprimaria.application.components.Exercise2View
+import com.yjotdev.empprimaria.application.components.Exercise3View
 
 @Composable
 fun LevelView(
     modifier: Modifier = Modifier,
     progressVm: ProgressViewModel,
-    exercise1: Exercise1Model = progressVm.exercise1[0],
-    exercise2: Exercise2Model = progressVm.exercise2[0],
-    exercise3: Exercise3Model = progressVm.exercise3[0],
+    exercise1: Exercise1Entity = progressVm.exercise1[0],
+    exercise2: Exercise2Entity = progressVm.exercise2[0],
+    exercise3: Exercise3Entity = progressVm.exercise3[0],
     numLevel: Int,
     totalLevels: Int,
     onCallback: () -> Unit

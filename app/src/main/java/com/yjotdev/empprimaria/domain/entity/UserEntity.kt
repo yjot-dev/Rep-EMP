@@ -8,8 +8,8 @@ en la BD.
  **/
 data class UserEntity(
     @SerializedName("id") val id: Int = 0,
-    @SerializedName("nombre") val nombre: String = "",
-    @SerializedName("correo") val correo: String = "",
-    @SerializedName("clave") val clave: String = "",
-    @SerializedName("foto") val foto: String = ""
+    @SerializedName("nombre") val name: String = "",
+    @SerializedName("correo") val email: String = "",
+    @SerializedName("clave") val password: String = "",
+    @SerializedName("foto") val photo: String = ""
 )

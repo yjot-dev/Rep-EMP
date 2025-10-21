@@ -1,0 +1,28 @@
+package com.yjotdev.empprimaria.application.utils
+
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
+import java.io.ByteArrayOutputStream
+
+object ImageUtils {
+    fun convertToBitmap(base64: String): Bitmap? {
+        return if(base64.isNotEmpty()){
+            val byteArray = Base64.decode(base64, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+        }else{
+            null
+        }
+    }
+
+    fun convertToBase64(bitmap: Bitmap?): String{
+        return bitmap?.let {
+            val outputStream = ByteArrayOutputStream()
+            it.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            val byteArray = outputStream.toByteArray()
+            Base64.encodeToString(byteArray, Base64.DEFAULT)
+        } ?: run {
+            ""
+        }
+    }
+}

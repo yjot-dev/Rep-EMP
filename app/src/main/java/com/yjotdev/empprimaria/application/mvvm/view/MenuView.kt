@@ -30,7 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.application.composable.BackgroundView
+import com.yjotdev.empprimaria.application.components.BackgroundView
 import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable

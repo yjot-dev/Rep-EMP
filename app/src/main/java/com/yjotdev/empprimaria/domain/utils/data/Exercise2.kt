@@ -1,13 +1,13 @@
 package com.yjotdev.empprimaria.domain.utils.data
 
-import com.yjotdev.empprimaria.application.mvvm.model.Exercise2Model
+import com.yjotdev.empprimaria.domain.entity.Exercise2Entity
 
 /**
  * Elegir opcion correcta
  **/
 object Exercise2 {
     val data = listOf(
-        Exercise2Model(
+        Exercise2Entity(
             question = "Elija la respuesta correcta \n" +
                     "Es la cantidad de bienes obtenidos por el precio de venta de un " +
                     "producto o servicio.",
@@ -18,7 +18,7 @@ object Exercise2 {
                 Pair("Ingresos", true)
             )
         ),
-        Exercise2Model(
+        Exercise2Entity(
             question = "Elija la respuesta correcta \n" +
                     "Son todos los desembolsos que hace la empresa para producir un " +
                     "bien o servicio que generará un beneficio económico, dentro de un ejercicio " +
@@ -30,7 +30,7 @@ object Exercise2 {
                 Pair("Ingresos", false)
             )
         ),
-        Exercise2Model(
+        Exercise2Entity(
             question = "Elija la respuesta correcta \n" +
                     "Es el desembolso que debe hacer el emprendimiento para poder " +
                     "llevar a cabo sus actividades, y que no se relacionen directamente con la fabri" +
@@ -42,7 +42,7 @@ object Exercise2 {
                 Pair("Ingresos", false)
             )
         ),
-        Exercise2Model(
+        Exercise2Entity(
             question = "Elija la respuesta correcta \n" +
                     "Consiste en asignar un capital a una actividad que genere un em" +
                     "prendimiento y permita alcanzar los objetivos propuestos.",

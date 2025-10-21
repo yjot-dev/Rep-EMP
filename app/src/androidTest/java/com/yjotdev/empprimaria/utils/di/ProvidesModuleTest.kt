@@ -9,11 +9,11 @@ import dagger.hilt.testing.TestInstallIn
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Singleton
-import com.yjotdev.empprimaria.domain.port.EmailRepository
-import com.yjotdev.empprimaria.domain.port.UserRepository
+import com.yjotdev.empprimaria.domain.port.EmailPort
+import com.yjotdev.empprimaria.domain.port.UserPort
 import com.yjotdev.empprimaria.infrastructure.di.ProvidesModule
-import com.yjotdev.empprimaria.utils.repositories.FakeEmailRepositoryImpl
-import com.yjotdev.empprimaria.utils.repositories.FakeUserRepositoryImpl
+import com.yjotdev.empprimaria.utils.repositories.FakeEmailRepository
+import com.yjotdev.empprimaria.utils.repositories.FakeUserRepository
 
 @Module
 @TestInstallIn(
@@ -23,13 +23,13 @@ import com.yjotdev.empprimaria.utils.repositories.FakeUserRepositoryImpl
 object ProvidesModuleTest {
     @Singleton
     @Provides
-    fun provideFakeUserRepositoryImpl(): UserRepository =
-        FakeUserRepositoryImpl()
+    fun provideFakeUserRepository(): UserPort =
+        FakeUserRepository()
 
     @Singleton
     @Provides
-    fun provideFakeEmailRepositoryImpl(): EmailRepository =
-        FakeEmailRepositoryImpl()
+    fun provideFakeEmailRepository(): EmailPort =
+        FakeEmailRepository()
 
     @Singleton
     @Provides
