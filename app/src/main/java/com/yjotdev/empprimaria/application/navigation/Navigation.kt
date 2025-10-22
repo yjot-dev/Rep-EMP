@@ -247,12 +247,10 @@ private fun ObserveViewModelState(
                     navController.navigate(ViewRoutes.Menu.name){
                         popUpTo(ViewRoutes.Login.name){ inclusive = true }
                     }
-                } ?: run {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.error_user_login),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                }
+                state.error?.let { error ->
+                    val msm = "${context.getString(R.string.error_user_login)}, $error"
+                    Toast.makeText(context, msm, Toast.LENGTH_SHORT).show()
                 }
             }
             2 -> {
@@ -262,12 +260,10 @@ private fun ObserveViewModelState(
                         context.getString(R.string.alert_user_registered),
                         Toast.LENGTH_SHORT
                     ).show()
-                } else {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.error_user_registered),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                }
+                state.error?.let { error ->
+                    val msm = "${context.getString(R.string.error_user_registered)}, $error"
+                    Toast.makeText(context, msm, Toast.LENGTH_SHORT).show()
                 }
             }
             3 -> {
@@ -277,12 +273,10 @@ private fun ObserveViewModelState(
                         context.getString(R.string.alert_user_changed_password),
                         Toast.LENGTH_SHORT
                     ).show()
-                } else {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.error_user_changed_password),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                }
+                state.error?.let { error ->
+                    val msm = "${context.getString(R.string.error_user_changed_password)}, $error"
+                    Toast.makeText(context, msm, Toast.LENGTH_SHORT).show()
                 }
             }
             4 -> {
@@ -292,12 +286,10 @@ private fun ObserveViewModelState(
                         context.getString(R.string.alert_email_sent),
                         Toast.LENGTH_SHORT
                     ).show()
-                } else {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.error_email_sent),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                }
+                state.error?.let { error ->
+                    val msm = "${context.getString(R.string.error_email_sent)}, $error"
+                    Toast.makeText(context, msm, Toast.LENGTH_SHORT).show()
                 }
             }
             5 -> {
@@ -307,12 +299,10 @@ private fun ObserveViewModelState(
                         context.getString(R.string.alert_user_updated),
                         Toast.LENGTH_SHORT
                     ).show()
-                } else {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.error_user_updated),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                }
+                state.error?.let { error ->
+                    val msm = "${context.getString(R.string.error_user_updated)}, $error"
+                    Toast.makeText(context, msm, Toast.LENGTH_SHORT).show()
                 }
             }
             6 -> {
@@ -322,12 +312,10 @@ private fun ObserveViewModelState(
                         context.getString(R.string.alert_user_deleted),
                         Toast.LENGTH_SHORT
                     ).show()
-                } else {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.error_user_deleted),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                }
+                state.error?.let { error ->
+                    val msm = "${context.getString(R.string.error_user_deleted)}, $error"
+                    Toast.makeText(context, msm, Toast.LENGTH_SHORT).show()
                 }
             }
             7 -> {
@@ -337,12 +325,10 @@ private fun ObserveViewModelState(
                         context.getString(R.string.alert_email_sent),
                         Toast.LENGTH_SHORT
                     ).show()
-                } else {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.error_email_sent),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                }
+                state.error?.let { error ->
+                    val msm = "${context.getString(R.string.error_email_sent)}, $error"
+                    Toast.makeText(context, msm, Toast.LENGTH_SHORT).show()
                 }
             }
             8 -> {
@@ -352,12 +338,10 @@ private fun ObserveViewModelState(
                         context.getString(R.string.alert_email_sent),
                         Toast.LENGTH_SHORT
                     ).show()
-                } else {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.error_email_sent),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                }
+                state.error?.let { error ->
+                    val msm = "${context.getString(R.string.error_email_sent)}, $error"
+                    Toast.makeText(context, msm, Toast.LENGTH_SHORT).show()
                 }
             }
         }

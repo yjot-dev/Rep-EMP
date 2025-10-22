@@ -17,5 +17,6 @@ data class ProgressModel(
     val wasUpdated: Boolean = false,
     val wasDeleted: Boolean = false,
     val wasEmailed: Boolean = false,
+    val error: String? = null,
     val operationCompletedCount: Int = 0
 )

@@ -138,6 +138,7 @@ class ProgressViewModel @Inject constructor(
                             isLoading = false,
                             user = null,
                             wasFound = false,
+                            error = result.exception.message,
                             operationCompletedCount = it.operationCompletedCount + 1
                         )
                     }
@@ -167,6 +168,7 @@ class ProgressViewModel @Inject constructor(
                         it.copy(
                             isLoading = false,
                             wasInserted = false,
+                            error = result.exception.message,
                             operationCompletedCount = it.operationCompletedCount + 1
                         )
                     }
@@ -202,6 +204,7 @@ class ProgressViewModel @Inject constructor(
                         it.copy(
                             isLoading = false,
                             wasUpdated = false,
+                            error = result.exception.message,
                             operationCompletedCount = it.operationCompletedCount + 1
                         )
                     }
@@ -230,6 +233,7 @@ class ProgressViewModel @Inject constructor(
                         it.copy(
                             isLoading = false,
                             wasUpdated = false,
+                            error = result.exception.message,
                             operationCompletedCount = it.operationCompletedCount + 1
                         )
                     }
@@ -258,6 +262,7 @@ class ProgressViewModel @Inject constructor(
                         it.copy(
                             isLoading = false,
                             wasDeleted = false,
+                            error = result.exception.message,
                             operationCompletedCount = it.operationCompletedCount + 1
                         )
                     }
@@ -287,6 +292,7 @@ class ProgressViewModel @Inject constructor(
                         it.copy(
                             isLoading = false,
                             wasEmailed = false,
+                            error = result.exception.message,
                             operationCompletedCount = it.operationCompletedCount + 1
                         )
                     }
@@ -316,6 +322,7 @@ class ProgressViewModel @Inject constructor(
                         it.copy(
                             isLoading = false,
                             wasEmailed = false,
+                            error = result.exception.message,
                             operationCompletedCount = it.operationCompletedCount + 1
                         )
                     }

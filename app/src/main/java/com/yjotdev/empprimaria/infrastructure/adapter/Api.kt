@@ -16,7 +16,7 @@ import com.yjotdev.empprimaria.infrastructure.datasource.EmailApi
 */
 @Singleton
 class Api @Inject constructor(
-    @ApplicationContext context: Context
+    @field:Inject @ApplicationContext context: Context
 ) {
     private val uri = "https://192.168.1.20:443/api/"
     private val httpsClient = if (BuildConfig.DEBUG) {
