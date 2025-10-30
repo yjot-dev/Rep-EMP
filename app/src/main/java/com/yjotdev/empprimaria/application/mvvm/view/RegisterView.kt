@@ -20,18 +20,15 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.application.components.BackgroundView
 import com.yjotdev.empprimaria.application.components.ButtonView
 import com.yjotdev.empprimaria.application.components.TextFieldView
-import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable
 fun RegisterView(
     modifier: Modifier = Modifier,
-    progressVm: ProgressViewModel,
     onRegister: (String, String, String) -> Unit
 ){
     Box(
@@ -41,7 +38,6 @@ fun RegisterView(
         BackgroundView(modifier = Modifier.fillMaxSize())
         ForegroundRegister(
             modifier = Modifier.fillMaxSize(),
-            progressVm = progressVm,
             onRegister = onRegister
         )
     }
@@ -50,7 +46,6 @@ fun RegisterView(
 @Composable
 private fun ForegroundRegister(
     modifier: Modifier = Modifier,
-    progressVm: ProgressViewModel,
     onRegister: (String, String, String) -> Unit
 ){
     val focusRequest1 = remember { FocusRequester() }
@@ -72,7 +67,6 @@ private fun ForegroundRegister(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
                 .focusRequester(focusRequest1),
-            progressVm = progressVm,
             value = user,
             onValueChange = { user = it },
             onNext = { focusRequest2.requestFocus() },
@@ -85,7 +79,6 @@ private fun ForegroundRegister(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
                 .focusRequester(focusRequest2),
-            progressVm = progressVm,
             value = email,
             onValueChange = { email = it },
             onNext = { focusRequest3.requestFocus() },
@@ -98,7 +91,6 @@ private fun ForegroundRegister(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
                 .focusRequester(focusRequest3),
-            progressVm = progressVm,
             value = password,
             onValueChange = { password = it },
             imeAction = ImeAction.Done,
@@ -130,7 +122,6 @@ private fun PreviewRegisterView(){
     EmprendimientoPrimariaTheme{
         RegisterView(
             modifier = Modifier.fillMaxSize(),
-            progressVm = viewModel(),
             onRegister = { _, _, _ -> }
         )
     }

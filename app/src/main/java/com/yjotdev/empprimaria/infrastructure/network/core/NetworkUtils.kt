@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.infrastructure.core
+package com.yjotdev.empprimaria.infrastructure.network.core
 
 import retrofit2.Response
 import java.io.IOException

@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.infrastructure.adapter
+package com.yjotdev.empprimaria.infrastructure.network.client
 
 import android.content.Context
 import android.util.Log

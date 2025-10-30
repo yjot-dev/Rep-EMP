@@ -18,19 +18,17 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.domain.entity.ProjectEntity
+import com.yjotdev.empprimaria.domain.utils.data.Projects
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.application.components.TextView
 import com.yjotdev.empprimaria.application.components.TitleView
-import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable
 fun ProjectListView(
     modifier: Modifier = Modifier,
-    progressVm: ProgressViewModel,
     isPreview: Boolean = false
 ){
     Column(
@@ -38,7 +36,7 @@ fun ProjectListView(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        progressVm.projectList.forEach { project ->
+        Projects.list.forEach { project ->
             ProjectView(
                 project = project,
                 isPreview = isPreview
@@ -96,7 +94,6 @@ private fun PreviewProjectListView(){
     EmprendimientoPrimariaTheme {
         ProjectListView(
             modifier = Modifier.fillMaxSize(),
-            progressVm = viewModel(),
             isPreview = true
         )
     }

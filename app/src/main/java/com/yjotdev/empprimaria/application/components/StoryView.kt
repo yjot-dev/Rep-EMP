@@ -18,10 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -35,28 +32,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.delay
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.domain.utils.data.Stories
 import com.yjotdev.empprimaria.domain.entity.StoryEntity
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable
 fun StoryView(
     modifier: Modifier = Modifier,
-    progressVm: ProgressViewModel,
     story: List<StoryEntity>,
-    numLevel: Int,
-    totalLevels: Int,
-    onCallback: () -> Unit
+    myLife: Int,
+    progressLevel: Float = 0f,
+    onProgressLevel: (Float) -> Unit = {},
+    isVisible: Boolean = false,
+    onIsTimerOff: (Boolean) -> Unit = {},
+    onCallback: (Int, Boolean?) -> Unit = {_,_ ->}
 ){
-    val progressUnit = (numLevel * 100)/totalLevels //Progreso de la unidad
-    var progressLevel by remember { mutableFloatStateOf(0f) }
-    var isVisible by remember { mutableStateOf(false) }
-    var isTimerOff by remember { mutableStateOf(false) }
-    val state by progressVm.uiState.collectAsState()
     val scrollState = rememberScrollState()
     //Color de la barra de progreso segun su avance
     val colorLinearProgress = when(progressLevel){
@@ -64,18 +55,7 @@ fun StoryView(
         0.66f -> colorResource(id = R.color.orange)
         else -> colorResource(id = R.color.green)
     }
-    LaunchedEffect(key1 = state.timeSpent) {
-        //Temporizador activo caso contrario se detiene
-        do{
-            delay(1000 * 60)
-            progressVm.setTimeSpent(state.timeSpent + 1)
-            if (progressLevel == 1f) {
-                progressVm.setCourseCompleted(progressUnit)
-                isTimerOff = true
-                isVisible = true
-            }
-        }while(!isTimerOff)
-    }
+    onCallback(-3, null)
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
@@ -88,8 +68,8 @@ fun StoryView(
         ) {
             IconButton(
                 onClick = {
-                    isTimerOff = true
-                    onCallback()
+                    onIsTimerOff(true)
+                    onCallback(0, null)
                 },
                 modifier = Modifier.size(dimensionResource(id = R.dimen.dm_5))
             ) {
@@ -107,7 +87,7 @@ fun StoryView(
                 trackColor = colorResource(id = R.color.white)
             )
             Text(
-                text = state.life.toString(),
+                text = myLife.toString(),
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold,
                     color = colorResource(id = R.color.red)
@@ -126,16 +106,16 @@ fun StoryView(
         ) {
             story.forEach { section ->
                 SectionView(section = section) { isCorrect ->
+                    onCallback(101, isCorrect)
                     if (isCorrect) {
                         val number = story.indexOf(section)
-                        progressLevel = when (number) {
-                            0 -> 0.33f
-                            1 -> 0.66f
-                            else -> 1f
-                        }
-                        progressVm.setExperience(state.experience + 20)
-                    } else {
-                        progressVm.setLife(state.life - 1)
+                        onProgressLevel(
+                            when (number) {
+                                0 -> 0.33f
+                                1 -> 0.66f
+                                else -> 1f
+                            }
+                        )
                     }
                 }
             }
@@ -144,7 +124,7 @@ fun StoryView(
                     modifier = Modifier
                         .height(dimensionResource(id = R.dimen.dm_5))
                         .fillMaxWidth(0.85f),
-                    click = onCallback,
+                    click = { onCallback(0, null) },
                     text = stringResource(id = R.string.button_next)
                 )
                 Spacer(modifier = Modifier.weight(0.1f))
@@ -246,11 +226,9 @@ private fun PreviewStoryView(){
     EmprendimientoPrimariaTheme {
         StoryView(
             modifier = Modifier.fillMaxSize(),
-            progressVm = viewModel(),
             story = Stories.data[0],
-            numLevel = 1,
-            totalLevels = 5,
-            onCallback = {}
+            myLife = 3,
+            progressLevel = 0f
         )
     }
 }

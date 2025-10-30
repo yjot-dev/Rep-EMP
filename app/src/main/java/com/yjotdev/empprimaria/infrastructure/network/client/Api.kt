@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.infrastructure.adapter
+package com.yjotdev.empprimaria.infrastructure.network.client
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -7,8 +7,9 @@ import android.content.Context
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.yjotdev.empprimaria.BuildConfig
-import com.yjotdev.empprimaria.infrastructure.datasource.UserApi
-import com.yjotdev.empprimaria.infrastructure.datasource.EmailApi
+import com.yjotdev.empprimaria.infrastructure.network.api.UserApi
+import com.yjotdev.empprimaria.infrastructure.network.api.EmailApi
+import com.yjotdev.empprimaria.infrastructure.network.core.NullOnEmptyConverterFactory
 
 /*
 * 10.0.2.2 -> IP para probar API desde emulador
@@ -16,7 +17,7 @@ import com.yjotdev.empprimaria.infrastructure.datasource.EmailApi
 */
 @Singleton
 class Api @Inject constructor(
-    @field:Inject @ApplicationContext context: Context
+    @ApplicationContext val context: Context
 ) {
     private val uri = "https://192.168.1.20:443/api/"
     private val httpsClient = if (BuildConfig.DEBUG) {

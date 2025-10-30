@@ -1,13 +1,13 @@
-package com.yjotdev.empprimaria.infrastructure.repositories
+package com.yjotdev.empprimaria.infrastructure.repository
 
 import javax.inject.Inject
 import javax.inject.Singleton
 import com.yjotdev.empprimaria.domain.entity.UserEntity
 import com.yjotdev.empprimaria.domain.port.UserPort
 import com.yjotdev.empprimaria.domain.core.Result
-import com.yjotdev.empprimaria.infrastructure.adapter.Api
-import com.yjotdev.empprimaria.infrastructure.core.safeApiCallForBody
-import com.yjotdev.empprimaria.infrastructure.core.safeApiCallForUnit
+import com.yjotdev.empprimaria.infrastructure.network.client.Api
+import com.yjotdev.empprimaria.infrastructure.network.core.safeApiCallForBody
+import com.yjotdev.empprimaria.infrastructure.network.core.safeApiCallForUnit
 
 @Singleton
 class UserRepository @Inject constructor(

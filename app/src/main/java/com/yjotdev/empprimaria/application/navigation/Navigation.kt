@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +44,7 @@ import com.yjotdev.empprimaria.application.mvvm.view.MenuView
 import com.yjotdev.empprimaria.application.mvvm.view.RecoverKeyView
 import com.yjotdev.empprimaria.application.mvvm.view.RegisterView
 import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun NavigationView(
@@ -61,6 +63,12 @@ fun NavigationView(
     //Variables reactivas locales
     var passwordR by remember { mutableStateOf("") }
     var operationId by remember { mutableIntStateOf(0) }
+    var progressLevel by remember { mutableFloatStateOf(0f) }
+    var isVisible by remember { mutableStateOf(false) }
+    var isTimerOff by remember { mutableStateOf(false) }
+    val numLevel = 1
+    val totalLevels = 5
+    val progressUnit = (numLevel * 100)/totalLevels //Progreso de la unidad
     //UI
     Scaffold(
         topBar = {
@@ -77,7 +85,12 @@ fun NavigationView(
             navController = navController,
             context = context,
             operationId = operationId,
-            passwordR = passwordR
+            passwordR = passwordR,
+            progressLevel = progressLevel,
+            progressUnit = progressUnit,
+            onIsVisible = { isVisible = it },
+            isTimerOff = isTimerOff,
+            onIsTimerOff = { isTimerOff = it }
         )
         NavHost(
             navController = navController,
@@ -93,7 +106,6 @@ fun NavigationView(
                 ){
                     LoginView(
                         modifier = Modifier.fillMaxSize(),
-                        progressVm = viewModel,
                         onLogin = { userOrEmail, password ->
                             viewModel.findUser(userOrEmail, userOrEmail, password)
                             operationId = 1
@@ -112,7 +124,6 @@ fun NavigationView(
                 ){
                     RegisterView(
                         modifier = Modifier.fillMaxSize(),
-                        progressVm = viewModel,
                         onRegister = { user, email, password ->
                             viewModel.insertUser(user, email, password)
                             operationId = 2
@@ -128,7 +139,6 @@ fun NavigationView(
                 ){
                     RecoverKeyView(
                         modifier = Modifier.fillMaxSize(),
-                        progressVm = viewModel,
                         onChangePassword = { email, password ->
                             viewModel.changePassword(email, password)
                             operationId = 3
@@ -153,7 +163,14 @@ fun NavigationView(
                 ){
                     MenuView(
                         modifier = Modifier.fillMaxSize(),
-                        progressVm = viewModel,
+                        myName = userInfo.name,
+                        myEmail = userInfo.email,
+                        myPassword = userInfo.password,
+                        myPhoto = userInfo.photo,
+                        myExperience = state.experience,
+                        myTimeSpent = state.timeSpent,
+                        myCourseCompleted = state.courseCompleted,
+                        myLife = state.life,
                         onLogout = { navController.navigate(ViewRoutes.Login.name){
                             popUpTo(ViewRoutes.Menu.name){ inclusive = true }}
                             viewModel.resetViewModel()
@@ -177,6 +194,68 @@ fun NavigationView(
                             val subject = context.getString(R.string.alert_dialog_opinion, nombre.uppercase())
                             viewModel.sendCommentaryByEmail(subject, text)
                             operationId = 8
+                        },
+                        progressLevel = progressLevel,
+                        onProgressLevel = { progressLevel = it },
+                        isVisible = isVisible,
+                        onIsVisible = { isVisible = it },
+                        onIsTimerOff = { isTimerOff = it },
+                        onCallback = { id, isCorrect ->
+                            when(id){
+                                -3 -> {
+                                    operationId = 9
+                                    viewModel.setOperationCompletedCount()
+                                }
+                                -2 -> {
+                                    operationId = 10
+                                    viewModel.setOperationCompletedCount()
+                                }
+                                -1 -> {
+                                    viewModel.setCourseCompleted(progressUnit)
+                                }
+                                1 -> {
+                                    isCorrect?.let {
+                                        if(it) {
+                                            progressLevel = 0.33f
+                                            viewModel.setExperience(state.experience + 20)
+                                            isVisible = true
+                                        }else{
+                                            viewModel.setLife(state.life - 1)
+                                        }
+                                    }
+                                }
+                                2 -> {
+                                    isCorrect?.let {
+                                        if(it) {
+                                            progressLevel = 0.66f
+                                            viewModel.setExperience(state.experience + 20)
+                                            isVisible = true
+                                        }else{
+                                            viewModel.setLife(state.life - 1)
+                                        }
+                                    }
+                                }
+                                3 -> {
+                                    isCorrect?.let {
+                                        if(it) {
+                                            progressLevel = 1f
+                                            viewModel.setExperience(state.experience + 20)
+                                            isVisible = true
+                                        }else{
+                                            viewModel.setLife(state.life - 1)
+                                        }
+                                    }
+                                }
+                                101 -> {
+                                    isCorrect?.let {
+                                        if (it) {
+                                            viewModel.setExperience(state.experience + 20)
+                                        } else {
+                                            viewModel.setLife(state.life - 1)
+                                        }
+                                    }
+                                }
+                            }
                         }
                     )
                     if(state.isLoading) LoadingScreen()
@@ -230,7 +309,12 @@ private fun ObserveViewModelState(
     navController: NavHostController,
     context: Context,
     operationId: Int,
-    passwordR: String
+    passwordR: String,
+    progressLevel: Float,
+    progressUnit: Int,
+    onIsVisible: (Boolean) -> Unit,
+    isTimerOff: Boolean,
+    onIsTimerOff: (Boolean) -> Unit
 ){
     val state by viewModel.uiState.collectAsState()
     LaunchedEffect(
@@ -238,7 +322,6 @@ private fun ObserveViewModelState(
     ) {
         // No ejecutar si operationCompletedCount es 0 (estado inicial)
         if (state.operationCompletedCount == 0) return@LaunchedEffect
-
         when(operationId){
             1 -> {
                 state.user?.let { user ->
@@ -343,6 +426,25 @@ private fun ObserveViewModelState(
                     val msm = "${context.getString(R.string.error_email_sent)}, $error"
                     Toast.makeText(context, msm, Toast.LENGTH_SHORT).show()
                 }
+            }
+            9 -> {
+                do{
+                    //Temporizador de StoryView
+                    delay(1000 * 60)
+                    viewModel.setTimeSpent(state.timeSpent + 1)
+                    if (progressLevel == 1f) {
+                        viewModel.setCourseCompleted(progressUnit)
+                        onIsTimerOff(true)
+                        onIsVisible(true)
+                    }
+                }while(!isTimerOff)
+            }
+            10 -> {
+                do{
+                    //Temporizador de LevelView
+                    delay(1000 * 60)
+                    viewModel.setTimeSpent(state.timeSpent + 1)
+                }while(!isTimerOff)
             }
         }
         viewModel.clearFlags()

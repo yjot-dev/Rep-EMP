@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlin.random.Random
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
@@ -25,12 +24,10 @@ import com.yjotdev.empprimaria.application.components.BackgroundView
 import com.yjotdev.empprimaria.application.components.AlertDialogView
 import com.yjotdev.empprimaria.application.components.ButtonView
 import com.yjotdev.empprimaria.application.components.TextFieldView
-import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable
 fun RecoverKeyView(
     modifier: Modifier = Modifier,
-    progressVm: ProgressViewModel,
     onChangePassword: (String, String) -> Unit,
     onSendCode: (String, String) -> Unit
 ){
@@ -41,7 +38,6 @@ fun RecoverKeyView(
         BackgroundView(modifier = Modifier.fillMaxSize())
         ForegroundRecoverKey(
             modifier = Modifier.fillMaxSize(),
-            progressVm = progressVm,
             onChangePassword = onChangePassword,
             onSendCode = onSendCode
         )
@@ -51,7 +47,6 @@ fun RecoverKeyView(
 @Composable
 private fun ForegroundRecoverKey(
     modifier: Modifier = Modifier,
-    progressVm: ProgressViewModel,
     onChangePassword: (String, String) -> Unit,
     onSendCode: (String, String) -> Unit
 ){
@@ -71,8 +66,7 @@ private fun ForegroundRecoverKey(
                     enabled = true
                     sendCode = false
                 }
-            },
-            progressVm = progressVm
+            }
         )
     }
     Column(
@@ -83,7 +77,6 @@ private fun ForegroundRecoverKey(
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_5)))
         TextFieldView(
             modifier = Modifier.fillMaxWidth(0.85f),
-            progressVm = progressVm,
             value = email,
             onValueChange = { email = it },
             validateCase = 3,
@@ -104,7 +97,6 @@ private fun ForegroundRecoverKey(
         )
         TextFieldView(
             modifier = Modifier.fillMaxWidth(0.85f),
-            progressVm = progressVm,
             enabled = enabled,
             value = password,
             onValueChange = { password = it },
@@ -134,7 +126,6 @@ private fun PreviewRecoverKeyView(){
     EmprendimientoPrimariaTheme {
         RecoverKeyView(
             modifier = Modifier.fillMaxSize(),
-            progressVm = viewModel(),
             onChangePassword = {_, _ ->},
             onSendCode = {_, _ ->}
         )
@@ -150,8 +141,7 @@ private fun PreviewAlertDialog1(){
     EmprendimientoPrimariaTheme {
         AlertDialogView(
             onDismiss = {},
-            onConfirm = {},
-            progressVm = viewModel(),
+            onConfirm = {}
         )
     }
 }

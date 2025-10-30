@@ -18,17 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.domain.utils.data.Exercise3
 import com.yjotdev.empprimaria.domain.entity.Exercise3Entity
-import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 
 @Composable
 fun Exercise3View(
     modifier: Modifier = Modifier,
-    progressVm: ProgressViewModel,
     exercise3: Exercise3Entity,
     onResponse: (Boolean) -> Unit
 ) {
@@ -53,7 +50,6 @@ fun Exercise3View(
             text = exercise3.question
         )
         TextFieldView(
-            progressVm = progressVm,
             value = responseText,
             onValueChange = { text ->
                 responseText = text
@@ -90,7 +86,6 @@ private fun PreviewExercise1View() {
     EmprendimientoPrimariaTheme {
         Exercise3View(
             modifier = Modifier.fillMaxSize(),
-            progressVm = viewModel(),
             exercise3 = Exercise3.data[0],
             onResponse = {}
         )

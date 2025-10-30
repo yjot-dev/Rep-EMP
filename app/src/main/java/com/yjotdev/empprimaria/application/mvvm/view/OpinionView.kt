@@ -15,7 +15,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,21 +26,20 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.application.components.ButtonView
 import com.yjotdev.empprimaria.application.components.TextFieldView
 import com.yjotdev.empprimaria.application.components.TitleView
-import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable
 fun OpinionView(
     modifier: Modifier = Modifier,
-    progressVm: ProgressViewModel,
+    myExperience: Int,
+    myTimeSpent: Int,
+    myCourseCompleted: Int,
     onSendOpinion: (String) -> Unit
 ){
-    val state by progressVm.uiState.collectAsState()
     var commentary by remember { mutableStateOf("") }
     var isError by remember { mutableStateOf(false) }
     Column(
@@ -57,9 +55,9 @@ fun OpinionView(
             title = stringResource(id = R.string.my_progress)
         )
         ProgressChart(
-            myExperience = state.experience,
-            myTimeSpent = state.timeSpent,
-            myCourseCompleted = state.courseCompleted,
+            myExperience = myExperience,
+            myTimeSpent = myTimeSpent,
+            myCourseCompleted = myCourseCompleted,
             modifier = Modifier
                 .background(
                     color = MaterialTheme.colorScheme.surface
@@ -76,7 +74,6 @@ fun OpinionView(
             title = stringResource(id = R.string.some_opinion)
         )
         TextFieldView(
-            progressVm = progressVm,
             value = commentary,
             onValueChange = { commentary = it },
             labelId = R.string.text_field_commentary,
@@ -177,7 +174,9 @@ private fun PreviewTrackingAndSupportView(){
     EmprendimientoPrimariaTheme {
         OpinionView(
             modifier = Modifier.fillMaxSize(),
-            progressVm = viewModel(),
+            myExperience = 0,
+            myTimeSpent = 0,
+            myCourseCompleted = 0,
             onSendOpinion = {}
         )
     }

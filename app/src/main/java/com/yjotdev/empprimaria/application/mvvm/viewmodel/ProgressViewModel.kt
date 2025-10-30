@@ -1,6 +1,5 @@
 package com.yjotdev.empprimaria.application.mvvm.viewmodel
 
-import android.graphics.Bitmap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.launch
@@ -11,8 +10,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import com.yjotdev.empprimaria.application.mvvm.model.ProgressModel
-import com.yjotdev.empprimaria.application.utils.ImageUtils.convertToBitmap
-import com.yjotdev.empprimaria.application.utils.ImageUtils.convertToBase64
 import com.yjotdev.empprimaria.domain.core.Result
 import com.yjotdev.empprimaria.domain.entity.EmailEntity
 import com.yjotdev.empprimaria.domain.entity.UserEntity
@@ -23,12 +20,6 @@ import com.yjotdev.empprimaria.domain.usecase.user.DeleteUserUseCase
 import com.yjotdev.empprimaria.domain.usecase.user.FindUserUseCase
 import com.yjotdev.empprimaria.domain.usecase.user.InsertUserUseCase
 import com.yjotdev.empprimaria.domain.usecase.user.UpdateUserUseCase
-import com.yjotdev.empprimaria.domain.utils.data.Exercise1
-import com.yjotdev.empprimaria.domain.utils.data.Exercise2
-import com.yjotdev.empprimaria.domain.utils.data.Exercise3
-import com.yjotdev.empprimaria.domain.utils.data.Projects
-import com.yjotdev.empprimaria.domain.utils.data.Stories
-import com.yjotdev.empprimaria.domain.utils.Validation
 
 @HiltViewModel
 class ProgressViewModel @Inject constructor(
@@ -45,11 +36,6 @@ class ProgressViewModel @Inject constructor(
     private val _userInfo = MutableStateFlow(UserEntity())
     val uiState: StateFlow<ProgressModel> = _uiState.asStateFlow()
     val userInfo: StateFlow<UserEntity> = _userInfo.asStateFlow()
-    val exercise1 = Exercise1.data
-    val exercise2 = Exercise2.data
-    val exercise3 = Exercise3.data
-    val story = Stories.data
-    val projectList = Projects.list
 
     override fun onCleared() {
         super.onCleared()
@@ -97,18 +83,14 @@ class ProgressViewModel @Inject constructor(
         }
     }
 
-    /** Este metodo valida un texto ingresado **/
-    fun getValidateText(text: String, case: Int): String =
-        Validation.validateText(text, case)
+    /** Este metodo actualiza el estado de la variable operationCompletedCount **/
+    fun setOperationCompletedCount(){
+        _uiState.update { state ->
+            state.copy(operationCompletedCount = state.operationCompletedCount + 1)
+        }
+    }
 
-    /** Este metodo convierte una foto en base64 a un objeto Bitmap **/
-    fun getBitmap(): Bitmap? =
-        convertToBitmap(userInfo.value.photo)
-
-    /** Este metodo convierte un objeto Bitmap a una foto en base64 **/
-    fun getBase64(): String =
-        convertToBase64(getBitmap())
-
+    /** Limpia los flags **/
     fun clearFlags() {
         _uiState.update { state ->
             state.copy(wasFound = false, wasInserted = false,

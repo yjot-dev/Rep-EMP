@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,22 +22,31 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yjotdev.empprimaria.R
+import com.yjotdev.empprimaria.domain.utils.data.Exercise1
+import com.yjotdev.empprimaria.domain.utils.data.Exercise2
+import com.yjotdev.empprimaria.domain.utils.data.Exercise3
+import com.yjotdev.empprimaria.domain.utils.data.Stories
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.application.components.ButtonView
 import com.yjotdev.empprimaria.application.components.StoryView
 import com.yjotdev.empprimaria.application.components.TitleView
-import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable
 fun UnitsView(
     modifier: Modifier = Modifier,
-    progressVm: ProgressViewModel
+    myExperience: Int,
+    myTimeSpent: Int,
+    myCourseCompleted: Int,
+    myLife: Int,
+    progressLevel: Float = 0f,
+    onProgressLevel: (Float) -> Unit = {},
+    isVisible: Boolean = false,
+    onIsVisible: (Boolean) -> Unit = {},
+    onIsTimerOff: (Boolean) -> Unit = {},
+    onCallback: (Int, Boolean?) -> Unit = {_,_ ->}
 ){
-    val state by progressVm.uiState.collectAsState()
     var level by remember { mutableStateOf("0") }
-    val totalLevels = 5 //Niveles totales de todas las unidades
     if(level == "0") {
         Column(
             modifier = modifier,
@@ -64,7 +72,7 @@ fun UnitsView(
                     .offset(x = dimensionResource(id = R.dimen.dm_5))
                     .size(dimensionResource(id = R.dimen.dm_7)),
                 click = { level = "1.2" },
-                enabled = state.courseCompleted >= 20,
+                enabled = myCourseCompleted >= 20,
                 text = stringResource(id = R.string.level, "2")
             )
             ButtonView(
@@ -72,7 +80,7 @@ fun UnitsView(
                     .offset(x = dimensionResource(id = R.dimen.dm_6))
                     .size(dimensionResource(id = R.dimen.dm_7)),
                 click = { level = "1.3" },
-                enabled = state.courseCompleted >= 40,
+                enabled = myCourseCompleted >= 40,
                 text = stringResource(id = R.string.level, "3")
             )
             ButtonView(
@@ -80,7 +88,7 @@ fun UnitsView(
                     .offset(x = dimensionResource(id = R.dimen.dm_2))
                     .size(dimensionResource(id = R.dimen.dm_7)),
                 click = { level = "1.4" },
-                enabled = state.courseCompleted >= 60,
+                enabled = myCourseCompleted >= 60,
                 text = stringResource(id = R.string.level, "4")
             )
             Image(
@@ -90,7 +98,7 @@ fun UnitsView(
                         y = -dimensionResource(id = R.dimen.dm_10)
                     )
                     .size(dimensionResource(id = R.dimen.dm_7))
-                    .clickable(enabled = state.courseCompleted >= 80) {
+                    .clickable(enabled = myCourseCompleted >= 80) {
                         level = "1.5"
                     },
                 painter = painterResource(id = R.drawable.steve_jobs),
@@ -102,51 +110,85 @@ fun UnitsView(
         when(level){
             "1.1" -> LevelView(
                 modifier = Modifier.fillMaxSize(),
-                progressVm = progressVm,
-                exercise1 = progressVm.exercise1[0],
-                exercise2 = progressVm.exercise2[0],
-                exercise3 = progressVm.exercise3[0],
-                numLevel = 1,
-                totalLevels = totalLevels,
-                onCallback = { level = "0" }
+                myExperience = myExperience,
+                myTimeSpent = myTimeSpent,
+                myCourseCompleted = myCourseCompleted,
+                myLife = myLife,
+                progressLevel = progressLevel,
+                isVisible = isVisible,
+                onIsVisible = onIsVisible,
+                onIsTimerOff = onIsTimerOff,
+                onCallback = { id, isCorrect ->
+                    if(id == 0) level = "0"
+                    onCallback(id, isCorrect)
+                }
             )
             "1.2" -> LevelView(
                 modifier = Modifier.fillMaxSize(),
-                progressVm = progressVm,
-                exercise1 = progressVm.exercise1[1],
-                exercise2 = progressVm.exercise2[1],
-                exercise3 = progressVm.exercise3[1],
-                numLevel = 2,
-                totalLevels = totalLevels,
-                onCallback = { level = "0" }
+                exercise1 = Exercise1.data[1],
+                exercise2 = Exercise2.data[1],
+                exercise3 = Exercise3.data[1],
+                myExperience = myExperience,
+                myTimeSpent = myTimeSpent,
+                myCourseCompleted = myCourseCompleted,
+                myLife = myLife,
+                progressLevel = progressLevel,
+                isVisible = isVisible,
+                onIsVisible = onIsVisible,
+                onIsTimerOff = onIsTimerOff,
+                onCallback = { id, isCorrect ->
+                    if(id == 0) level = "0"
+                    onCallback(id, isCorrect)
+                }
             )
             "1.3" -> LevelView(
                 modifier = Modifier.fillMaxSize(),
-                progressVm = progressVm,
-                exercise1 = progressVm.exercise1[2],
-                exercise2 = progressVm.exercise2[2],
-                exercise3 = progressVm.exercise3[2],
-                numLevel = 3,
-                totalLevels = totalLevels,
-                onCallback = { level = "0" }
+                exercise1 = Exercise1.data[2],
+                exercise2 = Exercise2.data[2],
+                exercise3 = Exercise3.data[2],
+                myExperience = myExperience,
+                myTimeSpent = myTimeSpent,
+                myCourseCompleted = myCourseCompleted,
+                myLife = myLife,
+                progressLevel = progressLevel,
+                isVisible = isVisible,
+                onIsVisible = onIsVisible,
+                onIsTimerOff = onIsTimerOff,
+                onCallback = { id, isCorrect ->
+                    if(id == 0) level = "0"
+                    onCallback(id, isCorrect)
+                }
             )
             "1.4" -> LevelView(
                 modifier = Modifier.fillMaxSize(),
-                progressVm = progressVm,
-                exercise1 = progressVm.exercise1[3],
-                exercise2 = progressVm.exercise2[3],
-                exercise3 = progressVm.exercise3[3],
-                numLevel = 4,
-                totalLevels = totalLevels,
-                onCallback = { level = "0" }
+                exercise1 = Exercise1.data[3],
+                exercise2 = Exercise2.data[3],
+                exercise3 = Exercise3.data[3],
+                myExperience = myExperience,
+                myTimeSpent = myTimeSpent,
+                myCourseCompleted = myCourseCompleted,
+                myLife = myLife,
+                progressLevel = progressLevel,
+                isVisible = isVisible,
+                onIsVisible = onIsVisible,
+                onIsTimerOff = onIsTimerOff,
+                onCallback = { id, isCorrect ->
+                    if(id == 0) level = "0"
+                    onCallback(id, isCorrect)
+                }
             )
             "1.5" -> StoryView(
                 modifier = Modifier.fillMaxSize(),
-                progressVm = progressVm,
-                story = progressVm.story[0],
-                numLevel = 5,
-                totalLevels = totalLevels,
-                onCallback = { level = "0" }
+                story = Stories.data[0],
+                myLife = myLife,
+                progressLevel = progressLevel,
+                onProgressLevel = onProgressLevel,
+                isVisible = isVisible,
+                onIsTimerOff = onIsTimerOff,
+                onCallback = { id, isCorrect ->
+                    if(id == 0) level = "0"
+                    onCallback(id, isCorrect)
+                }
             )
         }
     }
@@ -161,7 +203,10 @@ private fun PreviewUnitsView(){
     EmprendimientoPrimariaTheme {
         UnitsView(
             modifier = Modifier.fillMaxSize(),
-            progressVm = viewModel()
+            myExperience = 0,
+            myTimeSpent = 0,
+            myCourseCompleted = 0,
+            myLife = 3
         )
     }
 }

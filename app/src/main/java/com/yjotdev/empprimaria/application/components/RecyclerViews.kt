@@ -40,7 +40,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
+import com.yjotdev.empprimaria.domain.utils.Validation
 
 @Composable
 fun BackgroundView(
@@ -93,7 +93,6 @@ fun ButtonView(
 @Composable
 fun TextFieldView(
     modifier: Modifier = Modifier,
-    progressVm: ProgressViewModel,
     enabled: Boolean = true,
     value: String,
     onValueChange: (String) -> Unit,
@@ -149,7 +148,7 @@ fun TextFieldView(
         value = value,
         onValueChange = { text ->
             onValueChange(text)
-            errorMessage = progressVm.getValidateText(text, validateCase)
+            errorMessage = Validation.validateText(text, validateCase)
         },
         isError = errorMessage.isNotEmpty(),
         supportingText = {
@@ -174,8 +173,7 @@ fun TextFieldView(
 @Composable
 fun AlertDialogView(
     onDismiss: () -> Unit,
-    onConfirm: (String) -> Unit,
-    progressVm: ProgressViewModel
+    onConfirm: (String) -> Unit
 ){
     var code by remember { mutableStateOf("") }
     var isError by remember { mutableStateOf(false) }
@@ -192,7 +190,6 @@ fun AlertDialogView(
         text = {
             TextFieldView(
                 modifier = Modifier.fillMaxWidth(),
-                progressVm = progressVm,
                 value = code,
                 onValueChange = { code = it },
                 labelId = R.string.text_field_code,

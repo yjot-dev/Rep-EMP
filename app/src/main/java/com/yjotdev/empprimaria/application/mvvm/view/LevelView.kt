@@ -16,12 +16,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -34,13 +30,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.delay
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.domain.entity.Exercise1Entity
 import com.yjotdev.empprimaria.domain.entity.Exercise2Entity
 import com.yjotdev.empprimaria.domain.entity.Exercise3Entity
-import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
+import com.yjotdev.empprimaria.domain.utils.data.Exercise1
+import com.yjotdev.empprimaria.domain.utils.data.Exercise2
+import com.yjotdev.empprimaria.domain.utils.data.Exercise3
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.application.components.AnimationView
 import com.yjotdev.empprimaria.application.components.Exercise1View
@@ -51,47 +47,41 @@ import com.yjotdev.empprimaria.application.components.Exercise3View
 @Composable
 fun LevelView(
     modifier: Modifier = Modifier,
-    progressVm: ProgressViewModel,
-    exercise1: Exercise1Entity = progressVm.exercise1[0],
-    exercise2: Exercise2Entity = progressVm.exercise2[0],
-    exercise3: Exercise3Entity = progressVm.exercise3[0],
-    numLevel: Int,
-    totalLevels: Int,
-    onCallback: () -> Unit
+    exercise1: Exercise1Entity = Exercise1.data[0],
+    exercise2: Exercise2Entity = Exercise2.data[0],
+    exercise3: Exercise3Entity = Exercise3.data[0],
+    myExperience: Int,
+    myTimeSpent: Int,
+    myCourseCompleted: Int,
+    myLife: Int,
+    progressLevel: Float = 0f,
+    isVisible: Boolean = false,
+    onIsVisible: (Boolean) -> Unit = {},
+    onIsTimerOff: (Boolean) -> Unit = {},
+    onCallback: (Int, Boolean?) -> Unit = {_,_ ->}
 ){
     val scoreId = 4 //Id de ventana del puntaje
-    val progressUnit = (numLevel * 100)/totalLevels //Progreso de la unidad
-    var progressLevel by remember { mutableFloatStateOf(0f) }
     var nextExercise by remember { mutableIntStateOf(1) }
-    var isVisible by remember { mutableStateOf(false) }
-    var isTimerOff by remember { mutableStateOf(false) }
-    val state by progressVm.uiState.collectAsState()
     //Color de la barra de progreso segun su avance
     val colorLinearProgress = when(progressLevel){
         0.33f -> colorResource(id = R.color.red)
         0.66f -> colorResource(id = R.color.orange)
         else -> colorResource(id = R.color.green)
     }
-    LaunchedEffect(key1 = state.timeSpent) {
-        //Temporizador activo caso contrario se detiene
-        do{
-            delay(1000 * 60)
-            progressVm.setTimeSpent(state.timeSpent + 1)
-        }while(!isTimerOff)
-    }
+    onCallback(-2, null)
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         if(scoreId == nextExercise){
-            progressVm.setCourseCompleted(progressUnit)
-            isTimerOff = true
+            onCallback(-1, null)
+            onIsTimerOff(true)
             Spacer(modifier = Modifier.weight(0.1f))
             ProgressChart(
-                myExperience = state.experience,
-                myTimeSpent = state.timeSpent,
-                myCourseCompleted = state.courseCompleted,
+                myExperience = myExperience,
+                myTimeSpent = myTimeSpent,
+                myCourseCompleted = myCourseCompleted,
                 modifier = Modifier
                     .background(
                         color = MaterialTheme.colorScheme.surface
@@ -105,11 +95,11 @@ fun LevelView(
                 modifier = Modifier
                     .height(dimensionResource(id = R.dimen.dm_5))
                     .fillMaxWidth(0.85f),
-                click = onCallback,
+                click = { onCallback(0, null) },
                 text = stringResource(id = R.string.button_next)
             )
             Spacer(modifier = Modifier.weight(0.1f))
-        }else if(state.life == 0){
+        }else if(myLife == 0){
             Spacer(modifier = Modifier.weight(0.1f))
             AnimationView(
                 modifier = Modifier.fillMaxWidth(0.85f),
@@ -120,7 +110,7 @@ fun LevelView(
                 modifier = Modifier
                     .height(dimensionResource(id = R.dimen.dm_5))
                     .fillMaxWidth(0.85f),
-                click = onCallback,
+                click = { onCallback(0, null) },
                 text = stringResource(id = R.string.button_next)
             )
             Spacer(modifier = Modifier.weight(0.1f))
@@ -137,8 +127,8 @@ fun LevelView(
                     modifier = Modifier
                         .size(dimensionResource(id = R.dimen.dm_5))
                         .clickable {
-                            isTimerOff = true
-                            onCallback()
+                            onIsTimerOff(true)
+                            onCallback(0, null)
                         }
                 )
                 LinearProgressIndicator(
@@ -146,10 +136,9 @@ fun LevelView(
                     progress = { progressLevel },
                     color = colorLinearProgress,
                     trackColor = colorResource(id = R.color.white),
-                    gapSize = dimensionResource(id = R.dimen.dm_0)
                 )
                 Text(
-                    text = state.life.toString(),
+                    text = myLife.toString(),
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold,
                         color = colorResource(id = R.color.red)
@@ -169,13 +158,7 @@ fun LevelView(
                                    else Modifier.weight(0.7f),
                         exercise1 = exercise1
                     ) { isCorrect ->
-                        if(isCorrect) {
-                            progressLevel = 0.33f
-                            progressVm.setExperience(state.experience + 20)
-                            isVisible = true
-                        }else{
-                            progressVm.setLife(state.life - 1)
-                        }
+                        onCallback(1, isCorrect)
                     }
                 }
                 2 -> {
@@ -184,29 +167,16 @@ fun LevelView(
                                    else Modifier.weight(0.7f),
                         exercise2 = exercise2
                     ) { isCorrect ->
-                        if(isCorrect) {
-                            progressLevel = 0.66f
-                            progressVm.setExperience(state.experience + 20)
-                            isVisible = true
-                        }else{
-                            progressVm.setLife(state.life - 1)
-                        }
+                        onCallback(2, isCorrect)
                     }
                 }
                 3 -> {
                     Exercise3View(
                         modifier = if(isVisible) Modifier.weight(0.6f)
                                    else Modifier.weight(0.7f),
-                        progressVm = progressVm,
                         exercise3 = exercise3
                     ) { isCorrect ->
-                        if(isCorrect) {
-                            progressLevel = 1f
-                            progressVm.setExperience(state.experience + 20)
-                            isVisible = true
-                        }else{
-                            progressVm.setLife(state.life - 1)
-                        }
+                        onCallback(3, isCorrect)
                     }
                 }
             }
@@ -218,7 +188,7 @@ fun LevelView(
                         .fillMaxWidth(0.85f),
                     click = {
                         nextExercise += 1
-                        isVisible = false
+                        onIsVisible(false)
                     },
                     text = stringResource(id = R.string.button_next)
                 )
@@ -236,10 +206,10 @@ private fun PreviewLevelView(){
     EmprendimientoPrimariaTheme {
         LevelView(
             modifier = Modifier.fillMaxSize(),
-            progressVm = viewModel(),
-            numLevel = 1,
-            totalLevels = 5,
-            onCallback = {}
+            myExperience = 0,
+            myTimeSpent = 0,
+            myCourseCompleted = 0,
+            myLife = 3
         )
     }
 }

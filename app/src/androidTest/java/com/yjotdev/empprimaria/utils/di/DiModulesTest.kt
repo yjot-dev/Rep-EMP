@@ -7,34 +7,40 @@ import dagger.Module
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import dagger.Provides
+import dagger.Binds
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Singleton
 import com.yjotdev.empprimaria.domain.port.EmailPort
 import com.yjotdev.empprimaria.domain.port.UserPort
-import com.yjotdev.empprimaria.infrastructure.di.ProvidesModule
+import com.yjotdev.empprimaria.infrastructure.di.DiModules
 import com.yjotdev.empprimaria.utils.repositories.FakeEmailRepository
 import com.yjotdev.empprimaria.utils.repositories.FakeUserRepository
 
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [ProvidesModule::class] // Nombre del módulo real
+    replaces = [DiModules::class] // Nombre del módulo real
 )
-object ProvidesModuleTest {
+@Suppress("unused")
+abstract class DiModulesTest {
+    @Binds
     @Singleton
-    @Provides
-    fun provideFakeUserRepository(): UserPort =
-        FakeUserRepository()
+    abstract fun bindFakeUserRepository(
+        impl: FakeUserRepository
+    ): UserPort
 
+    @Binds
     @Singleton
-    @Provides
-    fun provideFakeEmailRepository(): EmailPort =
-        FakeEmailRepository()
+    abstract fun bindFakeEmailRepository(
+        impl: FakeEmailRepository
+    ): EmailPort
 
-    @Singleton
-    @Provides
-    fun provideTestNavHostController(@ApplicationContext context: Context) =
-        TestNavHostController(context).apply {
-            navigatorProvider.addNavigator(ComposeNavigator())
-        }
+    companion object {
+        @Provides
+        @Singleton
+        fun provideTestNavHostController(@ApplicationContext context: Context) =
+            TestNavHostController(context).apply {
+                navigatorProvider.addNavigator(ComposeNavigator())
+            }
+    }
 }

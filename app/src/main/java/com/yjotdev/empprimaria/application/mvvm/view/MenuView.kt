@@ -27,22 +27,33 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.application.components.BackgroundView
-import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 
 @Composable
 fun MenuView(
     modifier: Modifier = Modifier,
-    progressVm: ProgressViewModel,
-    onLogout: () -> Unit,
-    onUpdate: (String, String, String, String) -> Unit,
-    onDelete: () -> Unit,
-    onSendCode: (String, String) -> Unit,
+    myName: String,
+    myEmail: String,
+    myPassword: String,
+    myPhoto: String,
+    myExperience: Int,
+    myTimeSpent: Int,
+    myCourseCompleted: Int,
+    myLife: Int,
     isPreview: Boolean = false,
-    onSendOpinion: (String) -> Unit
+    progressLevel: Float = 0f,
+    onProgressLevel: (Float) -> Unit = {},
+    isVisible: Boolean = false,
+    onIsVisible: (Boolean) -> Unit = {},
+    onIsTimerOff: (Boolean) -> Unit = {},
+    onLogout: () -> Unit = {},
+    onUpdate: (String, String, String, String) -> Unit = {_, _, _, _ ->},
+    onDelete: () -> Unit = {},
+    onSendCode: (String, String) -> Unit = {_,_ ->},
+    onSendOpinion: (String) -> Unit = {},
+    onCallback: (Int, Boolean?) -> Unit = {_,_ ->}
 ){
     Box(
         modifier = modifier,
@@ -51,13 +62,26 @@ fun MenuView(
         BackgroundView(modifier = Modifier.fillMaxSize())
         ForegroundMenu(
             modifier = Modifier.fillMaxSize(),
-            progressVm = progressVm,
+            myName = myName,
+            myEmail = myEmail,
+            myPassword = myPassword,
+            myPhoto = myPhoto,
+            myExperience = myExperience,
+            myTimeSpent = myTimeSpent,
+            myCourseCompleted = myCourseCompleted,
+            myLife = myLife,
             onLogout = onLogout,
             onUpdate = onUpdate,
             onDelete = onDelete,
             onSendCode = onSendCode,
             isPreview = isPreview,
-            onSendOpinion = onSendOpinion
+            progressLevel = progressLevel,
+            onProgressLevel = onProgressLevel,
+            isVisible = isVisible,
+            onIsVisible = onIsVisible,
+            onIsTimerOff = onIsTimerOff,
+            onSendOpinion = onSendOpinion,
+            onCallback = onCallback
         )
     }
 }
@@ -122,13 +146,27 @@ private fun MenuBar(
 @Composable
 private fun ForegroundMenu(
     modifier: Modifier = Modifier,
-    progressVm: ProgressViewModel,
+    myName: String,
+    myEmail: String,
+    myPassword: String,
+    myPhoto: String,
+    myExperience: Int,
+    myTimeSpent: Int,
+    myCourseCompleted: Int,
+    myLife: Int,
+    isPreview: Boolean,
+    progressLevel: Float = 0f,
+    onProgressLevel: (Float) -> Unit,
+    isVisible: Boolean,
+    onIsVisible: (Boolean) -> Unit,
+    onIsTimerOff: (Boolean) -> Unit,
     onLogout: () -> Unit,
     onUpdate: (String, String, String, String) -> Unit,
     onDelete: () -> Unit,
     onSendCode: (String, String) -> Unit,
-    isPreview: Boolean,
-    onSendOpinion: (String) -> Unit
+    onSendOpinion: (String) -> Unit,
+
+    onCallback: (Int, Boolean?) -> Unit
 ){
     var selector by remember { mutableIntStateOf(0) }
     Column(
@@ -150,7 +188,10 @@ private fun ForegroundMenu(
         when(selector){
             0 -> UserInfoView(
                 modifier = Modifier.fillMaxSize(),
-                progressVm = progressVm,
+                myName = myName,
+                myEmail = myEmail,
+                myPassword = myPassword,
+                myPhoto = myPhoto,
                 onLogout = onLogout,
                 onUpdate = onUpdate,
                 onDelete = onDelete,
@@ -160,18 +201,28 @@ private fun ForegroundMenu(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(ScrollState(0)),
-                progressVm = progressVm
+                myExperience = myExperience,
+                myTimeSpent = myTimeSpent,
+                myCourseCompleted = myCourseCompleted,
+                myLife = myLife,
+                progressLevel = progressLevel,
+                onProgressLevel = onProgressLevel,
+                isVisible = isVisible,
+                onIsVisible = onIsVisible,
+                onIsTimerOff = onIsTimerOff,
+                onCallback = onCallback
             )
             2 -> ProjectListView(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(ScrollState(0)),
-                progressVm = progressVm,
                 isPreview = isPreview
             )
             3 -> OpinionView(
                 modifier = Modifier.fillMaxSize(),
-                progressVm = progressVm,
+                myExperience = myExperience,
+                myTimeSpent = myTimeSpent,
+                myCourseCompleted = myCourseCompleted,
                 onSendOpinion = onSendOpinion
             )
         }
@@ -187,13 +238,15 @@ private fun PreviewMenuView(){
     EmprendimientoPrimariaTheme {
         MenuView(
             modifier = Modifier.fillMaxSize(),
-            progressVm = viewModel(),
-            onLogout = {},
-            onUpdate = {_, _, _, _ ->},
-            onDelete = {},
-            onSendCode = {_, _ ->},
-            isPreview = true,
-            onSendOpinion = {}
+            myName = "Juan",
+            myEmail = "juan@gmail.com",
+            myPassword = "Test2000",
+            myPhoto = "",
+            myExperience = 0,
+            myTimeSpent = 0,
+            myCourseCompleted = 0,
+            myLife = 3,
+            isPreview = true
         )
     }
 }

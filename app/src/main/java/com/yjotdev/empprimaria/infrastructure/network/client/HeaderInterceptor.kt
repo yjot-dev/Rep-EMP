@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.infrastructure.adapter
+package com.yjotdev.empprimaria.infrastructure.network.client
 
 import okhttp3.Interceptor
 import okhttp3.Response

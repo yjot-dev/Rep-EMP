@@ -17,7 +17,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,22 +33,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.graphics.drawable.toBitmap
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 import kotlin.random.Random
 import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.application.components.AlertDialogView
 import com.yjotdev.empprimaria.application.components.ButtonView
 import com.yjotdev.empprimaria.application.components.TextFieldView
+import com.yjotdev.empprimaria.application.utils.ImageUtils.convertToBase64
+import com.yjotdev.empprimaria.application.utils.ImageUtils.convertToBitmap
 
 @Composable
 fun UserInfoView(
     modifier: Modifier = Modifier,
-    progressVm: ProgressViewModel,
+    myName: String,
+    myEmail: String,
+    myPassword: String,
+    myPhoto: String,
     onLogout: () -> Unit,
     onUpdate: (String, String, String, String) -> Unit,
     onDelete: () -> Unit,
@@ -59,11 +61,10 @@ fun UserInfoView(
     val focusRequest2 = remember { FocusRequester() }
     val focusRequest3 = remember { FocusRequester() }
     val scrollState = rememberScrollState()
-    val userInfo by progressVm.userInfo.collectAsState()
-    var user by remember { mutableStateOf(userInfo.name) }
-    var email by remember { mutableStateOf(userInfo.email) }
-    var password by remember { mutableStateOf(userInfo.password) }
-    var photo by remember { mutableStateOf(progressVm.getBitmap()) }
+    var name by remember { mutableStateOf(myName) }
+    var email by remember { mutableStateOf(myEmail) }
+    var password by remember { mutableStateOf(myPassword) }
+    var photo by remember { mutableStateOf(convertToBitmap(myPhoto)) }
     var sendCode by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(false) }
     val code by remember { mutableStateOf(Random.nextInt(100000, 999999).toString()) }
@@ -95,8 +96,7 @@ fun UserInfoView(
                     enabled = true
                     sendCode = false
                 }
-            },
-            progressVm = progressVm
+            }
         )
     }
     Column(
@@ -127,9 +127,8 @@ fun UserInfoView(
                 .fillMaxWidth(0.85f)
                 .padding(vertical = dimensionResource(id = R.dimen.dm_1))
                 .focusRequester(focusRequest1),
-            progressVm = progressVm,
-            value = user,
-            onValueChange = { user = it },
+            value = name,
+            onValueChange = { name = it },
             onNext = { focusRequest2.requestFocus() },
             validateCase = 2,
             labelId = R.string.text_field_user,
@@ -141,7 +140,6 @@ fun UserInfoView(
                 .fillMaxWidth(0.85f)
                 .padding(vertical = dimensionResource(id = R.dimen.dm_1))
                 .focusRequester(focusRequest2),
-            progressVm = progressVm,
             value = email,
             onValueChange = { email = it },
             onNext = { focusRequest3.requestFocus() },
@@ -155,7 +153,6 @@ fun UserInfoView(
                 .fillMaxWidth(0.85f)
                 .padding(vertical = dimensionResource(id = R.dimen.dm_1))
                 .focusRequester(focusRequest3),
-            progressVm = progressVm,
             value = password,
             onValueChange = { password = it },
             imeAction = ImeAction.Done,
@@ -191,7 +188,7 @@ fun UserInfoView(
                 .fillMaxWidth(0.85f)
                 .padding(vertical = dimensionResource(id = R.dimen.dm_1)),
             enabled = enabled && !isError1 && !isError2 && !isError3,
-            click = { onUpdate(user, email, password, progressVm.getBase64()) },
+            click = { onUpdate(name, email, password, convertToBase64(photo)) },
             text = stringResource(id = R.string.button_update)
         )
         ButtonView(
@@ -215,7 +212,10 @@ private fun PreviewUserInfoView(){
     EmprendimientoPrimariaTheme {
         UserInfoView(
             modifier = Modifier.fillMaxSize(),
-            progressVm = viewModel(),
+            myName = "Yasser",
+            myEmail = "2010guabo@gmail.com",
+            myPassword = "Test1000",
+            myPhoto = "",
             onLogout = {},
             onUpdate = {_, _, _, _ ->},
             onDelete = {},
@@ -233,8 +233,7 @@ private fun PreviewAlertDialog2(){
     EmprendimientoPrimariaTheme {
         AlertDialogView(
             onDismiss = {},
-            onConfirm = {},
-            progressVm = viewModel()
+            onConfirm = {}
         )
     }
 }

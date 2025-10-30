@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.infrastructure.datasource
+package com.yjotdev.empprimaria.infrastructure.network.api
 
 import retrofit2.Response
 import retrofit2.http.Body
