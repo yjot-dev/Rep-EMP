@@ -62,10 +62,10 @@ class NavigationViewInstrumentedTest {
         ).performClick()
         //Espera a que la corutina del boton Iniciar Sesión finalice
         composeTestRule.waitUntil(30000L) {
-            navController.currentDestination?.route == ViewRoutes.Menu.name
+            navController.currentDestination?.route == ViewRoutes.UserInfo.name
         }
-        //Verifica si la navegacion a Menu fue exitosa
-        assertEquals(ViewRoutes.Menu.name, navController.currentDestination?.route)
+        //Verifica si la navegacion a UserInfo fue exitosa
+        assertEquals(ViewRoutes.UserInfo.name, navController.currentDestination?.route)
     }
 
     @Test
@@ -116,7 +116,7 @@ class NavigationViewInstrumentedTest {
         navigateLoginToMenu()
         //Hace click en el boton para ver los modulos educativos
         composeTestRule.onNodeWithContentDescription(
-            context.getString(R.string.button_educational_modules)
+            context.getString(R.string.button_units)
         ).performClick()
         //Verifica que esta en la vista de los modulos educativos
         composeTestRule.onNodeWithText(
@@ -129,7 +129,7 @@ class NavigationViewInstrumentedTest {
         navigateLoginToMenu()
         //Hace click en el boton para ver los proyectos practicos
         composeTestRule.onNodeWithContentDescription(
-            context.getString(R.string.button_practical_projects)
+            context.getString(R.string.button_projects)
         ).performClick()
         //Verifica que esta en la vista de los proyectos practicos
         composeTestRule.onNodeWithText("Revista Escolar")
@@ -141,7 +141,7 @@ class NavigationViewInstrumentedTest {
         navigateLoginToMenu()
         //Hace click en el boton para ver el seguimiento y soporte
         composeTestRule.onNodeWithContentDescription(
-            context.getString(R.string.button_tracking_and_support)
+            context.getString(R.string.button_opinion)
         ).performClick()
         //Verifica que esta en la vista del seguimiento y soporte
         composeTestRule.onNodeWithText(

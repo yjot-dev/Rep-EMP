@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.application.components
+package com.yjotdev.empprimaria.application.mvvm.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,11 +31,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import com.yjotdev.empprimaria.R
+import com.yjotdev.empprimaria.application.components.ButtonView
+import com.yjotdev.empprimaria.application.components.TextView
 import com.yjotdev.empprimaria.domain.utils.data.Stories
 import com.yjotdev.empprimaria.domain.entity.StoryEntity
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.application.utils.ComponentPreview
 
 @Composable
 fun StoryView(
@@ -43,10 +45,10 @@ fun StoryView(
     story: List<StoryEntity>,
     myLife: Int,
     progressLevel: Float = 0f,
-    onProgressLevel: (Float) -> Unit = {},
     isVisible: Boolean = false,
     onIsTimerOff: (Boolean) -> Unit = {},
-    onCallback: (Int, Boolean?) -> Unit = {_,_ ->}
+    onProcess: (Int, Boolean) -> Unit = {_,_ ->},
+    onCallback: () -> Unit = {}
 ){
     val scrollState = rememberScrollState()
     //Color de la barra de progreso segun su avance
@@ -55,7 +57,6 @@ fun StoryView(
         0.66f -> colorResource(id = R.color.orange)
         else -> colorResource(id = R.color.green)
     }
-    onCallback(-3, null)
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
@@ -69,7 +70,7 @@ fun StoryView(
             IconButton(
                 onClick = {
                     onIsTimerOff(true)
-                    onCallback(0, null)
+                    onCallback()
                 },
                 modifier = Modifier.size(dimensionResource(id = R.dimen.dm_5))
             ) {
@@ -106,17 +107,8 @@ fun StoryView(
         ) {
             story.forEach { section ->
                 SectionView(section = section) { isCorrect ->
-                    onCallback(101, isCorrect)
-                    if (isCorrect) {
-                        val number = story.indexOf(section)
-                        onProgressLevel(
-                            when (number) {
-                                0 -> 0.33f
-                                1 -> 0.66f
-                                else -> 1f
-                            }
-                        )
-                    }
+                    val idSection = story.indexOf(section) + 1
+                    onProcess(idSection, isCorrect)
                 }
             }
             if (isVisible) {
@@ -124,7 +116,7 @@ fun StoryView(
                     modifier = Modifier
                         .height(dimensionResource(id = R.dimen.dm_5))
                         .fillMaxWidth(0.85f),
-                    click = { onCallback(0, null) },
+                    click = { onCallback() },
                     text = stringResource(id = R.string.button_next)
                 )
                 Spacer(modifier = Modifier.weight(0.1f))
@@ -217,10 +209,7 @@ private fun SectionView(section: StoryEntity, onResponse: (Boolean) -> Unit){
     }
 }
 
-@Preview(
-    showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO
-)
+@ComponentPreview
 @Composable
 private fun PreviewStoryView(){
     EmprendimientoPrimariaTheme {

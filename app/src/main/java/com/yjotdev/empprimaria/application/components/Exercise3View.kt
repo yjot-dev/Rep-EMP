@@ -17,11 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.domain.utils.data.Exercise3
 import com.yjotdev.empprimaria.domain.entity.Exercise3Entity
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.application.utils.ComponentPreview
 
 @Composable
 fun Exercise3View(
@@ -77,10 +77,7 @@ fun Exercise3View(
     }
 }
 
-@Preview(
-    showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO
-)
+@ComponentPreview
 @Composable
 private fun PreviewExercise1View() {
     EmprendimientoPrimariaTheme {

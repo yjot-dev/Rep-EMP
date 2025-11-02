@@ -3,14 +3,13 @@ package com.yjotdev.empprimaria.application.components
 import android.os.Build.VERSION.SDK_INT
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
@@ -23,7 +22,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.GifDecoder
@@ -32,6 +31,7 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.application.utils.ComponentPreview
 
 @Composable
 fun AnimationView(
@@ -44,29 +44,26 @@ fun AnimationView(
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
-            modifier = Modifier
-                .background(
-                    color = MaterialTheme.colorScheme.surface
-                        .copy(alpha = 0.8f),
-                    shape = ShapeDefaults.Large
-                )
-                .fillMaxWidth(0.85f),
-            contentAlignment = Alignment.Center
+        Card(
+            modifier = Modifier.fillMaxWidth(0.8f),
+            shape = ShapeDefaults.ExtraLarge
         ){
             Text(
-                modifier = Modifier.padding(dimensionResource(id = R.dimen.dm_3)),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(id = R.dimen.dm_3)),
                 text = title,
                 style = MaterialTheme.typography.titleLarge.copy(
+                    textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
             )
         }
         Row(
-            modifier = Modifier.fillMaxWidth(0.85f),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceEvenly
         ){
             GifImage(
                 idImage = R.drawable.person_one,
@@ -113,10 +110,7 @@ fun GifImage(
     }
 }
 
-@Preview(
-    showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
-)
+@ComponentPreview
 @Composable
 private fun PreviewAnimationView(){
     EmprendimientoPrimariaTheme {

@@ -17,7 +17,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.domain.entity.ProjectEntity
@@ -25,6 +24,7 @@ import com.yjotdev.empprimaria.domain.utils.data.Projects
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.application.components.TextView
 import com.yjotdev.empprimaria.application.components.TitleView
+import com.yjotdev.empprimaria.application.utils.ComponentPreview
 
 @Composable
 fun ProjectListView(
@@ -85,10 +85,7 @@ private fun ProjectView(project: ProjectEntity, isPreview: Boolean){
     Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_4)))
 }
 
-@Preview(
-    showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO
-)
+@ComponentPreview
 @Composable
 private fun PreviewProjectListView(){
     EmprendimientoPrimariaTheme {

@@ -83,15 +83,35 @@ class ProgressViewModel @Inject constructor(
         }
     }
 
-    /** Este metodo actualiza el estado de la variable operationCompletedCount **/
-    fun setOperationCompletedCount(){
+    /** Este metodo actualiza el estado de la variable currentLevelNum **/
+    fun setCurrentLevelNum(currentLevelNum: Int){
         _uiState.update { state ->
-            state.copy(operationCompletedCount = state.operationCompletedCount + 1)
+            state.copy(currentLevelNum = currentLevelNum)
         }
     }
 
+    /** Este metodo actualiza el estado de la variable isTimerOff **/
+    fun setIsTimerOff(isTimerOff: Boolean){
+        _uiState.update { state -> state.copy(isTimerOff = isTimerOff) }
+    }
+
+    /** Este metodo actualiza el estado de la variable currentLevelNum **/
+    fun setProgressLevel(progressLevel: Float){
+        _uiState.update { state -> state.copy(progressLevel = progressLevel) }
+    }
+
+    /** Este metodo actualiza el estado de la variable isAnswerDialogVisible **/
+    fun setDialogVisible(isDialogVisible: Boolean){
+        _uiState.update { it.copy(isDialogVisible = isDialogVisible) }
+    }
+
+    /** Este metodo actualiza el estado de la variable currentOperationId **/
+    fun setCurrentOperationId(currentOperationId: Int){
+        _uiState.update { it.copy(currentOperationId = currentOperationId) }
+    }
+
     /** Limpia los flags **/
-    fun clearFlags() {
+    fun clearFlags(){
         _uiState.update { state ->
             state.copy(wasFound = false, wasInserted = false,
                 wasUpdated = false, wasDeleted = false, wasEmailed = false)

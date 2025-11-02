@@ -3,14 +3,15 @@ package com.yjotdev.empprimaria.application.mvvm.view
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
@@ -25,12 +26,12 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.application.components.ButtonView
 import com.yjotdev.empprimaria.application.components.TextFieldView
 import com.yjotdev.empprimaria.application.components.TitleView
+import com.yjotdev.empprimaria.application.utils.ComponentPreview
 
 @Composable
 fun OpinionView(
@@ -54,17 +55,11 @@ fun OpinionView(
                 .background(MaterialTheme.colorScheme.secondary),
             title = stringResource(id = R.string.my_progress)
         )
-        ProgressChart(
+        UserProgress(
             myExperience = myExperience,
             myTimeSpent = myTimeSpent,
             myCourseCompleted = myCourseCompleted,
-            modifier = Modifier
-                .background(
-                    color = MaterialTheme.colorScheme.surface
-                        .copy(alpha = 0.8f),
-                    shape = ShapeDefaults.Large
-                )
-                .fillMaxWidth(0.85f)
+            modifier = Modifier.fillMaxWidth(0.85f)
         )
         TitleView(
             modifier = Modifier
@@ -97,18 +92,21 @@ fun OpinionView(
 }
 
 @Composable
-fun ProgressChart(
+fun UserProgress(
     modifier: Modifier = Modifier,
     myExperience: Int,
     myTimeSpent: Int,
     myCourseCompleted: Int
 ){
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
+    Card(
+        modifier = modifier,
+        shape = ShapeDefaults.ExtraLarge
     ){
-        Column{
-            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_3)))
+        Column(
+            modifier = Modifier.padding(dimensionResource(id = R.dimen.dm_3)),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
             ProgressInfo(
                 modifier = Modifier.fillMaxWidth(0.9f),
                 textInfo = stringResource(id = R.string.my_experience),
@@ -117,7 +115,6 @@ fun ProgressChart(
                     count = myExperience, myExperience
                 )
             )
-            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_3)))
             ProgressInfo(
                 modifier = Modifier.fillMaxWidth(0.9f),
                 textInfo = stringResource(id = R.string.my_time_spent),
@@ -126,13 +123,11 @@ fun ProgressChart(
                     count = myTimeSpent, myTimeSpent
                 )
             )
-            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_3)))
             ProgressInfo(
                 modifier = Modifier.fillMaxWidth(0.9f),
                 textInfo = stringResource(id = R.string.my_course_completed),
                 textResult = stringResource(id = R.string.my_percent, myCourseCompleted)
             )
-            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_3)))
         }
     }
 }
@@ -146,7 +141,7 @@ private fun ProgressInfo(
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.SpaceEvenly
     ){
         Text(
             text = textInfo,
@@ -155,7 +150,6 @@ private fun ProgressInfo(
                 color = MaterialTheme.colorScheme.secondary
             )
         )
-        Spacer(modifier = Modifier.weight(1f))
         Text(
             text = textResult,
             style = MaterialTheme.typography.titleMedium.copy(
@@ -165,10 +159,7 @@ private fun ProgressInfo(
     }
 }
 
-@Preview(
-    showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO
-)
+@ComponentPreview
 @Composable
 private fun PreviewTrackingAndSupportView(){
     EmprendimientoPrimariaTheme {

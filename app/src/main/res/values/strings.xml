@@ -5,9 +5,9 @@
     <string name="image_user_info">Foto del usuario</string>
     <string name="show_password">Contraseña visible</string>
     <string name="hide_password">Contraseña oculta</string>
-    <string name="text_field_user_email">Usuario o Correo electrónico</string>
+    <string name="text_field_user_email">Nombre de usuario o Correo</string>
     <string name="text_field_password">Contraseña</string>
-    <string name="text_field_user">Usuario</string>
+    <string name="text_field_user">Nombre de usuario</string>
     <string name="text_field_email">Correo electrónico</string>
     <string name="text_field_password_new">Nueva contraseña</string>
     <string name="text_field_code">Código</string>
@@ -27,9 +27,9 @@
     <string name="button_verify_exercise">Verificar</string>
     <string name="button_next">Continuar</string>
     <string name="button_user_info">Informacion de usuario</string>
-    <string name="button_educational_modules">Modulos de educacion</string>
-    <string name="button_practical_projects">Proyectos practicos</string>
-    <string name="button_tracking_and_support">Seguimiento y soporte</string>
+    <string name="button_units">Modulos de educacion</string>
+    <string name="button_projects">Proyectos practicos</string>
+    <string name="button_opinion">Seguimiento y soporte</string>
     <string name="alert_dialog_code">Verificación de código</string>
     <string name="alert_dialog_opinion">Opinion del usuario %1$s</string>
     <string name="error_user_login">Usuario, correo o contraseña incorrectos</string>

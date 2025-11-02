@@ -1,7 +1,6 @@
 package com.yjotdev.empprimaria.application.mvvm.view
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,36 +15,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import kotlin.random.Random
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.application.components.BackgroundView
 import com.yjotdev.empprimaria.application.components.AlertDialogView
 import com.yjotdev.empprimaria.application.components.ButtonView
 import com.yjotdev.empprimaria.application.components.TextFieldView
+import com.yjotdev.empprimaria.application.utils.ComponentPreview
 
 @Composable
 fun RecoverKeyView(
-    modifier: Modifier = Modifier,
-    onChangePassword: (String, String) -> Unit,
-    onSendCode: (String, String) -> Unit
-){
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center
-    ){
-        BackgroundView(modifier = Modifier.fillMaxSize())
-        ForegroundRecoverKey(
-            modifier = Modifier.fillMaxSize(),
-            onChangePassword = onChangePassword,
-            onSendCode = onSendCode
-        )
-    }
-}
-
-@Composable
-private fun ForegroundRecoverKey(
     modifier: Modifier = Modifier,
     onChangePassword: (String, String) -> Unit,
     onSendCode: (String, String) -> Unit
@@ -117,10 +96,7 @@ private fun ForegroundRecoverKey(
     }
 }
 
-@Preview(
-    showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO
-)
+@ComponentPreview
 @Composable
 private fun PreviewRecoverKeyView(){
     EmprendimientoPrimariaTheme {
@@ -132,10 +108,7 @@ private fun PreviewRecoverKeyView(){
     }
 }
 
-@Preview(
-    showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO
-)
+@ComponentPreview
 @Composable
 private fun PreviewAlertDialog1(){
     EmprendimientoPrimariaTheme {

@@ -2,7 +2,6 @@ package com.yjotdev.empprimaria.application.mvvm.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,36 +21,14 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.application.components.BackgroundView
 import com.yjotdev.empprimaria.application.components.ButtonView
 import com.yjotdev.empprimaria.application.components.TextFieldView
+import com.yjotdev.empprimaria.application.utils.ComponentPreview
 
 @Composable
 fun LoginView(
-    modifier: Modifier = Modifier,
-    onLogin: (String, String) -> Unit,
-    onRegister: () -> Unit,
-    onRecoverKey: () -> Unit,
-){
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center
-    ){
-        BackgroundView(modifier = Modifier.fillMaxSize())
-        ForegroundLogin(
-            modifier = Modifier.fillMaxSize(),
-            onLogin = onLogin,
-            onRegister = onRegister,
-            onRecoverKey = onRecoverKey
-        )
-    }
-}
-
-@Composable
-private fun ForegroundLogin(
     modifier: Modifier = Modifier,
     onLogin: (String, String) -> Unit,
     onRegister: () -> Unit,
@@ -125,10 +102,7 @@ private fun ForegroundLogin(
     }
 }
 
-@Preview(
-    showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO
-)
+@ComponentPreview
 @Composable
 private fun PreviewLoginView(){
     EmprendimientoPrimariaTheme{

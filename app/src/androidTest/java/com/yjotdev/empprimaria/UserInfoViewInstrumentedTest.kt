@@ -68,10 +68,10 @@ class UserInfoViewInstrumentedTest {
         ).performClick()
         //Espera a que la corutina del boton Iniciar Sesión finalice
         composeTestRule.waitUntil(30000L) {
-            navController.currentDestination?.route == ViewRoutes.Menu.name
+            navController.currentDestination?.route == ViewRoutes.UserInfo.name
         }
-        //Verifica si la navegacion a Menu fue exitosa
-        assertEquals(ViewRoutes.Menu.name, navController.currentDestination?.route)
+        //Verifica si la navegacion a UserInfo fue exitosa
+        assertEquals(ViewRoutes.UserInfo.name, navController.currentDestination?.route)
     }
 
     @Test

@@ -1,6 +1,5 @@
 package com.yjotdev.empprimaria.application.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -9,9 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.application.utils.ComponentPreview
 
 /**
  * Un Composable que muestra un indicador de progreso circular en el centro de la pantalla.
@@ -27,11 +26,8 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
     }
 }
 
+@ComponentPreview
 @Composable
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO
-)
 fun PreviewLoadingScreen() {
     EmprendimientoPrimariaTheme {
         LoadingScreen(modifier = Modifier.size(dimensionResource(R.dimen.dm_8)))

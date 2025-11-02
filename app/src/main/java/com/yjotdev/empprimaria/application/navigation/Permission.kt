@@ -30,7 +30,7 @@ fun PermissionView(
         hasPermissions = permissions.all { permission -> permission.value }
     }
     if(hasPermissions){
-        NavigationView(
+        Navigation(
             navController = navController,
             viewModel = viewModel,
             onCode = { code -> onCode(code) }

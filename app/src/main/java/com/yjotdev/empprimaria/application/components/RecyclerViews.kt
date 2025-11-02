@@ -3,7 +3,6 @@ package com.yjotdev.empprimaria.application.components
 import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,10 +27,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,19 +38,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.domain.utils.Validation
-
-@Composable
-fun BackgroundView(
-    modifier: Modifier = Modifier
-){
-    Image(
-        modifier = modifier,
-        painter = painterResource(id = R.drawable.background_login),
-        contentDescription = stringResource(id = R.string.background_login),
-        contentScale = ContentScale.FillHeight,
-        alpha = 0.5f
-    )
-}
 
 @Composable
 fun ButtonView(

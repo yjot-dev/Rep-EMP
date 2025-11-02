@@ -1,7 +1,6 @@
 package com.yjotdev.empprimaria.application.mvvm.view
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,32 +18,14 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.application.components.BackgroundView
 import com.yjotdev.empprimaria.application.components.ButtonView
 import com.yjotdev.empprimaria.application.components.TextFieldView
+import com.yjotdev.empprimaria.application.utils.ComponentPreview
 
 @Composable
 fun RegisterView(
-    modifier: Modifier = Modifier,
-    onRegister: (String, String, String) -> Unit
-){
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center
-    ){
-        BackgroundView(modifier = Modifier.fillMaxSize())
-        ForegroundRegister(
-            modifier = Modifier.fillMaxSize(),
-            onRegister = onRegister
-        )
-    }
-}
-
-@Composable
-private fun ForegroundRegister(
     modifier: Modifier = Modifier,
     onRegister: (String, String, String) -> Unit
 ){
@@ -113,10 +94,7 @@ private fun ForegroundRegister(
     }
 }
 
-@Preview(
-    showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO
-)
+@ComponentPreview
 @Composable
 private fun PreviewRegisterView(){
     EmprendimientoPrimariaTheme{
