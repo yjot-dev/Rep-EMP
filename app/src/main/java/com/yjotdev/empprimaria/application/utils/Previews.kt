@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 @Preview(
     name = "Light Mode",
     showBackground = true,
+    backgroundColor = 0xFFFFFF,
     uiMode = Configuration.UI_MODE_NIGHT_NO,
     apiLevel = 34
 )
@@ -22,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 @Preview(
     name = "Dark Mode",
     showBackground = true,
+    backgroundColor = 0x000000,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     apiLevel = 34
 )
