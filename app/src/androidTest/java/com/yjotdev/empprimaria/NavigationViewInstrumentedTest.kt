@@ -1,11 +1,13 @@
 package com.yjotdev.empprimaria
 
 import android.content.Context
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -14,7 +16,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.Rule
 import org.junit.Before
-import javax.inject.Inject
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltAndroidRule
 import com.yjotdev.empprimaria.application.navigation.PermissionView
@@ -29,23 +30,24 @@ class NavigationViewInstrumentedTest {
     var hiltRule: HiltAndroidRule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
-    val composeTestRule = createAndroidComposeRule<MainActivity>()
+    val composeTestRule = createAndroidComposeRule<HiltTestActivity>()
 
-    @Inject
-    lateinit var navController: TestNavHostController // NavController del Test
+    private lateinit var navController: TestNavHostController // NavController del Test
+    private val context: Context = ApplicationProvider.getApplicationContext() // Contexto del test de la app
 
     @Before
-    fun setup() {
+    fun init() {
         hiltRule.inject() // Inicializa Hilt
     }
-    // Contexto del test de la app.
-    private val context: Context = ApplicationProvider.getApplicationContext()
 
     @Test
     fun navigateLoginToMenu() {
         composeTestRule.setContent {
+            navController = TestNavHostController(LocalContext.current)
+            navController.navigatorProvider.addNavigator(ComposeNavigator())
+
             EmprendimientoPrimariaTheme {
-                PermissionView(navController)
+                PermissionView(navController = navController)
             }
         }
         //Escribe nombre de usuario
@@ -61,7 +63,7 @@ class NavigationViewInstrumentedTest {
             context.getString(R.string.button_login)
         ).performClick()
         //Espera a que la corutina del boton Iniciar Sesión finalice
-        composeTestRule.waitUntil(30000L) {
+        composeTestRule.waitUntil(5000L) {
             navController.currentDestination?.route == ViewRoutes.UserInfo.name
         }
         //Verifica si la navegacion a UserInfo fue exitosa
@@ -71,6 +73,9 @@ class NavigationViewInstrumentedTest {
     @Test
     fun navigateLoginToRegister() {
         composeTestRule.setContent {
+            navController = TestNavHostController(LocalContext.current)
+            navController.navigatorProvider.addNavigator(ComposeNavigator())
+
             EmprendimientoPrimariaTheme {
                 PermissionView(navController)
             }
@@ -86,6 +91,9 @@ class NavigationViewInstrumentedTest {
     @Test
     fun navigationLoginToRecoverKey() {
         composeTestRule.setContent {
+            navController = TestNavHostController(LocalContext.current)
+            navController.navigatorProvider.addNavigator(ComposeNavigator())
+
             EmprendimientoPrimariaTheme {
                 PermissionView(navController)
             }

@@ -1,12 +1,16 @@
 package com.yjotdev.empprimaria
 
 import android.content.Context
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTextReplacement
+import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -16,7 +20,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import dagger.hilt.android.testing.HiltAndroidRule
 import org.junit.Before
-import javax.inject.Inject
 import dagger.hilt.android.testing.HiltAndroidTest
 import com.yjotdev.empprimaria.application.navigation.PermissionView
 import com.yjotdev.empprimaria.application.navigation.ViewRoutes
@@ -30,23 +33,23 @@ class UserInfoViewInstrumentedTest {
     var hiltRule: HiltAndroidRule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
-    val composeTestRule = createAndroidComposeRule<MainActivity>()
+    val composeTestRule = createAndroidComposeRule<HiltTestActivity>()
 
-    @Inject
-    lateinit var navController: TestNavHostController // NavController del Test
+    private lateinit var navController: TestNavHostController // NavController del Test
+    private val context: Context = ApplicationProvider.getApplicationContext() // Contexto del test de la app
+    private lateinit var code: String
 
     @Before
-    fun setup() {
+    fun init() {
         hiltRule.inject() // Inicializa Hilt
     }
-    // Contexto del test de la app.
-    private val context: Context = ApplicationProvider.getApplicationContext()
-
-    private lateinit var code: String
 
     @Test
     fun navigateLoginToMenu() {
         composeTestRule.setContent {
+            navController = TestNavHostController(LocalContext.current)
+            navController.navigatorProvider.addNavigator(ComposeNavigator())
+
             EmprendimientoPrimariaTheme {
                 PermissionView(
                     navController = navController,
@@ -67,7 +70,7 @@ class UserInfoViewInstrumentedTest {
             context.getString(R.string.button_login)
         ).performClick()
         //Espera a que la corutina del boton Iniciar Sesión finalice
-        composeTestRule.waitUntil(30000L) {
+        composeTestRule.waitUntil(5000L) {
             navController.currentDestination?.route == ViewRoutes.UserInfo.name
         }
         //Verifica si la navegacion a UserInfo fue exitosa
@@ -104,20 +107,34 @@ class UserInfoViewInstrumentedTest {
         //Escribe nueva clave de usuario
         composeTestRule.onNodeWithText(
             context.getString(R.string.text_field_password)
-        ).performTextReplacement("Yjot1997")
+        ).performTextReplacement("Test1000")
         //Click en el boton Enviar codigo
         composeTestRule.onNodeWithText(
             context.getString(R.string.button_send_code)
         ).performClick()
         //Escribe el codigo de verificacion en el AlertDialog
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.text_field_code)
-        ).performTextInput(code)
+        composeTestRule.onNodeWithTag("InputCode").performTextInput(code)
         //Click en el boton Verificar del AlertDialog
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.button_verify_code)
-        ).performClick()
+        composeTestRule.onNodeWithTag("CodeCheck").performClick()
+        composeTestRule.waitUntil(5000L) {
+            try {
+                composeTestRule.onNodeWithTag("CodeCheck").assertDoesNotExist()
+                true
+            } catch (_: AssertionError){
+                false
+            }
+        }
         //Click en el boton Actualizar
+        composeTestRule.waitUntil(5000L) {
+            try {
+                composeTestRule.onNodeWithText(
+                    context.getString(R.string.button_update)
+                ).assertIsEnabled()
+                true
+            } catch (_: AssertionError){
+                false
+            }
+        }
         composeTestRule.onNodeWithText(
             context.getString(R.string.button_update)
         ).performClick()
@@ -131,14 +148,28 @@ class UserInfoViewInstrumentedTest {
             context.getString(R.string.button_send_code)
         ).performClick()
         //Escribe el codigo de verificacion en el AlertDialog
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.text_field_code)
-        ).performTextInput(code)
+        composeTestRule.onNodeWithTag("InputCode").performTextInput(code)
         //Click en el boton Verificar del AlertDialog
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.button_verify_code)
-        ).performClick()
+        composeTestRule.onNodeWithTag("CodeCheck").performClick()
+        composeTestRule.waitUntil(5000L) {
+            try {
+                composeTestRule.onNodeWithTag("CodeCheck").assertDoesNotExist()
+                true
+            } catch (_: AssertionError){
+                false
+            }
+        }
         //Click en el boton Borrar cuenta
+        composeTestRule.waitUntil(5000L) {
+            try {
+                composeTestRule.onNodeWithText(
+                    context.getString(R.string.button_delete)
+                ).assertIsEnabled()
+                true
+            } catch (_: AssertionError){
+                false
+            }
+        }
         composeTestRule.onNodeWithText(
             context.getString(R.string.button_delete)
         ).performClick()

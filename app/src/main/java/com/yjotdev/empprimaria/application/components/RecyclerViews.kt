@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -173,7 +174,9 @@ fun AlertDialogView(
         },
         text = {
             TextFieldView(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("InputCode"),
                 value = code,
                 onValueChange = { code = it },
                 labelId = R.string.text_field_code,
@@ -187,7 +190,8 @@ fun AlertDialogView(
             ButtonView(
                 modifier = Modifier
                     .height(dimensionResource(id = R.dimen.dm_5))
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .testTag("CodeCheck"),
                 click = { onConfirm(code) },
                 enabled = !isError,
                 text = stringResource(id = R.string.button_verify_code)

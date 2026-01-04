@@ -55,6 +55,19 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="-1259350396">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="INFINIX Infinix X6528" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-1174651889">
           <value>
             <AndroidTestResultsTableState>
@@ -100,6 +113,7 @@
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="90" />
+                  <entry key="INFINIX Infinix X6528" value="120" />
                   <entry key="Tests" value="360" />
                   <entry key="samsung SM-A217M" value="120" />
                 </map>
@@ -218,6 +232,7 @@
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="90" />
+                  <entry key="INFINIX Infinix X6528" value="120" />
                   <entry key="Tests" value="360" />
                   <entry key="samsung SM-A217M" value="120" />
                 </map>

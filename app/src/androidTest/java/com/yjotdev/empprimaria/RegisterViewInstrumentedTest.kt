@@ -1,10 +1,12 @@
 package com.yjotdev.empprimaria
 
 import android.content.Context
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -14,7 +16,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import dagger.hilt.android.testing.HiltAndroidRule
 import org.junit.Before
-import javax.inject.Inject
 import dagger.hilt.android.testing.HiltAndroidTest
 import com.yjotdev.empprimaria.application.navigation.PermissionView
 import com.yjotdev.empprimaria.application.navigation.ViewRoutes
@@ -28,23 +29,24 @@ class RegisterViewInstrumentedTest {
     var hiltRule: HiltAndroidRule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
-    val composeTestRule = createAndroidComposeRule<MainActivity>()
+    val composeTestRule = createAndroidComposeRule<HiltTestActivity>()
 
-    @Inject
-    lateinit var navController: TestNavHostController // NavController del Test
+    private lateinit var navController: TestNavHostController // NavController del Test
+    private val context: Context = ApplicationProvider.getApplicationContext() // Contexto del test de la app
 
     @Before
-    fun setup() {
+    fun init() {
         hiltRule.inject() // Inicializa Hilt
     }
-    // Contexto del test de la app.
-    private val context: Context = ApplicationProvider.getApplicationContext()
 
     @Test
     fun createUser_RegisterView() {
         composeTestRule.setContent {
+            navController = TestNavHostController(LocalContext.current)
+            navController.navigatorProvider.addNavigator(ComposeNavigator())
+
             EmprendimientoPrimariaTheme {
-                PermissionView(navController)
+                PermissionView(navController = navController)
             }
         }
         //Hace click en el boton Registrarse

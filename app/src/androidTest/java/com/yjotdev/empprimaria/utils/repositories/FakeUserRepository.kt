@@ -9,7 +9,7 @@ import com.yjotdev.empprimaria.domain.core.Result
 @Singleton
 class FakeUserRepository @Inject constructor() : UserPort {
     private val users = mutableListOf(UserEntity(
-        id = 1,
+        id = 0,
         name = "yasser",
         email = "2010guabo@gmail.com",
         password = "Yjot1997",
@@ -17,11 +17,6 @@ class FakeUserRepository @Inject constructor() : UserPort {
     ))
 
     override suspend fun findUser(name: String, email: String, password: String): Result<UserEntity> {
-        users[0] = users[0].copy(
-            name = name,
-            email = email,
-            password = password
-        )
         return Result.Success(users[0])
     }
 
