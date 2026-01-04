@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.mvvm.view.utils
+package com.yjotdev.empprimaria
 
 import app.cash.turbine.test
 import io.mockk.coEvery
