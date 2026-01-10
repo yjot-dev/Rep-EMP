@@ -1,5 +1,6 @@
 # GAMIFICACION SOBRE EMPRENDIMIENTO
-Esta app está orientada a la educación, cuenta con varios ejercicios sobre la temática de emprendimiento, tiene cuatro modelos de actividades.
+Esta app está orientada a la educación, cuenta con varios ejercicios sobre la 
+temática de emprendimiento, tiene cuatro modelos de actividades.
 
 # Características principales
 - 🪟 Interfaz moderna con Jetpack Compose

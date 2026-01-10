@@ -1,0 +1,76 @@
+<resources>
+    <string name="app_name">EMP</string>
+    <string name="background_login">Background image</string>
+    <string name="foreground_login">Presentation image</string>
+    <string name="image_user_info">User photo</string>
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+    <string name="text_field_user_email">Username or Email</string>
+    <string name="text_field_password">Password</string>
+    <string name="text_field_user">Username</string>
+    <string name="text_field_email">Email</string>
+    <string name="text_field_password_new">New password</string>
+    <string name="text_field_code">Code</string>
+    <string name="text_field_commentary">Comment or suggestion</string>
+    <string name="text_field_response">Response</string>
+    <string name="button_login">Login</string>
+    <string name="button_register">Register</string>
+    <string name="button_recover_key">Recover Key</string>
+    <string name="button_create_user">Create user</string>
+    <string name="button_change_password">Change password</string>
+    <string name="button_update">Update</string>
+    <string name="button_delete">Delete account</string>
+    <string name="button_send_code">Send code</string>
+    <string name="button_verify_code">Verify code</string>
+    <string name="button_logout">Logout</string>
+    <string name="button_send_opinion">Send feedback</string>
+    <string name="button_verify_exercise">Verify</string>
+    <string name="button_next">Continue</string>
+    <string name="button_user_info">User information</string>
+    <string name="button_units">Education modules</string>
+    <string name="button_projects">Practical projects</string>
+    <string name="button_opinion">Support and follow-up</string>
+    <string name="alert_dialog_code">Code verification</string>
+    <string name="alert_dialog_opinion">User feedback %1$s</string>
+    <string name="error_user_login">Incorrect user, email or password</string>
+    <string name="error_user_registered">Error registering user</string>
+    <string name="alert_user_registered">User registered successfully</string>
+    <string name="error_user_updated">Error updating user</string>
+    <string name="alert_user_updated">User updated successfully</string>
+    <string name="error_user_changed_password">Error changing password</string>
+    <string name="alert_user_changed_password">Password updated successfully</string>
+    <string name="error_user_deleted">Error deleting user</string>
+    <string name="alert_user_deleted">User deleted successfully</string>
+    <string name="error_email_sent">Error sending email</string>
+    <string name="alert_email_sent">Email sent successfully</string>
+    <string name="body_email">
+        Hello %1$s, to verify your identity, please enter the following code: %2$s
+    </string>
+    <string name="valid_user_email">The username or email must be correct.</string>
+    <string name="valid_user">Username must have at least 3 letters, uppercase or lowercase.</string>
+    <string name="valid_email">The email must be correct.</string>
+    <string name="valid_password">Password must have at least 8 characters, one letter, and one number.</string>
+    <string name="valid_number">The code must have 6 positive numbers.</string>
+    <string name="valid_commentary">The message must have a maximum of 300 text characters.</string>
+    <string name="valid_response">The response must be text only, without numbers.</string>
+    <string name="error_fields">The text field is incorrect.</string>
+    <string name="unit">Unit %1$s</string>
+    <string name="level">Level %1$s</string>
+    <string name="subtitle_unit1">Concepts we should know before starting a business</string>
+    <string name="my_progress">My progress</string>
+    <string name="my_experience">Experience</string>
+    <plurals name="points">
+        <item quantity="one">%1$d point</item>
+        <item quantity="other">%1$d points</item>
+    </plurals>
+    <string name="my_time_spent">Time spent</string>
+    <plurals name="minutes">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="my_course_completed">Course completed</string>
+    <string name="my_percent">%1$d%%</string>
+    <string name="some_opinion">Any feedback?</string>
+    <string name="my_score">Score</string>
+    <string name="game_over">Game over</string>
+</resources>

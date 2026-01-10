@@ -42,14 +42,7 @@ class NavigationViewInstrumentedTest {
 
     @Test
     fun navigateLoginToMenu() {
-        composeTestRule.setContent {
-            navController = TestNavHostController(LocalContext.current)
-            navController.navigatorProvider.addNavigator(ComposeNavigator())
-
-            EmprendimientoPrimariaTheme {
-                PermissionView(navController = navController)
-            }
-        }
+        loadTestActivity()
         //Escribe nombre de usuario
         composeTestRule.onNodeWithText(
             context.getString(R.string.text_field_user_email)
@@ -72,14 +65,7 @@ class NavigationViewInstrumentedTest {
 
     @Test
     fun navigateLoginToRegister() {
-        composeTestRule.setContent {
-            navController = TestNavHostController(LocalContext.current)
-            navController.navigatorProvider.addNavigator(ComposeNavigator())
-
-            EmprendimientoPrimariaTheme {
-                PermissionView(navController)
-            }
-        }
+        loadTestActivity()
         //Hace click en el boton Registrarse
         composeTestRule.onNodeWithText(
             context.getString(R.string.button_register)
@@ -90,14 +76,7 @@ class NavigationViewInstrumentedTest {
 
     @Test
     fun navigationLoginToRecoverKey() {
-        composeTestRule.setContent {
-            navController = TestNavHostController(LocalContext.current)
-            navController.navigatorProvider.addNavigator(ComposeNavigator())
-
-            EmprendimientoPrimariaTheme {
-                PermissionView(navController)
-            }
-        }
+        loadTestActivity()
         //Hace click en el boton Recuperar clave
         composeTestRule.onNodeWithText(
             context.getString(R.string.button_recover_key)
@@ -155,5 +134,20 @@ class NavigationViewInstrumentedTest {
         composeTestRule.onNodeWithText(
             context.getString(R.string.my_progress)
         ).assertExists()
+    }
+
+    /**
+     * Funcion para cargar la vista de prueba.
+     * Evita errores de aserción inmediata antes de que la vista se cargue.
+     */
+    private fun loadTestActivity() {
+        composeTestRule.setContent {
+            navController = TestNavHostController(LocalContext.current)
+            navController.navigatorProvider.addNavigator(ComposeNavigator())
+
+            EmprendimientoPrimariaTheme {
+                PermissionView(navController = navController)
+            }
+        }
     }
 }

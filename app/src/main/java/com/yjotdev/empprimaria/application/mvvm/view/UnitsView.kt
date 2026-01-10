@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -77,11 +78,13 @@ fun UnitsView(
             modifier = Modifier.offset(
                     x = -dimensionResource(id = R.dimen.dm_6),
                     y = -dimensionResource(id = R.dimen.dm_10)
-                )
+                ).size(dimensionResource(id = R.dimen.dm_7))
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.steve_jobs),
-                contentDescription = stringResource(id = R.string.foreground_login)
+                contentDescription = stringResource(id = R.string.foreground_login),
+                tint = Color.Unspecified,
+                modifier = Modifier.size(dimensionResource(id = R.dimen.dm_6))
             )
         }
     }
