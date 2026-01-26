@@ -19,7 +19,7 @@ import com.yjotdev.empprimaria.infrastructure.network.core.NullOnEmptyConverterF
 class Api @Inject constructor(
     @ApplicationContext val context: Context
 ) {
-    private val uri = "https://192.168.1.20:443/api/"
+    private val uri = "https://api-emp-production.up.railway.app/api/"
     private val httpsClient = if (BuildConfig.DEBUG) {
         Client.getUnsafeClient(context) }
     else {

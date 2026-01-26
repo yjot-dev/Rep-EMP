@@ -6,9 +6,9 @@ import retrofit2.http.POST
 import com.yjotdev.empprimaria.domain.entity.EmailEntity
 
 interface EmailApi {
-    @POST("users/email")
+    @POST("oauth/email")
     suspend fun sendEmail(@Body email: EmailEntity): Response<Unit>
 
-    @POST("users/commentary")
+    @POST("oauth/feedback")
     suspend fun sendCommentary(@Body email: EmailEntity): Response<Unit>
 }
