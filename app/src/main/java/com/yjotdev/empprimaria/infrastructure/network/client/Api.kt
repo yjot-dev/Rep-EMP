@@ -11,27 +11,21 @@ import com.yjotdev.empprimaria.infrastructure.network.api.UserApi
 import com.yjotdev.empprimaria.infrastructure.network.api.EmailApi
 import com.yjotdev.empprimaria.infrastructure.network.core.NullOnEmptyConverterFactory
 
-/*
-* 10.0.2.2 -> IP para probar API desde emulador
-* 192.168.1.20 -> IP para probar API desde dispositivo fisico
-*/
 @Singleton
 class Api @Inject constructor(
-    @ApplicationContext val context: Context
+    @ApplicationContext context: Context
 ) {
-    private val uri = "https://api-emp-production.up.railway.app/api/"
-    private val httpsClient = if (BuildConfig.DEBUG) {
-        Client.getUnsafeClient(context) }
-    else {
-        Client.getSafeClient()
-    }
+    private val uri = if (BuildConfig.DEBUG) { "https://192.168.1.20:3000/api/" }
+                      else { "https://emp-yjotdev.up.railway.app/api/" }
+    private val httpsClient = if (BuildConfig.DEBUG) { Client.getUnsafeClient(context) }
+                              else { Client.getSafeClient() }
 
     /** API Tabla Usuario **/
     fun getUserRetrofit(): UserApi = Retrofit.Builder()
         .baseUrl(uri)
         .client(httpsClient)
-        .addConverterFactory(NullOnEmptyConverterFactory())
         .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(NullOnEmptyConverterFactory())
         .build()
         .create(UserApi::class.java)
 
@@ -39,8 +33,8 @@ class Api @Inject constructor(
     fun getEmailRetrofit(): EmailApi = Retrofit.Builder()
         .baseUrl(uri)
         .client(httpsClient)
-        .addConverterFactory(NullOnEmptyConverterFactory())
         .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(NullOnEmptyConverterFactory())
         .build()
         .create(EmailApi::class.java)
 }

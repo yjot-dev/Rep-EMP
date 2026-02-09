@@ -32,7 +32,7 @@ fun RegisterView(
     val focusRequest1 = remember { FocusRequester() }
     val focusRequest2 = remember { FocusRequester() }
     val focusRequest3 = remember { FocusRequester() }
-    var user by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isError1 by remember { mutableStateOf(false) }
@@ -48,8 +48,8 @@ fun RegisterView(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
                 .focusRequester(focusRequest1),
-            value = user,
-            onValueChange = { user = it },
+            value = name,
+            onValueChange = { name = it },
             onNext = { focusRequest2.requestFocus() },
             validateCase = 2,
             labelId = R.string.text_field_user,
@@ -85,9 +85,9 @@ fun RegisterView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
                 .fillMaxWidth(0.85f),
-            click = { onRegister(user, email, password) },
+            click = { onRegister(name, email, password) },
             enabled = !isError1 && !isError2 && !isError3 &&
-                    user.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty(),
+                    name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty(),
             text = stringResource(id = R.string.button_create_user)
         )
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_5)))

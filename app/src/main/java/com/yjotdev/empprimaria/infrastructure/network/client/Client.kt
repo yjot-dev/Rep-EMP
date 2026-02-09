@@ -11,16 +11,23 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.CertificatePinner
+import com.yjotdev.empprimaria.BuildConfig
 import com.yjotdev.empprimaria.R
 
 object Client {
     private val loggingInterceptor = HttpLoggingInterceptor{ msm ->
         Log.d("OkHttp", msm)
     }.apply { level = HttpLoggingInterceptor.Level.BODY }
+    private val certificatePinner = CertificatePinner.Builder()
+        .add(BuildConfig.API_DOMAIN, BuildConfig.CERT_PIN_LEAF)
+        .add(BuildConfig.API_DOMAIN, BuildConfig.CERT_PIN_INTERMEDIATE)
+        .build()
 
     /** Cliente para app en producción **/
     fun getSafeClient(): OkHttpClient {
         return OkHttpClient.Builder()
+            .certificatePinner(certificatePinner)
             .addInterceptor(HeaderInterceptor())
             .addInterceptor(loggingInterceptor)
             .build()

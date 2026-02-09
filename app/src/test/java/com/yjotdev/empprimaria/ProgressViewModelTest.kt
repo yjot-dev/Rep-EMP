@@ -98,14 +98,14 @@ class ProgressViewModelTest {
     fun findUserSuccessUpdatesStateWithUser() = runTest {
         // Given
         val mockUser = UserEntity(id = 1, name = "Found", email = "found@email.com")
-        coEvery { findUserUseCase("Found", "found@email.com", "pass") } returns Result.Success(mockUser)
+        coEvery { findUserUseCase(any()) } returns Result.Success(mockUser)
 
         viewModel.uiState.test {
             // Estado inicial
             awaitItem()
 
             // When
-            viewModel.findUser("Found", "found@email.com", "pass")
+            viewModel.findUser("Found", "pass")
 
             // Then: Loading true
             val loadingState = awaitItem()
@@ -124,13 +124,13 @@ class ProgressViewModelTest {
     fun findUserErrorUpdatesStateWithErrorMessage() = runTest {
         // Given
         val errorMessage = "User not found"
-        coEvery { findUserUseCase(any(), any(), any()) } returns Result.Error(Exception(errorMessage))
+        coEvery { findUserUseCase(any()) } returns Result.Error(Exception(errorMessage))
 
         viewModel.uiState.test {
             awaitItem() // Initial
 
             // When
-            viewModel.findUser("Wrong", "wrong", "pass")
+            viewModel.findUser("Wrong","pass")
 
             // Then
             awaitItem() // Loading

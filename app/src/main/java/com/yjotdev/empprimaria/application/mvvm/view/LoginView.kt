@@ -36,7 +36,7 @@ fun LoginView(
 ){
     val focusRequest1 = remember { FocusRequester() }
     val focusRequest2 = remember { FocusRequester() }
-    var userOrEmail by remember { mutableStateOf("") }
+    var nameOrEmail by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isError1 by remember { mutableStateOf(false) }
     var isError2 by remember { mutableStateOf(false) }
@@ -55,8 +55,8 @@ fun LoginView(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
                 .focusRequester(focusRequest1),
-            value = userOrEmail,
-            onValueChange = { userOrEmail = it },
+            value = nameOrEmail,
+            onValueChange = { nameOrEmail = it },
             onNext = { focusRequest2.requestFocus() },
             validateCase = 1,
             labelId = R.string.text_field_user_email,
@@ -80,9 +80,9 @@ fun LoginView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
                 .fillMaxWidth(0.85f),
-            click = { onLogin(userOrEmail, password) },
+            click = { onLogin(nameOrEmail, password) },
             enabled = !isError1 && !isError2 &&
-                    userOrEmail.isNotEmpty() && password.isNotEmpty(),
+                    nameOrEmail.isNotEmpty() && password.isNotEmpty(),
             text = stringResource(id = R.string.button_login)
         )
         ButtonView(

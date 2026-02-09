@@ -2,7 +2,7 @@
 agp = "8.6.1"
 kotlinxCoroutines = "1.8.1"
 kotlin = "2.0.0"
-ksp = "2.0.0-1.0.21"
+ksp = "2.0.0-1.0.22"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -12,10 +12,11 @@ activityCompose = "1.9.0"
 composeBom = "2024.06.00"
 navigationRuntimeKtx = "2.7.7"
 uiTextGoogleFonts = "1.9.3"
-retrofit = "2.9.0"
+retrofit = "2.11.0"
+gson = "2.13.2"
 coil = "2.6.0"
 coreKtxTest = "1.6.1"
-loggingInterceptor = "4.11.0"
+loggingInterceptor = "4.12.0"
 hilt = "2.51.1"
 hiltCompose = "1.3.0"
 mockk = "1.13.8"
@@ -40,6 +41,7 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 
 com-squareup-retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 com-squareup-retrofit2-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+google-code-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
 io-coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 io-coil-kt-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil" }

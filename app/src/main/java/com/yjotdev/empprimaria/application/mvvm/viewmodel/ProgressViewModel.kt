@@ -13,6 +13,8 @@ import com.yjotdev.empprimaria.application.mvvm.model.ProgressModel
 import com.yjotdev.empprimaria.domain.core.Result
 import com.yjotdev.empprimaria.domain.entity.EmailEntity
 import com.yjotdev.empprimaria.domain.entity.UserEntity
+import com.yjotdev.empprimaria.domain.entity.LoginEntity
+import com.yjotdev.empprimaria.domain.entity.RecoveryEntity
 import com.yjotdev.empprimaria.domain.usecase.email.SendCommentaryUseCase
 import com.yjotdev.empprimaria.domain.usecase.email.SendEmailUseCase
 import com.yjotdev.empprimaria.domain.usecase.user.ChangePasswordUserUseCase
@@ -119,11 +121,14 @@ class ProgressViewModel @Inject constructor(
     }
 
     /** Este metodo obtiene los datos del usuario en la BD **/
-    fun findUser(name: String, email: String, password: String){
+    fun findUser(nameOrEmail: String, password: String){
+        val login = LoginEntity(
+            name = nameOrEmail,
+            password = password
+        )
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            val result = findUserUseCase(name, email, password)
-            when (result) {
+            when (val result = findUserUseCase(login)) {
                 is Result.Success -> {
                     _uiState.update {
                         it.copy(
@@ -154,8 +159,7 @@ class ProgressViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch{
             val userToInsert = UserEntity(0, name, email, password)
-            val result = insertUserUseCase(userToInsert)
-            when (result) {
+            when (val result = insertUserUseCase(userToInsert)) {
                 is Result.Success -> {
                     _uiState.update {
                         it.copy(
@@ -190,8 +194,7 @@ class ProgressViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch{
             val userToUpdate = UserEntity(id, name, email, password, photo)
-            val result = updateUserUseCase(id, userToUpdate)
-            when (result) {
+            when (val result = updateUserUseCase(id, userToUpdate)) {
                 is Result.Success -> {
                     _uiState.update {
                         it.copy(
@@ -217,10 +220,13 @@ class ProgressViewModel @Inject constructor(
 
     /** Este metodo cambia la clave del usuario de la BD **/
     fun changePassword(email: String, password: String){
+        val recovery = RecoveryEntity(
+            email = email,
+            password = password
+        )
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch{
-            val result = changePasswordUserUseCase(email, password)
-            when (result) {
+            when (val result = changePasswordUserUseCase(recovery)) {
                 is Result.Success -> {
                     _uiState.update {
                         it.copy(
@@ -248,8 +254,7 @@ class ProgressViewModel @Inject constructor(
     fun deleteUser(id: Int){
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch{
-            val result = deleteUserUseCase(id)
-            when (result) {
+            when (val result = deleteUserUseCase(id)) {
                 is Result.Success -> {
                     _uiState.update {
                         it.copy(
@@ -278,8 +283,7 @@ class ProgressViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch{
             val email = EmailEntity(to, subject, text)
-            val result = sendEmailUseCase(email)
-            when (result) {
+            when (val result = sendEmailUseCase(email)) {
                 is Result.Success -> {
                     _uiState.update {
                         it.copy(
@@ -308,8 +312,7 @@ class ProgressViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch{
             val email = EmailEntity("", subject, text)
-            val result = sendCommentaryUseCase(email)
-            when (result) {
+            when (val result = sendCommentaryUseCase(email)) {
                 is Result.Success -> {
                     _uiState.update {
                         it.copy(

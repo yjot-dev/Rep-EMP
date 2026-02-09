@@ -1,10 +1,11 @@
 package com.yjotdev.empprimaria.domain.entity
 
+import com.google.gson.annotations.SerializedName
 /**
  Modelo para enviar correos electronicos.
  **/
 data class EmailEntity(
-    val to: String,
-    val subject: String,
-    val text: String
+    @SerializedName("para") val to: String,
+    @SerializedName("asunto") val subject: String,
+    @SerializedName("mensaje") val text: String
 )

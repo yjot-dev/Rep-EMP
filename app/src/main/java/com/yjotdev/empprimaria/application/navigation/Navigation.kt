@@ -16,9 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -62,16 +59,13 @@ fun Navigation(
     //Obtiene estados del viewmodel
     val userInfo by viewModel.userInfo.collectAsState()
     val state by viewModel.uiState.collectAsState()
-    //Variables reactivas locales
-    var passwordR by remember { mutableStateOf("") }
     //Observa temporizador
     ObserveTimerState(viewModel = viewModel)
     //Observa estados asincronicos
     ObserveViewModelState(
         viewModel = viewModel,
         navController = navController,
-        context = context,
-        passwordR = passwordR
+        context = context
     )
     // Define las rutas que no mostrarán el boton regresar
     val screensWithoutNavigateBack = setOf(
@@ -129,10 +123,10 @@ fun Navigation(
                 ){
                     LoginView(
                         modifier = Modifier.fillMaxSize(),
-                        onLogin = { userOrEmail, password ->
-                            viewModel.findUser(userOrEmail, userOrEmail, password)
+                        onLogin = { nameOrEmail, password ->
+                            viewModel.findUser(nameOrEmail, password)
                             viewModel.setCurrentOperationId(1)
-                            passwordR = password
+                            viewModel.setUserInfo(userInfo.copy(password = password))
                         },
                         onRegister = { navController.navigate(ViewRoutes.Register.name) },
                         onRecoverKey = { navController.navigate(ViewRoutes.RecoverKey.name) }
@@ -147,8 +141,8 @@ fun Navigation(
                 ){
                     RegisterView(
                         modifier = Modifier.fillMaxSize(),
-                        onRegister = { user, email, password ->
-                            viewModel.insertUser(user, email, password)
+                        onRegister = { name, email, password ->
+                            viewModel.insertUser(name, email, password)
                             viewModel.setCurrentOperationId(2)
                         }
                     )
@@ -194,8 +188,8 @@ fun Navigation(
                         }
                         viewModel.resetViewModel()
                     },
-                    onUpdate = { user, email, password, photo ->
-                        viewModel.updateUser(userInfo.id, user, email, password, photo)
+                    onUpdate = { name, email, password, photo ->
+                        viewModel.updateUser(userInfo.id, name, email, password, photo)
                         viewModel.setCurrentOperationId(5)
                     },
                     onDelete = {
@@ -389,8 +383,7 @@ private fun ObserveTimerState(
 private fun ObserveViewModelState(
     viewModel: ProgressViewModel,
     navController: NavHostController,
-    context: Context,
-    passwordR: String
+    context: Context
 ){
     val state by viewModel.uiState.collectAsState()
     LaunchedEffect(
@@ -403,7 +396,7 @@ private fun ObserveViewModelState(
             1 -> {
                 state.user?.let { user ->
                     if(state.wasFound) viewModel.clearFlags()
-                    viewModel.setUserInfo(user.copy(password = passwordR))
+                    viewModel.setUserInfo(user)
                     navController.navigate(ViewRoutes.UserInfo.name){
                         popUpTo(ViewRoutes.Login.name){ inclusive = true }
                     }
