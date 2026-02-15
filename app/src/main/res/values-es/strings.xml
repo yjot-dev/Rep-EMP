@@ -41,17 +41,19 @@
     <string name="alert_user_changed_password">Contraseña actualizada satisfactoriamente</string>
     <string name="error_user_deleted">Error al eliminar usuario</string>
     <string name="alert_user_deleted">Usuario eliminado satisfactoriamente</string>
-    <string name="error_email_sent">Error al enviar el correo</string>
-    <string name="alert_email_sent">Correo electrónico enviado satisfactoriamente</string>
+    <string name="error_code_sent">Error al enviar el código</string>
+    <string name="alert_code_sent">Código enviado satisfactoriamente</string>
+    <string name="error_feedback_sent">Error al enviar el comentario</string>
+    <string name="alert_feedback_sent">Comentario enviado satisfactoriamente</string>
     <string name="body_email">
         Hola %1$s, para verificar su identidad ingrese el siguiente código: %2$s
     </string>
     <string name="valid_user_email">El usuario o correo electrónico deben ser correctos.</string>
-    <string name="valid_user">El usuario debe tener minimo 3 letras, mayusculas o minusculas.</string>
+    <string name="valid_user">El usuario debe tener mínimo 3 letras, mayusculas o minusculas.</string>
     <string name="valid_email">El correo electrónico debe ser correcto.</string>
-    <string name="valid_password">La contraseña debe tener minimo 8 caracteres, una letra y un número.</string>
+    <string name="valid_password">La contraseña debe tener mínimo 8 caracteres, una letra y un número.</string>
     <string name="valid_number">El código debe tener 6 números positivos.</string>
-    <string name="valid_commentary">El mensaje debe tener maximo 300 caracteres de texto.</string>
+    <string name="valid_commentary">El mensaje debe tener máximo 300 caracteres de texto.</string>
     <string name="valid_response">La respuesta debe ser solo texto sin números.</string>
     <string name="error_fields">El campo de texto esta incorrecto.</string>
     <string name="unit">Unidad %1$s</string>
@@ -61,12 +63,12 @@
     <string name="my_experience">Experiencia</string>
     <plurals name="points">
         <item quantity="one">%1$d punto</item>
-        <item quantity="other">%1$d puntos</item>
+        <item quantity="many">%1$d puntos</item>
     </plurals>
     <string name="my_time_spent">Tiempo invertido</string>
     <plurals name="minutes">
         <item quantity="one">%1$d minuto</item>
-        <item quantity="other">%1$d minutos</item>
+        <item quantity="many">%1$d minutos</item>
     </plurals>
     <string name="my_course_completed">Curso completado</string>
     <string name="my_percent">%1$d%%</string>

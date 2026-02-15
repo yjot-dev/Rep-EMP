@@ -22,9 +22,6 @@
       <SelectionState runConfigName="deleteUser_UserInfoView()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="navigationMenuToUserInfo()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
     </selectionStates>
   </component>
 </project>

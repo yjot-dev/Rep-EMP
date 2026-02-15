@@ -41,8 +41,10 @@
     <string name="alert_user_changed_password">Contraseña actualizada satisfactoriamente</string>
     <string name="error_user_deleted">Error al eliminar usuario</string>
     <string name="alert_user_deleted">Usuario eliminado satisfactoriamente</string>
-    <string name="error_email_sent">Error al enviar el correo</string>
-    <string name="alert_email_sent">Correo electrónico enviado satisfactoriamente</string>
+    <string name="error_code_sent">Error al enviar el código</string>
+    <string name="alert_code_sent">Código enviado satisfactoriamente</string>
+    <string name="error_feedback_sent">Error al enviar el comentario</string>
+    <string name="alert_feedback_sent">Comentario enviado satisfactoriamente</string>
     <string name="body_email">
         Hola %1$s, para verificar su identidad ingrese el siguiente código: %2$s
     </string>

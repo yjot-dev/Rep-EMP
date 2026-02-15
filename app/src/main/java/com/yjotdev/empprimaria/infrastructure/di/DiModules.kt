@@ -6,8 +6,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import com.yjotdev.empprimaria.domain.port.EmailPort
+import com.yjotdev.empprimaria.domain.port.StringPort
 import com.yjotdev.empprimaria.domain.port.UserPort
 import com.yjotdev.empprimaria.infrastructure.repository.EmailRepository
+import com.yjotdev.empprimaria.infrastructure.repository.StringRepository
 import com.yjotdev.empprimaria.infrastructure.repository.UserRepository
 
 @Module
@@ -25,4 +27,10 @@ abstract class DiModules {
     abstract fun bindEmailRepository(
         impl: EmailRepository
     ): EmailPort
+
+    @Binds
+    @Singleton
+    abstract fun bindStringRepository(
+        impl: StringRepository
+    ): StringPort
 }

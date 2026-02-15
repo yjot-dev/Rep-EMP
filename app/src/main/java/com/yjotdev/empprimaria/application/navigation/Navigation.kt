@@ -1,6 +1,7 @@
 package com.yjotdev.empprimaria.application.navigation
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.slideInHorizontally
@@ -57,7 +58,6 @@ fun Navigation(
         currentRoute.substringBefore("/")
     )
     //Obtiene estados del viewmodel
-    val userInfo by viewModel.userInfo.collectAsState()
     val state by viewModel.uiState.collectAsState()
     //Observa temporizador
     ObserveTimerState(viewModel = viewModel)
@@ -90,33 +90,22 @@ fun Navigation(
                 progressLevel = state.progressLevel,
                 myLife = state.life,
                 navigateUp = { navController.navigateUp() },
-                onUserInfo = { navController.navigate(ViewRoutes.UserInfo.name){
-                    popUpTo(ViewRoutes.UserInfo.name)
-                    launchSingleTop = true
-                } },
-                onUnits = { navController.navigate(ViewRoutes.Units.name){
-                    popUpTo(ViewRoutes.Units.name)
-                    launchSingleTop = true
-                } },
-                onProjects = { navController.navigate(ViewRoutes.Projects.name){
-                    popUpTo(ViewRoutes.Projects.name)
-                    launchSingleTop = true
-                } },
-                onOpinion = { navController.navigate(ViewRoutes.Opinion.name){
-                    popUpTo(ViewRoutes.Opinion.name)
-                    launchSingleTop = true
-                } }
+                onUserInfo = { navigateToMainScreen(navController, ViewRoutes.UserInfo.name) },
+                onUnits = { navigateToMainScreen(navController, ViewRoutes.Units.name) },
+                onProjects = { navigateToMainScreen(navController, ViewRoutes.Projects.name) },
+                onOpinion = { navigateToMainScreen(navController, ViewRoutes.Opinion.name) },
             )
         }
-    ) { innerPadding ->
+    ) { paddingValues ->
         NavHost(
             navController = navController,
             startDestination = ViewRoutes.Login.name,
             enterTransition = { slideInHorizontally{ -300 } },
             exitTransition = { slideOutHorizontally{ 300 } },
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(paddingValues)
         ){
             composable(route = ViewRoutes.Login.name) {
+                LaunchedEffect(Unit) { viewModel.resetViewModel() }
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -124,9 +113,7 @@ fun Navigation(
                     LoginView(
                         modifier = Modifier.fillMaxSize(),
                         onLogin = { nameOrEmail, password ->
-                            viewModel.findUser(nameOrEmail, password)
-                            viewModel.setCurrentOperationId(1)
-                            viewModel.setUserInfo(userInfo.copy(password = password))
+                            viewModel.loginUser(nameOrEmail, password)
                         },
                         onRegister = { navController.navigate(ViewRoutes.Register.name) },
                         onRecoverKey = { navController.navigate(ViewRoutes.RecoverKey.name) }
@@ -143,7 +130,6 @@ fun Navigation(
                         modifier = Modifier.fillMaxSize(),
                         onRegister = { name, email, password ->
                             viewModel.insertUser(name, email, password)
-                            viewModel.setCurrentOperationId(2)
                         }
                     )
                     if(state.isLoading) LoadingScreen()
@@ -158,52 +144,51 @@ fun Navigation(
                         modifier = Modifier.fillMaxSize(),
                         onChangePassword = { email, password ->
                             viewModel.changePassword(email, password)
-                            viewModel.setCurrentOperationId(3)
                         },
                         onSendCode = { email, code ->
                             onCode(code)
                             val subject = context.getString(R.string.alert_dialog_code)
                             val text = context.getString(R.string.body_email, "Usuario", code)
                             viewModel.sendCodeByEmail(email, subject, text)
-                            viewModel.setCurrentOperationId(4)
                         }
                     )
                     if(state.isLoading) LoadingScreen()
                 }
             }
             composable(route = ViewRoutes.UserInfo.name) {
-                UserInfoView(
+                Box(
                     modifier = Modifier.fillMaxSize(),
-                    userInfo = userInfo,
-                    onUserInfo = { id, param ->
-                        when(id){
-                            1 -> { viewModel.setUserInfo(userInfo.copy(name = param)) }
-                            2 -> { viewModel.setUserInfo(userInfo.copy(email = param)) }
-                            3 -> { viewModel.setUserInfo(userInfo.copy(password = param)) }
+                    contentAlignment = Alignment.Center
+                ){
+                    UserInfoView(
+                        modifier = Modifier.fillMaxSize(),
+                        userInfo = state.user,
+                        isDialogDisplayed = state.isDialogDisplayed,
+                        onIsDialogDisplayed = { displayed ->
+                            viewModel.setIsDialogDisplayed(displayed)
+                        },
+                        onUserInfo = { id, param ->
+                            when (id) {
+                                1 -> viewModel.setUser(state.user.copy(name = param))
+                                2 -> viewModel.setUser(state.user.copy(email = param))
+                                3 -> viewModel.setUser(state.user.copy(password = param))
+                            }
+                        },
+                        onLogout = { viewModel.logoutUser() },
+                        onUpdate = { name, email, password, photo ->
+                            viewModel.updateUser(state.user.id, name, email, password, photo)
+                        },
+                        onDelete = { viewModel.deleteUser(state.user.id) },
+                        onSendCode = { email, code ->
+                            onCode(code)
+                            val subject = context.getString(R.string.alert_dialog_code)
+                            val text =
+                                context.getString(R.string.body_email, state.user.name, code)
+                            viewModel.sendCodeByEmail(email, subject, text)
                         }
-                    },
-                    onLogout = {
-                        navController.navigate(ViewRoutes.Login.name){
-                            popUpTo(ViewRoutes.UserInfo.name){ inclusive = true }
-                        }
-                        viewModel.resetViewModel()
-                    },
-                    onUpdate = { name, email, password, photo ->
-                        viewModel.updateUser(userInfo.id, name, email, password, photo)
-                        viewModel.setCurrentOperationId(5)
-                    },
-                    onDelete = {
-                        viewModel.deleteUser(userInfo.id)
-                        viewModel.setCurrentOperationId(6)
-                    },
-                    onSendCode = { email, code ->
-                        onCode(code)
-                        val subject = context.getString(R.string.alert_dialog_code)
-                        val text = context.getString(R.string.body_email, userInfo.name, code)
-                        viewModel.sendCodeByEmail(email, subject, text)
-                        viewModel.setCurrentOperationId(7)
-                    }
-                )
+                    )
+                    if(state.isLoading) LoadingScreen()
+                }
             }
             composable(route = ViewRoutes.Units.name) {
                 UnitsView(
@@ -241,10 +226,9 @@ fun Navigation(
                     onSendOpinion = { text ->
                         val subject = context.getString(
                             R.string.alert_dialog_opinion,
-                            userInfo.name.uppercase()
+                            state.user.name.uppercase()
                         )
                         viewModel.sendCommentaryByEmail(subject, text)
-                        viewModel.setCurrentOperationId(8)
                     }
                 )
             }
@@ -261,14 +245,14 @@ fun Navigation(
                     myTimeSpent = state.timeSpent,
                     myCourseCompleted = state.courseCompleted,
                     myLife = state.life,
-                    isVisible = state.isDialogVisible,
+                    isBtnNextDisplayed = state.isBtnNextDisplayed,
                     exercise1 = when(levelNum){
-                            1 -> Exercise1.data[0]
-                            2 -> Exercise1.data[1]
-                            3 -> Exercise1.data[2]
-                            4 -> Exercise1.data[3]
-                            else -> Exercise1.data[0]
-                        },
+                        1 -> Exercise1.data[0]
+                        2 -> Exercise1.data[1]
+                        3 -> Exercise1.data[2]
+                        4 -> Exercise1.data[3]
+                        else -> Exercise1.data[0]
+                    },
                     exercise2 = when(levelNum){
                         1 -> Exercise2.data[0]
                         2 -> Exercise2.data[1]
@@ -283,8 +267,8 @@ fun Navigation(
                         4 -> Exercise3.data[3]
                         else -> Exercise3.data[0]
                     },
-                    onIsVisible = { isVisible ->
-                        viewModel.setDialogVisible(isVisible)
+                    onIsBtnNextDisplayed = { displayed ->
+                        viewModel.setIsBtnNextDisplayed(displayed)
                     },
                     onIsTimerOff = { isTimerOff ->
                         viewModel.setIsTimerOff(isTimerOff)
@@ -298,14 +282,14 @@ fun Navigation(
                         if(correct) {
                             viewModel.setExperience(state.experience + 20)
                             viewModel.setProgressLevel(progressLevel)
-                            viewModel.setDialogVisible(true)
+                            viewModel.setIsBtnNextDisplayed(true)
                         }else{
                             viewModel.setLife(state.life - 1)
                         }
                     },
                     onCallback = {
                         viewModel.setProgressLevel(0f)
-                        viewModel.setDialogVisible(false)
+                        viewModel.setIsBtnNextDisplayed(false)
                         viewModel.setIsTimerOff(false)
                         navController.navigateUp()
                     }
@@ -322,7 +306,7 @@ fun Navigation(
                     modifier = Modifier.fillMaxSize(),
                     story = Stories.data[0],
                     myLife = state.life,
-                    isVisible = state.isDialogVisible,
+                    isVisible = state.isBtnNextDisplayed,
                     progressLevel = state.progressLevel,
                     onIsTimerOff = { isTimerOff ->
                         viewModel.setIsTimerOff(isTimerOff)
@@ -336,14 +320,14 @@ fun Navigation(
                         if(correct) {
                             viewModel.setExperience(state.experience + 20)
                             viewModel.setProgressLevel(progressLevel)
-                            viewModel.setDialogVisible(true)
+                            viewModel.setIsBtnNextDisplayed(true)
                         }else{
                             viewModel.setLife(state.life - 1)
                         }
                     },
                     onCallback = {
                         viewModel.setProgressLevel(0f)
-                        viewModel.setDialogVisible(false)
+                        viewModel.setIsBtnNextDisplayed(false)
                         viewModel.setIsTimerOff(false)
                         navController.navigateUp()
                     }
@@ -373,7 +357,7 @@ private fun ObserveTimerState(
             if (state.progressLevel == 1f) {
                 viewModel.setCourseCompleted(progressUnit)
                 viewModel.setIsTimerOff(true)
-                viewModel.setDialogVisible(true)
+                viewModel.setIsBtnNextDisplayed(true)
             }
         }while(!state.isTimerOff)
     }
@@ -385,119 +369,33 @@ private fun ObserveViewModelState(
     navController: NavHostController,
     context: Context
 ){
-    val state by viewModel.uiState.collectAsState()
-    LaunchedEffect(
-        key1 = state.operationCompletedCount
-    ) {
-        // No ejecutar si operationCompletedCount es 0 (estado inicial)
-        if (state.operationCompletedCount == 0) return@LaunchedEffect
-        // Usamos el operationId del state
-        when(state.currentOperationId){
-            1 -> {
-                state.user?.let { user ->
-                    if(state.wasFound) viewModel.clearFlags()
-                    viewModel.setUserInfo(user)
-                    navController.navigate(ViewRoutes.UserInfo.name){
-                        popUpTo(ViewRoutes.Login.name){ inclusive = true }
-                    }
+    LaunchedEffect(key1 = true) {
+        viewModel.eventChannel.collect { event ->
+            when (event) {
+                /*
+                Login -> UserInfo (Revisar ProgressViewModel.kt lineas 134 - 137)
+                UserInfo -> Login (Revisar ProgressViewModel.kt lineas 117 - 124)
+                */
+                is UiEvent.Navigate -> navController.navigate(event.route){
+                    popUpTo(event.routePopUp){ inclusive = true }
                 }
-                state.error?.let { error ->
-                    val msm = "${context.getString(R.string.error_user_login)}, $error"
-                    Toast.makeText(context, msm, Toast.LENGTH_SHORT).show()
-                }
-            }
-            2 -> {
-                if (state.wasInserted) {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.alert_user_registered),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                state.error?.let { error ->
-                    val msm = "${context.getString(R.string.error_user_registered)}, $error"
-                    Toast.makeText(context, msm, Toast.LENGTH_SHORT).show()
-                }
-            }
-            3 -> {
-                if (state.wasUpdated) {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.alert_user_changed_password),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                state.error?.let { error ->
-                    val msm = "${context.getString(R.string.error_user_changed_password)}, $error"
-                    Toast.makeText(context, msm, Toast.LENGTH_SHORT).show()
-                }
-            }
-            4 -> {
-                if (state.wasEmailed) {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.alert_email_sent),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                state.error?.let { error ->
-                    val msm = "${context.getString(R.string.error_email_sent)}, $error"
-                    Toast.makeText(context, msm, Toast.LENGTH_SHORT).show()
-                }
-            }
-            5 -> {
-                if (state.wasUpdated) {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.alert_user_updated),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                state.error?.let { error ->
-                    val msm = "${context.getString(R.string.error_user_updated)}, $error"
-                    Toast.makeText(context, msm, Toast.LENGTH_SHORT).show()
-                }
-            }
-            6 -> {
-                if (state.wasDeleted) {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.alert_user_deleted),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                state.error?.let { error ->
-                    val msm = "${context.getString(R.string.error_user_deleted)}, $error"
-                    Toast.makeText(context, msm, Toast.LENGTH_SHORT).show()
-                }
-            }
-            7 -> {
-                if (state.wasEmailed) {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.alert_email_sent),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                state.error?.let { error ->
-                    val msm = "${context.getString(R.string.error_email_sent)}, $error"
-                    Toast.makeText(context, msm, Toast.LENGTH_SHORT).show()
-                }
-            }
-            8 -> {
-                if (state.wasEmailed) {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.alert_email_sent),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                state.error?.let { error ->
-                    val msm = "${context.getString(R.string.error_email_sent)}, $error"
-                    Toast.makeText(context, msm, Toast.LENGTH_SHORT).show()
-                }
+                // Muestra un mensaje de exito o error en el Toast
+                is UiEvent.ShowToast -> Toast.makeText(
+                    context, event.message, Toast.LENGTH_SHORT
+                ).show()
+                // Muestra el error en el Log
+                is UiEvent.ShowLog -> Log.d("Https",event.message)
             }
         }
-        viewModel.clearFlags()
+    }
+}
+
+private fun navigateToMainScreen(navController: NavHostController, route: String) {
+    navController.navigate(route) {
+        popUpTo(navController.graph.startDestinationId) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
     }
 }

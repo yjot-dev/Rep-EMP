@@ -49,6 +49,8 @@ import com.yjotdev.empprimaria.domain.entity.UserEntity
 fun UserInfoView(
     modifier: Modifier = Modifier,
     userInfo: UserEntity,
+    isDialogDisplayed: Boolean,
+    onIsDialogDisplayed: (Boolean) -> Unit,
     onUserInfo: (Int, String) -> Unit,
     onLogout: () -> Unit,
     onUpdate: (String, String, String, String) -> Unit,
@@ -60,7 +62,6 @@ fun UserInfoView(
     val focusRequest3 = remember { FocusRequester() }
     val scrollState = rememberScrollState()
     var photo by remember { mutableStateOf(convertToBitmap(userInfo.photo)) }
-    var sendCode by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(false) }
     val code by remember { mutableStateOf(Random.nextInt(100000, 999999).toString()) }
     var isError1 by remember { mutableStateOf(false) }
@@ -83,13 +84,13 @@ fun UserInfoView(
         }
     }
     //Muestra el dialogo para enviar el codigo
-    if(sendCode){
+    if(isDialogDisplayed){
         AlertDialogView(
-            onDismiss = { sendCode = false },
+            onDismiss = { onIsDialogDisplayed(false) },
             onConfirm = { codeIn ->
                 if(code == codeIn){
                     enabled = true
-                    sendCode = false
+                    onIsDialogDisplayed(false)
                 }
             }
         )
@@ -165,7 +166,7 @@ fun UserInfoView(
             enabled = !isError2,
             click = {
                 onSendCode(userInfo.email, code)
-                sendCode = true
+                onIsDialogDisplayed(true)
             },
             text = stringResource(id = R.string.button_send_code)
         )
@@ -200,6 +201,8 @@ private fun PreviewUserInfoView(){
                 password = "Test1000",
                 photo = ""
             ),
+            isDialogDisplayed = false,
+            onIsDialogDisplayed = {},
             onUserInfo = {_,_ ->},
             onLogout = {},
             onUpdate = {_, _, _, _ ->},

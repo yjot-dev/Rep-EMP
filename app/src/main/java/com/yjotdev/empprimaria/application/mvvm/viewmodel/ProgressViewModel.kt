@@ -3,13 +3,17 @@ package com.yjotdev.empprimaria.application.mvvm.viewmodel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.channels.Channel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.receiveAsFlow
 import com.yjotdev.empprimaria.application.mvvm.model.ProgressModel
+import com.yjotdev.empprimaria.application.navigation.UiEvent
+import com.yjotdev.empprimaria.application.navigation.ViewRoutes
 import com.yjotdev.empprimaria.domain.core.Result
 import com.yjotdev.empprimaria.domain.entity.EmailEntity
 import com.yjotdev.empprimaria.domain.entity.UserEntity
@@ -17,14 +21,17 @@ import com.yjotdev.empprimaria.domain.entity.LoginEntity
 import com.yjotdev.empprimaria.domain.entity.RecoveryEntity
 import com.yjotdev.empprimaria.domain.usecase.email.SendCommentaryUseCase
 import com.yjotdev.empprimaria.domain.usecase.email.SendEmailUseCase
+import com.yjotdev.empprimaria.domain.usecase.string.StringUseCase
 import com.yjotdev.empprimaria.domain.usecase.user.ChangePasswordUserUseCase
 import com.yjotdev.empprimaria.domain.usecase.user.DeleteUserUseCase
 import com.yjotdev.empprimaria.domain.usecase.user.FindUserUseCase
 import com.yjotdev.empprimaria.domain.usecase.user.InsertUserUseCase
 import com.yjotdev.empprimaria.domain.usecase.user.UpdateUserUseCase
+import com.yjotdev.empprimaria.R
 
 @HiltViewModel
 class ProgressViewModel @Inject constructor(
+    private val getString: StringUseCase,
     private val findUserUseCase: FindUserUseCase,
     private val insertUserUseCase: InsertUserUseCase,
     private val updateUserUseCase: UpdateUserUseCase,
@@ -35,9 +42,9 @@ class ProgressViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(ProgressModel())
-    private val _userInfo = MutableStateFlow(UserEntity())
+    private val _eventChannel = Channel<UiEvent>()
     val uiState: StateFlow<ProgressModel> = _uiState.asStateFlow()
-    val userInfo: StateFlow<UserEntity> = _userInfo.asStateFlow()
+    val eventChannel = _eventChannel.receiveAsFlow()
 
     override fun onCleared() {
         super.onCleared()
@@ -72,16 +79,10 @@ class ProgressViewModel @Inject constructor(
         }
     }
 
-    /** Este metodo actualiza el estado del objeto UserInfo **/
-    fun setUserInfo(userInfo: UserEntity){
-        _userInfo.update { state ->
-            state.copy(
-                id = userInfo.id,
-                name = userInfo.name,
-                email = userInfo.email,
-                password = userInfo.password,
-                photo = userInfo.photo
-            )
+    /** Este metodo actualiza el estado del usuario **/
+    fun setUser(user: UserEntity){
+        _uiState.update { state ->
+            state.copy(user = user)
         }
     }
 
@@ -97,31 +98,33 @@ class ProgressViewModel @Inject constructor(
         _uiState.update { state -> state.copy(isTimerOff = isTimerOff) }
     }
 
-    /** Este metodo actualiza el estado de la variable currentLevelNum **/
+    /** Este metodo actualiza el estado de la variable progressLevel **/
     fun setProgressLevel(progressLevel: Float){
         _uiState.update { state -> state.copy(progressLevel = progressLevel) }
     }
 
-    /** Este metodo actualiza el estado de la variable isAnswerDialogVisible **/
-    fun setDialogVisible(isDialogVisible: Boolean){
-        _uiState.update { it.copy(isDialogVisible = isDialogVisible) }
+    /** Este metodo actualiza el estado de la variable isDialogDisplayed **/
+    fun setIsDialogDisplayed(isDialogDisplayed: Boolean){
+        _uiState.update { it.copy(isDialogDisplayed = isDialogDisplayed) }
     }
 
-    /** Este metodo actualiza el estado de la variable currentOperationId **/
-    fun setCurrentOperationId(currentOperationId: Int){
-        _uiState.update { it.copy(currentOperationId = currentOperationId) }
+    /** Este metodo actualiza el estado de la variable isBtnNextDisplayed **/
+    fun setIsBtnNextDisplayed(isBtnNextDisplayed: Boolean){
+        _uiState.update { it.copy(isBtnNextDisplayed = isBtnNextDisplayed) }
     }
 
-    /** Limpia los flags **/
-    fun clearFlags(){
-        _uiState.update { state ->
-            state.copy(wasFound = false, wasInserted = false,
-                wasUpdated = false, wasDeleted = false, wasEmailed = false)
+    /** Este metodo cierra la sesión del usuario **/
+    fun logoutUser(){
+        viewModelScope.launch {
+            _eventChannel.send(UiEvent.Navigate(
+                route = ViewRoutes.Login.name,
+                routePopUp = ViewRoutes.UserInfo.name
+            ))
         }
     }
 
     /** Este metodo obtiene los datos del usuario en la BD **/
-    fun findUser(nameOrEmail: String, password: String){
+    fun loginUser(nameOrEmail: String, password: String){
         val login = LoginEntity(
             name = nameOrEmail,
             password = password
@@ -133,22 +136,26 @@ class ProgressViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            user = result.data,
-                            wasFound = true,
-                            operationCompletedCount = it.operationCompletedCount + 1
+                            user = result.data.copy(
+                                password = password
+                            )
                         )
                     }
+                    _eventChannel.send(UiEvent.Navigate(
+                        route = ViewRoutes.UserInfo.name,
+                        routePopUp = ViewRoutes.Login.name
+                    ))
                 }
                 is Result.Error -> {
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            user = null,
-                            wasFound = false,
-                            error = result.exception.message,
-                            operationCompletedCount = it.operationCompletedCount + 1
+                            user = UserEntity()
                         )
                     }
+                    _eventChannel.send(UiEvent.ShowLog(
+                        result.exception.message!!)
+                    )
                 }
             }
         }
@@ -162,22 +169,22 @@ class ProgressViewModel @Inject constructor(
             when (val result = insertUserUseCase(userToInsert)) {
                 is Result.Success -> {
                     _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            wasInserted = true,
-                            operationCompletedCount = it.operationCompletedCount + 1
-                        )
+                        it.copy(isLoading = false)
                     }
+                    _eventChannel.send(UiEvent.ShowToast(
+                        getString(R.string.alert_user_registered))
+                    )
                 }
                 is Result.Error -> {
                     _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            wasInserted = false,
-                            error = result.exception.message,
-                            operationCompletedCount = it.operationCompletedCount + 1
-                        )
+                        it.copy(isLoading = false)
                     }
+                    _eventChannel.send(UiEvent.ShowToast(
+                        getString(R.string.error_user_registered))
+                    )
+                    _eventChannel.send(UiEvent.ShowLog(
+                        result.exception.message!!)
+                    )
                 }
             }
         }
@@ -197,22 +204,22 @@ class ProgressViewModel @Inject constructor(
             when (val result = updateUserUseCase(id, userToUpdate)) {
                 is Result.Success -> {
                     _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            wasUpdated = true,
-                            operationCompletedCount = it.operationCompletedCount + 1
-                        )
+                        it.copy(isLoading = false)
                     }
+                    _eventChannel.send(UiEvent.ShowToast(
+                        getString(R.string.alert_user_updated))
+                    )
                 }
                 is Result.Error -> {
                     _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            wasUpdated = false,
-                            error = result.exception.message,
-                            operationCompletedCount = it.operationCompletedCount + 1
-                        )
+                        it.copy(isLoading = false)
                     }
+                    _eventChannel.send(UiEvent.ShowToast(
+                        getString(R.string.error_user_updated))
+                    )
+                    _eventChannel.send(UiEvent.ShowLog(
+                        result.exception.message!!)
+                    )
                 }
             }
         }
@@ -229,22 +236,22 @@ class ProgressViewModel @Inject constructor(
             when (val result = changePasswordUserUseCase(recovery)) {
                 is Result.Success -> {
                     _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            wasUpdated = true,
-                            operationCompletedCount = it.operationCompletedCount + 1
-                        )
+                        it.copy(isLoading = false)
                     }
+                    _eventChannel.send(UiEvent.ShowToast(
+                        getString(R.string.alert_user_changed_password))
+                    )
                 }
                 is Result.Error -> {
                     _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            wasUpdated = false,
-                            error = result.exception.message,
-                            operationCompletedCount = it.operationCompletedCount + 1
-                        )
+                        it.copy(isLoading = false)
                     }
+                    _eventChannel.send(UiEvent.ShowToast(
+                        getString(R.string.error_user_changed_password))
+                    )
+                    _eventChannel.send(UiEvent.ShowLog(
+                        result.exception.message!!)
+                    )
                 }
             }
         }
@@ -257,22 +264,22 @@ class ProgressViewModel @Inject constructor(
             when (val result = deleteUserUseCase(id)) {
                 is Result.Success -> {
                     _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            wasDeleted = true,
-                            operationCompletedCount = it.operationCompletedCount + 1
-                        )
+                        it.copy(isLoading = false)
                     }
+                    _eventChannel.send(UiEvent.ShowToast(
+                        getString(R.string.alert_user_deleted))
+                    )
                 }
                 is Result.Error -> {
                     _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            wasDeleted = false,
-                            error = result.exception.message,
-                            operationCompletedCount = it.operationCompletedCount + 1
-                        )
+                        it.copy(isLoading = false)
                     }
+                    _eventChannel.send(UiEvent.ShowToast(
+                        getString(R.string.error_user_deleted))
+                    )
+                    _eventChannel.send(UiEvent.ShowLog(
+                        result.exception.message!!)
+                    )
                 }
             }
         }
@@ -286,22 +293,22 @@ class ProgressViewModel @Inject constructor(
             when (val result = sendEmailUseCase(email)) {
                 is Result.Success -> {
                     _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            wasEmailed = true,
-                            operationCompletedCount = it.operationCompletedCount + 1
-                        )
+                        it.copy(isLoading = false)
                     }
+                    _eventChannel.send(UiEvent.ShowToast(
+                        getString(R.string.alert_code_sent))
+                    )
                 }
                 is Result.Error -> {
                     _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            wasEmailed = false,
-                            error = result.exception.message,
-                            operationCompletedCount = it.operationCompletedCount + 1
-                        )
+                        it.copy(isLoading = false)
                     }
+                    _eventChannel.send(UiEvent.ShowToast(
+                        getString(R.string.error_code_sent))
+                    )
+                    _eventChannel.send(UiEvent.ShowLog(
+                        result.exception.message!!)
+                    )
                 }
             }
         }
@@ -315,22 +322,22 @@ class ProgressViewModel @Inject constructor(
             when (val result = sendCommentaryUseCase(email)) {
                 is Result.Success -> {
                     _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            wasEmailed = true,
-                            operationCompletedCount = it.operationCompletedCount + 1
-                        )
+                        it.copy(isLoading = false)
                     }
+                    _eventChannel.send(UiEvent.ShowToast(
+                        getString(R.string.alert_feedback_sent))
+                    )
                 }
                 is Result.Error -> {
                     _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            wasEmailed = false,
-                            error = result.exception.message,
-                            operationCompletedCount = it.operationCompletedCount + 1
-                        )
+                        it.copy(isLoading = false)
                     }
+                    _eventChannel.send(UiEvent.ShowToast(
+                        getString(R.string.error_feedback_sent))
+                    )
+                    _eventChannel.send(UiEvent.ShowLog(
+                        result.exception.message!!)
+                    )
                 }
             }
         }
@@ -339,6 +346,5 @@ class ProgressViewModel @Inject constructor(
     /** Este metodo reinicia el estado del ProgressViewModel **/
     fun resetViewModel(){
         _uiState.value = ProgressModel()
-        _userInfo.value = UserEntity()
     }
 }

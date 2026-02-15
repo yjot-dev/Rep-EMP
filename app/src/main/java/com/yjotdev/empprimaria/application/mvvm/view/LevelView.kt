@@ -39,8 +39,8 @@ fun LevelView(
     myTimeSpent: Int,
     myCourseCompleted: Int,
     myLife: Int,
-    isVisible: Boolean = false,
-    onIsVisible: (Boolean) -> Unit = {},
+    isBtnNextDisplayed: Boolean = false,
+    onIsBtnNextDisplayed: (Boolean) -> Unit = {},
     onIsTimerOff: (Boolean) -> Unit = {},
     onProcess: (Int, Boolean) -> Unit = {_,_ ->},
     onCallback: () -> Unit = {}
@@ -107,14 +107,14 @@ fun LevelView(
                     }
                 }
             }
-            if (isVisible) {
+            if (isBtnNextDisplayed) {
                 ButtonView(
                     modifier = Modifier
                         .height(dimensionResource(id = R.dimen.dm_5))
                         .fillMaxWidth(0.85f),
                     click = {
                         nextExercise += 1
-                        onIsVisible(false)
+                        onIsBtnNextDisplayed(false)
                     },
                     text = stringResource(id = R.string.button_next)
                 )
@@ -133,7 +133,7 @@ private fun PreviewLevelView(){
             myTimeSpent = 0,
             myCourseCompleted = 0,
             myLife = 3,
-            isVisible = true
+            isBtnNextDisplayed = true
         )
     }
 }

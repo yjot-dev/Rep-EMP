@@ -15,6 +15,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.application.navigation.ViewRoutes
 
@@ -51,28 +52,33 @@ fun TitleBar(
     // Renderiza la TopAppBar con el contenido correcto
     TopAppBar(
         title = {
-            if (currentScreen in screensWithTopBarMenu) {
-                TopBarMenu(
-                    modifier = modifier,
-                    onUserInfo = onUserInfo,
-                    onUnits = onUnits,
-                    onProjects = onProjects,
-                    onOpinion = onOpinion
-                )
-            } else if (currentScreen in screensWithProgressLevel){
-                TopBarProgress(
-                    modifier = modifier,
-                    progressLevel = progressLevel,
-                    myLife = myLife
-                )
-            } else {
-                Text(
-                    modifier = modifier,
-                    text = stringResource(id = currentScreen.idTitle),
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Bold
+            when (currentScreen) {
+                in screensWithTopBarMenu -> {
+                    TopBarMenu(
+                        modifier = modifier,
+                        onUserInfo = onUserInfo,
+                        onUnits = onUnits,
+                        onProjects = onProjects,
+                        onOpinion = onOpinion
                     )
-                )
+                }
+                in screensWithProgressLevel -> {
+                    TopBarProgress(
+                        modifier = modifier,
+                        progressLevel = progressLevel,
+                        myLife = myLife
+                    )
+                }
+                else -> {
+                    Text(
+                        modifier = modifier,
+                        text = stringResource(id = currentScreen.idTitle),
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        )
+                    )
+                }
             }
         },
         navigationIcon = {

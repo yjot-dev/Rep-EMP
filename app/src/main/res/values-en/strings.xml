@@ -41,8 +41,10 @@
     <string name="alert_user_changed_password">Password updated successfully</string>
     <string name="error_user_deleted">Error deleting user</string>
     <string name="alert_user_deleted">User deleted successfully</string>
-    <string name="error_email_sent">Error sending email</string>
-    <string name="alert_email_sent">Email sent successfully</string>
+    <string name="error_code_sent">Error sending code</string>
+    <string name="alert_code_sent">Code sent successfully</string>
+    <string name="error_feedback_sent">Error sending comment</string>
+    <string name="alert_feedback_sent">Comment sent successfully</string>
     <string name="body_email">
         Hello %1$s, to verify your identity, please enter the following code: %2$s
     </string>
