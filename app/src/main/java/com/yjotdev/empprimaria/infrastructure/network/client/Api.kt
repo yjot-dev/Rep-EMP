@@ -29,7 +29,7 @@ class Api @Inject constructor(
         .build()
         .create(UserApi::class.java)
 
-    /** API Tabla Email **/
+    /** API Gmail **/
     fun getEmailRetrofit(): EmailApi = Retrofit.Builder()
         .baseUrl(uri)
         .client(httpsClient)

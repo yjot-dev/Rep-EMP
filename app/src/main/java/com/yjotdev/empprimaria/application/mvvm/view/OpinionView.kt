@@ -26,6 +26,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.application.components.ButtonView
@@ -103,8 +104,9 @@ fun UserProgress(
         shape = ShapeDefaults.ExtraLarge
     ){
         Column(
-            modifier = Modifier.padding(dimensionResource(id = R.dimen.dm_3)),
-            verticalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier.padding(dimensionResource(id = R.dimen.dm_3))
+                               .fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
             ProgressInfo(
@@ -141,11 +143,12 @@ private fun ProgressInfo(
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
+        horizontalArrangement = Arrangement.SpaceBetween
     ){
         Text(
             text = textInfo,
-            style = MaterialTheme.typography.titleLarge.copy(
+            style = MaterialTheme.typography.titleMedium.copy(
+                textAlign = TextAlign.Start,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.secondary
             )
@@ -153,6 +156,7 @@ private fun ProgressInfo(
         Text(
             text = textResult,
             style = MaterialTheme.typography.titleMedium.copy(
+                textAlign = TextAlign.End,
                 color = MaterialTheme.colorScheme.onSurface
             )
         )

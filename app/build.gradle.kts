@@ -17,17 +17,6 @@ android {
         versionCode = 4
         versionName = "3.4"
         testInstrumentationRunner = "com.yjotdev.empprimaria.CustomTestRunner"
-        // Variables globales en gradle
-        val apiDomain = project.findProperty("APP_API_DOMAIN") as? String
-            ?: error("La propiedad 'APP_API_DOMAIN' no se encontró en gradle.properties")
-        val certPinIntermediate = project.findProperty("APP_CERT_PIN_INTERMEDIATE") as? String
-            ?: error("La propiedad 'APP_CERT_PIN_INTERMEDIATE' no se encontró en gradle.properties")
-        val certPinLeaf = project.findProperty("APP_CERT_PIN_LEAF") as? String
-            ?: error("La propiedad 'APP_CERT_PIN_LEAF' no se encontró en gradle.properties")
-        // Variables en BuildConfig
-        buildConfigField("String", "API_DOMAIN", "\"$apiDomain\"")
-        buildConfigField("String", "CERT_PIN_INTERMEDIATE", "\"$certPinIntermediate\"")
-        buildConfigField("String", "CERT_PIN_LEAF", "\"$certPinLeaf\"")
         vectorDrawables {
             useSupportLibrary = true
         }

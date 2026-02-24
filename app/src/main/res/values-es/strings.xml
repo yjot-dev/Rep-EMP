@@ -62,13 +62,15 @@
     <string name="my_progress">Mi progreso</string>
     <string name="my_experience">Experiencia</string>
     <plurals name="points">
+        <item quantity="zero">%1$d puntos</item>
         <item quantity="one">%1$d punto</item>
-        <item quantity="many">%1$d puntos</item>
+        <item quantity="other">%1$d puntos</item>
     </plurals>
     <string name="my_time_spent">Tiempo invertido</string>
     <plurals name="minutes">
+        <item quantity="zero">%1$d minutos</item>
         <item quantity="one">%1$d minuto</item>
-        <item quantity="many">%1$d minutos</item>
+        <item quantity="other">%1$d minutos</item>
     </plurals>
     <string name="my_course_completed">Curso completado</string>
     <string name="my_percent">%1$d%%</string>

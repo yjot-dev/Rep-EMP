@@ -38,7 +38,7 @@ import com.yjotdev.empprimaria.domain.entity.EmailEntity
 import com.yjotdev.empprimaria.domain.entity.RecoveryEntity
 
 @ExperimentalCoroutinesApi
-class ProgressViewModelTest {
+class ViewModelTest {
 
     @RelaxedMockK
     private lateinit var getString: StringUseCase

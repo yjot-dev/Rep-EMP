@@ -1,6 +1,5 @@
-# GAMIFICACION SOBRE EMPRENDIMIENTO
-Esta app está orientada a la educación, cuenta con varios ejercicios sobre la 
-temática de emprendimiento, tiene cuatro modelos de actividades.
+# EMPRENDIMIENTO PRIMARIA (EMP)
+EMP es una aplicación móvil educativa y gamificada, diseñada para enseñar conceptos fundamentales de emprendimiento a través de una experiencia interactiva y progresiva. El objetivo principal es motivar al usuario a aprender mediante lecciones estructuradas y ejercicios prácticos, mientras sigue su progreso y gestiona su perfil de aprendizaje.
 
 # Características principales
 - 🪟 Interfaz moderna con Jetpack Compose
@@ -24,21 +23,19 @@ temática de emprendimiento, tiene cuatro modelos de actividades.
 - Material 3
 
 # Uso
-- Al abrir la app, se muestra la vista de inicio *Login* donde se ubican tres botones con las opciones de inicia sesion, registrarse y recuperar clave, en el caso de ya
-  tener un usuario se puede directamente iniciar sesion en la misma vista rellenando los campos de usuario/correo y contraseña.
-- Si no se tiene un usuario se lo debe crear dando click en el boton Registrarse, luego se abre una vista *Registrarse* hay se debe rellenar los campos usuario, correo y contraseña para
-  luego hacer click en el boton Crear Usuario.
-- Si no se acuerda de la clave debe hacer click en el boton Recuperar Clave, luego se abre una vista "Recuperar Clave" hay debe escribir su correo y luego dar click en el boton
-  Enviar Codigo, le llegara un codigo a su correo y ese codigo debe escribirlo en la vista emergente que le aparece, luego debe dar enter y escribir la nueva clave en el campo de la vista
-  "Recuperar Clave" para finalmente dar click en el boton Cambiar Clave.
-- Si ya inicio sesion le aparecera la vista "Menu" que contiene cuatro opciones en la barra superior y en la parte de la vista se aparecera cada vista de la opcion seleccionada.
-- La opcion 1 es la vista *Usuario*, hay podra ver su foto de perfil, su usuario, correo y clave (encriptada pero con opcion de ver), tambien puede actualizar dicha informacion o borrar
-  su cuenta, para ello debe enviar un codigo a su correo y con dicho codigo verificar la accion correspondiente.
-- La opcion 2 es la vista *Unidades* hay podra realizar cada leccion del contenido sobre la tematica de emprendimeinto ofrecido, cuenta con ejercicios de verdadero o falso, completar la
-  oracion y ordenar pares de tarjetas (ejemplo con titulo del concepto), al finalizar cada nivel se muestra el puntaje obtenido.
-- La opcion 3 es la vista *Proyectos* hay podra ver una lista de proyectos de emprendimiento con informacion de cada uno de ellos, que ayudara a darle ideas de como empezar su negocio.
-- La opcion 4 es la vista *Puntaje* hay podra ver el puntaje acumulado que involucra su puntaje total, el tiempo total de estudio en la app y el porcentaje del avance de todo el curso,
-  ademas puede enviar una opinion a manera de retroalimentacion al correo configurado en la API RESTful.
+El flujo de uso de la aplicación está diseñado para ser intuitivo y completo, guiando al usuario a través de los siguientes pasos:
+
+1. Acceso y Autenticación de Usuario: Al iniciar la aplicación, el usuario se encuentra con una pantalla de Login clara y funcional. Desde aquí, tiene tres opciones directas:
+   - Iniciar Sesión: Los usuarios existentes pueden acceder rápidamente ingresando su nombre de usuario/correo y contraseña.
+   - Registrarse: Los nuevos usuarios son dirigidos a una vista de Registro donde pueden crear su cuenta proporcionando un nombre de usuario, correo electrónico y contraseña.
+   - Recuperar Clave: Si un usuario olvida su contraseña, puede ingresar su correo para recibir un código de verificación. Tras validar el código, puede establecer una nueva contraseña y recuperar el acceso a su cuenta.
+2. Navegación en el Menú Principal: Una vez autenticado, el usuario accede al núcleo de la aplicación, que presenta una barra de navegación superior con cuatro secciones principales, cada una ofreciendo una funcionalidad clave:
+   - Perfil de Usuario: Esta es la sección personal del usuario. Aquí puede visualizar y actualizar su información (foto de perfil, nombre de usuario, correo y contraseña). Para garantizar la seguridad, cualquier actualización o la eliminación de la cuenta requiere una verificación mediante un código enviado a su correo.
+   - Módulos Educativos (Unidades): El corazón del aprendizaje. En esta vista, el usuario avanza a través de lecciones estructuradas sobre emprendimiento. El contenido se presenta mediante ejercicios gamificados como verdadero/falso, completar oraciones y emparejar conceptos, obteniendo un puntaje al finalizar cada nivel.
+   - Proyectos Prácticos: Para inspirar la acción, esta sección ofrece una lista de ideas de proyectos de emprendimiento. Cada proyecto incluye información detallada que sirve como guía y ejemplo para que el usuario pueda empezar a conceptualizar su propio negocio.
+   - Progreso y Feedback (Puntaje): Esta vista funciona como un panel de control del rendimiento del usuario. Muestra métricas clave como el puntaje total acumulado, el tiempo total de estudio en la app y el porcentaje de avance del curso. Además, incluye una función para que el usuario pueda enviar sus opiniones o sugerencias directamente al desarrollador.
+
+En resumen, Emprendimiento Primaria empodera a los usuarios en su camino de aprendizaje sobre negocios, combinando una sólida arquitectura técnica con una experiencia de usuario gamificada y fácil de seguir para reportar, aprender y monitorear su progreso de manera efectiva.
   
 # Ver video Demo
 [Ver en YouTube](https://youtu.be/8ceBytM3tVI)
