@@ -16,7 +16,7 @@ class Api @Inject constructor(
     @ApplicationContext context: Context
 ) {
     private val uri = if (BuildConfig.DEBUG) { "https://192.168.1.20:3000/api/" }
-                      else { "https://emp-yjotdev.up.railway.app/api/" }
+                      else { "https://servicio-api-emp-599017784283.us-central1.run.app/api/" }
     private val httpsClient = if (BuildConfig.DEBUG) { Client.getUnsafeClient(context) }
                               else { Client.getSafeClient() }
 
