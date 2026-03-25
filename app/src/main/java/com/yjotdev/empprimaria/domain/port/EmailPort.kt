@@ -5,6 +5,4 @@ import com.yjotdev.empprimaria.domain.entity.EmailEntity
 
 interface EmailPort {
     suspend fun sendEmail(email: EmailEntity): Result<Unit>
-
-    suspend fun sendCommentary(email: EmailEntity): Result<Unit>
 }

@@ -37,8 +37,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import com.yjotdev.empprimaria.application.utils.Helper
 import com.yjotdev.empprimaria.R
-import com.yjotdev.empprimaria.domain.utils.Validation
 
 @Composable
 fun ButtonView(
@@ -104,12 +104,12 @@ fun TextFieldView(
             )
         },
         visualTransformation =
-        if(isPassword){
-            if (passwordVisible) VisualTransformation.None
-            else PasswordVisualTransformation()
-        }else{
-            VisualTransformation.None
-        },
+            if(isPassword){
+                if (passwordVisible) VisualTransformation.None
+                else PasswordVisualTransformation()
+            }else{
+                VisualTransformation.None
+            },
         trailingIcon = {
             if (isPassword) {
                 val image = if (passwordVisible)
@@ -133,7 +133,7 @@ fun TextFieldView(
         value = value,
         onValueChange = { text ->
             onValueChange(text)
-            errorMessage = Validation.validateText(text, validateCase)
+            errorMessage = Helper.validateText(text, validateCase)
         },
         isError = errorMessage.isNotEmpty(),
         supportingText = {

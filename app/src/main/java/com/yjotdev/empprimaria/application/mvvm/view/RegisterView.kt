@@ -18,15 +18,18 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import com.yjotdev.empprimaria.R
+import kotlin.random.Random
+import com.yjotdev.empprimaria.application.components.AlertDialogView
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.application.components.ButtonView
 import com.yjotdev.empprimaria.application.components.TextFieldView
 import com.yjotdev.empprimaria.application.utils.ComponentPreview
+import com.yjotdev.empprimaria.R
 
 @Composable
 fun RegisterView(
     modifier: Modifier = Modifier,
+    onSendCode: (String, String) -> Unit,
     onRegister: (String, String, String) -> Unit
 ){
     val focusRequest1 = remember { FocusRequester() }
@@ -35,9 +38,23 @@ fun RegisterView(
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var sendCode by remember { mutableStateOf(false) }
+    val code by remember { mutableStateOf(Random.nextInt(100000, 999999).toString()) }
     var isError1 by remember { mutableStateOf(false) }
     var isError2 by remember { mutableStateOf(false) }
     var isError3 by remember { mutableStateOf(false) }
+    //Muestra el dialogo para enviar el codigo
+    if(sendCode){
+        AlertDialogView(
+            onDismiss = { sendCode = false },
+            onConfirm = { codeIn ->
+                if(code == codeIn){
+                    onRegister(name, email, password)
+                    sendCode = false
+                }
+            }
+        )
+    }
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceEvenly,
@@ -85,7 +102,10 @@ fun RegisterView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
                 .fillMaxWidth(0.85f),
-            click = { onRegister(name, email, password) },
+            click = {
+                onSendCode(email, code)
+                sendCode = true
+            },
             enabled = !isError1 && !isError2 && !isError3 &&
                     name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty(),
             text = stringResource(id = R.string.button_create_user)
@@ -100,6 +120,7 @@ private fun PreviewRegisterView(){
     EmprendimientoPrimariaTheme{
         RegisterView(
             modifier = Modifier.fillMaxSize(),
+            onSendCode = { _, _ -> },
             onRegister = { _, _, _ -> }
         )
     }

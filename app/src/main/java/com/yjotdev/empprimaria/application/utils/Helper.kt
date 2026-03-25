@@ -1,6 +1,11 @@
-package com.yjotdev.empprimaria.domain.utils
+package com.yjotdev.empprimaria.application.utils
 
-object Validation{
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
+import java.io.ByteArrayOutputStream
+
+object Helper {
     fun validateText(text: String, case: Int): String{
         val messageRegex = Regex("^[A-Za-z.,\\s]{1,300}$")
         val userOrEmailRegex = Regex("^(?=.{3,50}$)([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,7}|[A-Za-z0-9._%+-]{3,50})$")
@@ -18,5 +23,25 @@ object Validation{
                 else -> if(!passwordRegex.matches(text)) "error" else ""
             }
         }else ""
+    }
+
+    fun convertToBitmap(base64: String): Bitmap? {
+        return if(base64.isNotEmpty()){
+            val byteArray = Base64.decode(base64, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+        }else{
+            null
+        }
+    }
+
+    fun convertToBase64(bitmap: Bitmap?): String{
+        return bitmap?.let {
+            val outputStream = ByteArrayOutputStream()
+            it.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            val byteArray = outputStream.toByteArray()
+            Base64.encodeToString(byteArray, Base64.DEFAULT)
+        } ?: run {
+            ""
+        }
     }
 }

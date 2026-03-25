@@ -41,8 +41,8 @@ import com.yjotdev.empprimaria.application.components.AlertDialogView
 import com.yjotdev.empprimaria.application.components.ButtonView
 import com.yjotdev.empprimaria.application.components.TextFieldView
 import com.yjotdev.empprimaria.application.utils.ComponentPreview
-import com.yjotdev.empprimaria.application.utils.ImageUtils.convertToBase64
-import com.yjotdev.empprimaria.application.utils.ImageUtils.convertToBitmap
+import com.yjotdev.empprimaria.application.utils.Helper.convertToBase64
+import com.yjotdev.empprimaria.application.utils.Helper.convertToBitmap
 import com.yjotdev.empprimaria.domain.entity.UserEntity
 
 @Composable

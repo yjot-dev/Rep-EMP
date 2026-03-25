@@ -13,6 +13,6 @@ class StringUseCase @Inject constructor(
     }
 
     operator fun invoke(resId: Int, vararg args: Any): String {
-        return stringPort.getString(resId, args)
+        return stringPort.getString(resId, *args)
     }
 }

@@ -24,7 +24,6 @@ import com.yjotdev.empprimaria.application.navigation.UiEvent
 import com.yjotdev.empprimaria.domain.core.Result
 import com.yjotdev.empprimaria.domain.entity.LoginEntity
 import com.yjotdev.empprimaria.domain.entity.UserEntity
-import com.yjotdev.empprimaria.domain.usecase.email.SendCommentaryUseCase
 import com.yjotdev.empprimaria.domain.usecase.email.SendEmailUseCase
 import com.yjotdev.empprimaria.domain.usecase.string.StringUseCase
 import com.yjotdev.empprimaria.domain.usecase.user.ChangePasswordUserUseCase
@@ -61,9 +60,6 @@ class ViewModelTest {
     @RelaxedMockK
     private lateinit var sendEmailUseCase: SendEmailUseCase
 
-    @RelaxedMockK
-    private lateinit var sendCommentaryUseCase: SendCommentaryUseCase
-
     private lateinit var viewModel: ProgressViewModel
     private val testDispatcher = StandardTestDispatcher()
 
@@ -81,8 +77,7 @@ class ViewModelTest {
             updateUserUseCase,
             changePasswordUserUseCase,
             deleteUserUseCase,
-            sendEmailUseCase,
-            sendCommentaryUseCase
+            sendEmailUseCase
         )
     }
 
@@ -496,7 +491,7 @@ class ViewModelTest {
         }
 
         // When
-        viewModel.sendCodeByEmail(email.to, email.subject, email.text)
+        viewModel.sendEmail(email.to, email.subject, email.text)
         advanceUntilIdle()
 
         job1.cancel()
@@ -536,7 +531,7 @@ class ViewModelTest {
         }
 
         // When
-        viewModel.sendCodeByEmail(email.to, email.subject, email.text)
+        viewModel.sendEmail(email.to, email.subject, email.text)
         advanceUntilIdle()
 
         job1.cancel()

@@ -19,7 +19,6 @@ import com.yjotdev.empprimaria.domain.entity.EmailEntity
 import com.yjotdev.empprimaria.domain.entity.UserEntity
 import com.yjotdev.empprimaria.domain.entity.LoginEntity
 import com.yjotdev.empprimaria.domain.entity.RecoveryEntity
-import com.yjotdev.empprimaria.domain.usecase.email.SendCommentaryUseCase
 import com.yjotdev.empprimaria.domain.usecase.email.SendEmailUseCase
 import com.yjotdev.empprimaria.domain.usecase.string.StringUseCase
 import com.yjotdev.empprimaria.domain.usecase.user.ChangePasswordUserUseCase
@@ -37,8 +36,7 @@ class ProgressViewModel @Inject constructor(
     private val updateUserUseCase: UpdateUserUseCase,
     private val changePasswordUserUseCase: ChangePasswordUserUseCase,
     private val deleteUserUseCase: DeleteUserUseCase,
-    private val sendEmailUseCase: SendEmailUseCase,
-    private val sendCommentaryUseCase: SendCommentaryUseCase
+    private val sendEmailUseCase: SendEmailUseCase
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(ProgressModel())
@@ -286,7 +284,7 @@ class ProgressViewModel @Inject constructor(
     }
 
     /** Este metodo envia un correo al usuario con el código de verificación **/
-    fun sendCodeByEmail(to: String, subject: String, text: String){
+    fun sendEmail(to: String, subject: String, text: String){
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch{
             val email = EmailEntity(to, subject, text)
@@ -305,35 +303,6 @@ class ProgressViewModel @Inject constructor(
                     }
                     _eventChannel.send(UiEvent.ShowToast(
                         getString(R.string.error_code_sent))
-                    )
-                    _eventChannel.send(UiEvent.ShowLog(
-                        result.exception.message!!)
-                    )
-                }
-            }
-        }
-    }
-
-    /** Este metodo envia un comentario del usuario al correo de la empresa **/
-    fun sendCommentaryByEmail(subject: String, text: String){
-        _uiState.update { it.copy(isLoading = true) }
-        viewModelScope.launch{
-            val email = EmailEntity("", subject, text)
-            when (val result = sendCommentaryUseCase(email)) {
-                is Result.Success -> {
-                    _uiState.update {
-                        it.copy(isLoading = false)
-                    }
-                    _eventChannel.send(UiEvent.ShowToast(
-                        getString(R.string.alert_feedback_sent))
-                    )
-                }
-                is Result.Error -> {
-                    _uiState.update {
-                        it.copy(isLoading = false)
-                    }
-                    _eventChannel.send(UiEvent.ShowToast(
-                        getString(R.string.error_feedback_sent))
                     )
                     _eventChannel.send(UiEvent.ShowLog(
                         result.exception.message!!)

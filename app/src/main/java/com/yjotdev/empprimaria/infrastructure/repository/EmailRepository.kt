@@ -12,10 +12,6 @@ import com.yjotdev.empprimaria.infrastructure.network.core.safeApiCallForUnit
 class EmailRepository @Inject constructor(
     private val api: Api
 ): EmailPort {
-    override suspend fun sendCommentary(email: EmailEntity): Result<Unit> {
-        return safeApiCallForUnit{ api.getEmailRetrofit().sendCommentary(email) }
-    }
-
     override suspend fun sendEmail(email: EmailEntity): Result<Unit> {
         return safeApiCallForUnit{ api.getEmailRetrofit().sendEmail(email) }
     }

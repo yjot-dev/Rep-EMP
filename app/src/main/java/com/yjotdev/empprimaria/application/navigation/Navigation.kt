@@ -27,7 +27,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import kotlinx.coroutines.delay
-import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.domain.utils.data.Stories
 import com.yjotdev.empprimaria.domain.utils.data.Exercise1
 import com.yjotdev.empprimaria.domain.utils.data.Exercise2
@@ -44,6 +43,7 @@ import com.yjotdev.empprimaria.application.mvvm.view.StoryView
 import com.yjotdev.empprimaria.application.mvvm.view.UnitsView
 import com.yjotdev.empprimaria.application.mvvm.view.UserInfoView
 import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
+import com.yjotdev.empprimaria.R
 
 @Composable
 fun Navigation(
@@ -57,11 +57,11 @@ fun Navigation(
     val currentScreen = ViewRoutes.valueOf(
         currentRoute.substringBefore("/")
     )
-    //Obtiene estados del viewmodel
+    // Obtiene estados del viewmodel
     val state by viewModel.uiState.collectAsState()
-    //Observa temporizador
+    // Observa temporizador
     ObserveTimerState(viewModel = viewModel)
-    //Observa estados asincronicos
+    // Observa estados asincronicos
     ObserveViewModelState(
         viewModel = viewModel,
         navController = navController,
@@ -79,7 +79,7 @@ fun Navigation(
     if(currentScreen in screensWithoutNavigateBack){
         BackHandler(enabled = true){}
     }
-    //UI
+    // UI
     Scaffold(
         topBar = {
             TitleBar(
@@ -128,6 +128,13 @@ fun Navigation(
                 ){
                     RegisterView(
                         modifier = Modifier.fillMaxSize(),
+                        onSendCode = { email, code ->
+                            onCode(code)
+                            val subject = context.getString(R.string.alert_dialog_code)
+                            val text = context.getString(R.string.body_email,
+                                "Usuario", code)
+                            viewModel.sendEmail(email, subject, text)
+                        },
                         onRegister = { name, email, password ->
                             viewModel.insertUser(name, email, password)
                         }
@@ -148,8 +155,9 @@ fun Navigation(
                         onSendCode = { email, code ->
                             onCode(code)
                             val subject = context.getString(R.string.alert_dialog_code)
-                            val text = context.getString(R.string.body_email, "Usuario", code)
-                            viewModel.sendCodeByEmail(email, subject, text)
+                            val text = context.getString(R.string.body_email,
+                                "Usuario", code)
+                            viewModel.sendEmail(email, subject, text)
                         }
                     )
                     if(state.isLoading) LoadingScreen()
@@ -182,9 +190,9 @@ fun Navigation(
                         onSendCode = { email, code ->
                             onCode(code)
                             val subject = context.getString(R.string.alert_dialog_code)
-                            val text =
-                                context.getString(R.string.body_email, state.user.name, code)
-                            viewModel.sendCodeByEmail(email, subject, text)
+                            val text = context.getString(R.string.body_email,
+                                    state.user.name.uppercase(), code)
+                            viewModel.sendEmail(email, subject, text)
                         }
                     )
                     if(state.isLoading) LoadingScreen()
@@ -224,11 +232,12 @@ fun Navigation(
                     myTimeSpent = state.timeSpent,
                     myCourseCompleted = state.courseCompleted,
                     onSendOpinion = { text ->
+                        val to = "emprendimiento2020g7h2@gmail.com"
                         val subject = context.getString(
                             R.string.alert_dialog_opinion,
                             state.user.name.uppercase()
                         )
-                        viewModel.sendCommentaryByEmail(subject, text)
+                        viewModel.sendEmail(to, subject, text)
                     }
                 )
             }
