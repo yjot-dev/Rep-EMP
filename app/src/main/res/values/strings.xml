@@ -77,4 +77,152 @@
     <string name="some_opinion">¿Alguna opinion?</string>
     <string name="my_score">Puntaje</string>
     <string name="game_over">Juego terminado</string>
+    <string name="exercise1_question1">
+        Elija verdadero o falso \nEl ingreso es la cantidad de bienes obtenidos
+        por el precio de venta de un producto o servicio.
+    </string>
+    <string name="exercise1_question2">
+        Elija verdadero o falso \nEl costo es la cantidad de bienes obtenidos
+        por el precio de venta de un producto o servicio.
+    </string>
+    <string name="exercise1_question3">
+        Elija verdadero o falso \nLos costos son todos los desembolsos que hace
+        la empresa para producir un bien o servicio que generará un beneficio
+        económico, dentro de un ejercicio contable.
+    </string>
+    <string name="exercise1_question4">
+        Elija verdadero o falso \nLos gastos son todos los desembolsos que hace
+        la empresa para producir un bien o servicio que generará un beneficio
+        económico, dentro de un ejercicio contable.
+    </string>
+    <string name="exercise1_question5">
+        Elija verdadero o falso \nUn gasto es el desembolso que debe hacer el
+        emprendimiento para poder llevar a cabo sus actividades, y que no se
+        relacionen directamente con la fabricación o compra de productos.
+    </string>
+    <string name="exercise1_question6">
+        Elija verdadero o falso \nUna inversión es el desembolso que debe hacer
+        el emprendimiento para poder llevar a cabo sus actividades, y que no se
+        relacionen directamente con la fabricación o compra de productos.
+    </string>
+    <string name="exercise1_question7">
+        Elija verdadero o falso \nLa inversión consiste en asignar un capital a
+        una actividad que genere un emprendimiento y permita alcanzar los
+        objetivos propuestos.
+    </string>
+    <string name="exercise1_question8">
+        Elija verdadero o falso \nEl ingreso consiste en asignar un capital a
+        una actividad que genere un emprendimiento y permita alcanzar los
+        objetivos propuestos.
+    </string>
+    <string name="exercise1_answer_true">Verdadero</string>
+    <string name="exercise1_answer_false">Falso</string>
+    <string name="exercise2_question1">
+        Elija la respuesta correcta \nEs la cantidad de bienes obtenidos por el
+        precio de venta de un producto o servicio.
+    </string>
+    <string name="exercise2_question2">
+        Elija la respuesta correcta \nSon todos los desembolsos que hace la empresa
+        para producir un bien o servicio que generará un beneficio económico,
+        dentro de un ejercicio contable.
+    </string>
+    <string name="exercise2_question3">
+        Elija la respuesta correcta \nEs el desembolso que debe hacer el
+        emprendimiento para poder llevar a cabo sus actividades, y que no se
+        relacionen directamente con la fabricación o compra de productos.
+    </string>
+    <string name="exercise2_question4">
+        Elija la respuesta correcta \nConsiste en asignar un capital a una
+        actividad que genere un em y permita alcanzar los objetivos propuestos.
+    </string>
+    <string name="exercise2_answer1">Costos</string>
+    <string name="exercise2_answer2">Gastos</string>
+    <string name="exercise2_answer3">Inversión</string>
+    <string name="exercise2_answer4">Ingresos</string>
+    <string name="exercise3_question1">
+        Escriba la respuesta correcta \nEs la cantidad de bienes obtenidos por el
+        precio de venta de un producto o servicio.
+    </string>
+    <string name="exercise3_question2">
+        Escriba la respuesta correcta \nSon todos los desembolsos que hace la
+        empresa para producir un bien o servicio que generará un beneficio
+        económico, dentro de un ejercicio contable.
+    </string>
+    <string name="exercise3_question3">
+        Escriba la respuesta correcta \nEs el desembolso que debe hacer el
+        emprendimiento para poder llevar a cabo sus actividades, y que no se
+        relacionen directamente con la fabricación o compra de productos.
+    </string>
+    <string name="exercise3_question4">
+        Escriba la respuesta correcta \nConsiste en asignar un capital a una
+        actividad que genere un emprendimiento y permita alcanzar los objetivos
+        propuestos.
+    </string>
+    <string name="exercise3_answer1">Ingresos</string>
+    <string name="exercise3_answer2">Costos</string>
+    <string name="exercise3_answer3">Gastos</string>
+    <string name="exercise3_answer4">Inversión</string>
+    <string name="project_title1">Cajas de Reciclaje Creativas</string>
+    <string name="project_description1">
+        Descripción: Crear y decorar cajas de reciclaje para diferentes tipos de
+        materiales (plástico, papel, vidrio) y ubicarlas en la escuela.\nObjetivos:
+        Fomentar el cuidado del medio ambiente y la conciencia ecológica.\nHabilidades
+        Desarrolladas: Creatividad, responsabilidad social, trabajo colaborativo.
+    </string>
+    <string name="project_title2">Revista Escolar</string>
+    <string name="project_description2">
+        Descripción: Publicar una revista escolar en la que los estudiantes escriban
+        artículos, realicen entrevistas, y diseñen la maquetación.\nObjetivos:
+        Desarrollar habilidades de comunicación, escritura y diseño gráfico.
+        \nHabilidades Desarrolladas: Creatividad, gestión de proyectos, habilidades
+        de comunicación.
+    </string>
+    <string name="project_title3">Huerto Escolar</string>
+    <string name="project_description3">
+        Descripción: Crear y mantener un huerto en la escuela, donde los estudiantes
+        cultiven y cuiden de diversas plantas.\nObjetivos: Aprender sobre agricultura,
+        sostenibilidad y alimentación saludable. \nHabilidades Desarrolladas: Trabajo
+        en equipo, responsabilidad, cuidado del medio ambiente.
+    </string>
+    <string name="project_title4">Iniciativa Solidaria</string>
+    <string name="project_description4">
+        Descripción: Organizar una campaña de recolección de fondos o donaciones para
+        una causa benéfica.\nObjetivos: Fomentar la empatía y la solidaridad.
+        \nHabilidades Desarrolladas: Gestión de proyectos, habilidades de comunicación,
+        responsabilidad social.
+    </string>
+    <string name="project_title5">Día del Emprendedor</string>
+    <string name="project_description5">
+        Descripción: Organizar un evento en la escuela donde los estudiantes presenten
+        sus ideas de negocio o proyectos innovadores a sus compañeros y maestros.
+        \nObjetivos: Desarrollar habilidades de presentación y defensa de ideas.
+        \nHabilidades Desarrolladas: Creatividad, habilidades de presentación,
+        confianza en sí mismos.
+    </string>
+    <string name="project_title6">Tienda de Libros Usados</string>
+    <string name="project_description6">
+        Descripción: Crear una tienda temporal donde se vendan libros usados donados por
+        los estudiantes y maestros.\nObjetivos: Fomentar el amor por la lectura
+        y la reutilización.\nHabilidades Desarrolladas: Gestión de inventario,
+        habilidades de venta, manejo de dinero.
+    </string>
+    <string name="story_paragraph1">
+        Steve Jobs fue un emprendedor visionario y carismático que dejó una huella
+        indeleble en la industria tecnológica. Junto con Steve Wozniak y Ronald
+        Wayne, Jobs fundó Apple Computer, Inc. en 1976 en el garaje de su casa.
+    </string>
+    <string name="story_question1">¿En qué año Steve Jobs fundó Apple Computer, Inc.?</string>
+    <string name="story_paragraph2">
+        Jobs jugó un papel crucial en el desarrollo de productos icónicos como el
+        Apple I, Apple II, iMac, iPod, iPhone y iPad. Estos productos revolucionaron
+        sus respectivos mercados y cambiaron la forma en que interactuamos con la
+        tecnología.
+    </string>
+    <string name="story_question2">¿Cuál de los siguientes productos son icónicos de Apple Computer, Inc.?</string>
+    <string name="story_paragraph3">
+        Además de Apple, Jobs también adquirió Pixar en 1986, que se convirtió en
+        una exitosa compañía de animación, produciendo películas como \"Toy Story\"
+        y \"Buscando a Nemo\".
+    </string>
+    <string name="story_question3">¿Cual fue el nombre de la empresa que adquirió Steve Jobs en 1986?</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.yjotdev.empprimaria.domain.utils.data
 
 import com.yjotdev.empprimaria.domain.entity.Exercise3Entity
+import com.yjotdev.empprimaria.R
 
 /**
  * Escribir opcion correcta
@@ -8,30 +9,20 @@ import com.yjotdev.empprimaria.domain.entity.Exercise3Entity
 object Exercise3 {
     val data = listOf(
         Exercise3Entity(
-            question = "Escriba la respuesta correcta \n" +
-                    "Es la cantidad de bienes obtenidos por el precio de venta de un " +
-                    "producto o servicio.",
-            answer = "Ingresos"
+            question = R.string.exercise3_question1,
+            answer = R.string.exercise3_answer1
         ),
         Exercise3Entity(
-            question = "Escriba la respuesta correcta \n" +
-                    "Son todos los desembolsos que hace la empresa para producir un " +
-                    "bien o servicio que generará un beneficio económico, dentro de un ejercicio " +
-                    "contable.",
-            answer = "Costos"
+            question = R.string.exercise3_question2,
+            answer = R.string.exercise3_answer2
         ),
         Exercise3Entity(
-            question = "Escriba la respuesta correcta \n" +
-                    "Es el desembolso que debe hacer el emprendimiento para poder " +
-                    "llevar a cabo sus actividades, y que no se relacionen directamente con la fabri" +
-                    "cación o compra de productos.",
-            answer = "Gastos"
+            question = R.string.exercise3_question3,
+            answer = R.string.exercise3_answer3
         ),
         Exercise3Entity(
-            question = "Escriba la respuesta correcta \n" +
-                    "Consiste en asignar un capital a una actividad que genere un em" +
-                    "prendimiento y permita alcanzar los objetivos propuestos.",
-            answer = "Inversión"
+            question = R.string.exercise3_question4,
+            answer = R.string.exercise3_answer4
         ),
     )
 }

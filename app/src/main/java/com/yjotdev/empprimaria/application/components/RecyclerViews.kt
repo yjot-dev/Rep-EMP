@@ -2,11 +2,12 @@ package com.yjotdev.empprimaria.application.components
 
 import android.annotation.SuppressLint
 import androidx.annotation.StringRes
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
@@ -47,11 +48,18 @@ fun ButtonView(
     click: () -> Unit,
     text: String
 ){
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val containerColor = if (isPressed)
+        MaterialTheme.colorScheme.primaryContainer.copy(0.8f)
+    else
+        MaterialTheme.colorScheme.primaryContainer
     Button(
         modifier = modifier,
         enabled = enabled,
+        interactionSource = interactionSource,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            containerColor = containerColor,
             contentColor = MaterialTheme.colorScheme.secondary,
             disabledContainerColor = MaterialTheme.colorScheme.primaryContainer
                 .copy(0.7f),
@@ -239,21 +247,12 @@ fun TextView(
     modifier: Modifier = Modifier,
     text: String
 ){
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-    ){
-        Column{
-            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_3)))
-            Text(
-                modifier = Modifier.fillMaxWidth(0.9f),
-                text = text,
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    textAlign = TextAlign.Justify,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            )
-            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_3)))
-        }
-    }
+    Text(
+        modifier = modifier,
+        text = text,
+        style = MaterialTheme.typography.bodyLarge.copy(
+            textAlign = TextAlign.Justify,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    )
 }

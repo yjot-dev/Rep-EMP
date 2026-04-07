@@ -52,7 +52,7 @@ private fun ProjectView(project: ProjectEntity, isPreview: Boolean){
             .height(dimensionResource(id = R.dimen.dm_5))
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.secondary),
-        title = project.title
+        title = stringResource(project.title)
     )
     Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_4)))
     if(isPreview)
@@ -80,7 +80,7 @@ private fun ProjectView(project: ProjectEntity, isPreview: Boolean){
                 shape = ShapeDefaults.Large
             )
             .fillMaxWidth(0.85f),
-        text = project.description
+        text = stringResource(project.description)
     )
     Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_4)))
 }

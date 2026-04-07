@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import com.yjotdev.empprimaria.R
+import com.yjotdev.empprimaria.application.utils.ComponentPreview
 import com.yjotdev.empprimaria.domain.entity.Exercise1Entity
 import com.yjotdev.empprimaria.domain.entity.Exercise2Entity
 import com.yjotdev.empprimaria.domain.entity.Exercise3Entity
@@ -27,7 +27,7 @@ import com.yjotdev.empprimaria.application.components.Exercise1View
 import com.yjotdev.empprimaria.application.components.ButtonView
 import com.yjotdev.empprimaria.application.components.Exercise2View
 import com.yjotdev.empprimaria.application.components.Exercise3View
-import com.yjotdev.empprimaria.application.utils.ComponentPreview
+import com.yjotdev.empprimaria.R
 
 @Composable
 fun LevelView(
@@ -41,7 +41,6 @@ fun LevelView(
     myLife: Int,
     isBtnNextDisplayed: Boolean = false,
     onIsBtnNextDisplayed: (Boolean) -> Unit = {},
-    onIsTimerOff: (Boolean) -> Unit = {},
     onProcess: (Int, Boolean) -> Unit = {_,_ ->},
     onCallback: () -> Unit = {}
 ){
@@ -52,73 +51,65 @@ fun LevelView(
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        if(scoreId == nextExercise){
-            onIsTimerOff(true)
-            UserProgress(
-                myExperience = myExperience,
-                myTimeSpent = myTimeSpent,
-                myCourseCompleted = myCourseCompleted,
-                modifier = Modifier.fillMaxWidth(0.85f)
-            )
-            ButtonView(
-                modifier = Modifier
-                    .height(dimensionResource(id = R.dimen.dm_5))
-                    .fillMaxWidth(0.85f),
-                click = onCallback,
-                text = stringResource(id = R.string.button_next)
-            )
-        }else if(myLife == 0){
-            onIsTimerOff(true)
-            AnimationView(
-                modifier = Modifier.fillMaxWidth(0.85f),
-                title = stringResource(id = R.string.game_over)
-            )
-            ButtonView(
-                modifier = Modifier
-                    .height(dimensionResource(id = R.dimen.dm_5))
-                    .fillMaxWidth(0.85f),
-                click = onCallback,
-                text = stringResource(id = R.string.button_next)
-            )
-        }else {
-            when (nextExercise) {
-                1 -> {
-                    Exercise1View(
-                        modifier = Modifier.fillMaxWidth(0.85f),
-                        exercise1 = exercise1
-                    ) { isCorrect ->
-                        onProcess(1, isCorrect)
-                    }
-                }
-                2 -> {
-                    Exercise2View(
-                        modifier = Modifier.fillMaxWidth(0.85f),
-                        exercise2 = exercise2
-                    ) { isCorrect ->
-                        onProcess(2, isCorrect)
-                    }
-                }
-                3 -> {
-                    Exercise3View(
-                        modifier = Modifier.fillMaxWidth(0.85f),
-                        exercise3 = exercise3
-                    ) { isCorrect ->
-                        onProcess(3, isCorrect)
-                    }
+        when {
+            nextExercise == 1 -> {
+                Exercise1View(
+                    modifier = Modifier.fillMaxWidth(0.85f),
+                    exercise1 = exercise1
+                ) { isCorrect ->
+                    onProcess(1, isCorrect)
                 }
             }
-            if (isBtnNextDisplayed) {
-                ButtonView(
-                    modifier = Modifier
-                        .height(dimensionResource(id = R.dimen.dm_5))
-                        .fillMaxWidth(0.85f),
-                    click = {
-                        nextExercise += 1
-                        onIsBtnNextDisplayed(false)
-                    },
-                    text = stringResource(id = R.string.button_next)
+            nextExercise == 2 -> {
+                Exercise2View(
+                    modifier = Modifier.fillMaxWidth(0.85f),
+                    exercise2 = exercise2
+                ) { isCorrect ->
+                    onProcess(2, isCorrect)
+                }
+            }
+            nextExercise == 3 -> {
+                Exercise3View(
+                    modifier = Modifier.fillMaxWidth(0.85f),
+                    exercise3 = exercise3
+                ) { isCorrect ->
+                    onProcess(3, isCorrect)
+                }
+            }
+            nextExercise == scoreId -> {
+                UserProgress(
+                    myExperience = myExperience,
+                    myTimeSpent = myTimeSpent,
+                    myCourseCompleted = myCourseCompleted,
+                    modifier = Modifier.fillMaxWidth(0.85f)
                 )
             }
+            myLife == 0 -> {
+                AnimationView(
+                    modifier = Modifier.fillMaxWidth(0.85f),
+                    title = stringResource(id = R.string.game_over)
+                )
+            }
+        }
+        if (isBtnNextDisplayed) {
+            ButtonView(
+                modifier = Modifier
+                    .height(dimensionResource(id = R.dimen.dm_5))
+                    .fillMaxWidth(0.85f),
+                click = {
+                    if (myLife == 0 || nextExercise == scoreId) {
+                        onCallback()
+                    } else {
+                        val show = when(nextExercise) {
+                            1, 2 -> { false }
+                            else -> { true }
+                        }
+                        nextExercise += 1
+                        onIsBtnNextDisplayed(show)
+                    }
+                },
+                text = stringResource(id = R.string.button_next)
+            )
         }
     }
 }

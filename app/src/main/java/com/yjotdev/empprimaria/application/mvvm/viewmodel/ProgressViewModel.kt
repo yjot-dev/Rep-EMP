@@ -92,8 +92,8 @@ class ProgressViewModel @Inject constructor(
     }
 
     /** Este metodo actualiza el estado de la variable isTimerOff **/
-    fun setIsTimerOff(isTimerOff: Boolean){
-        _uiState.update { state -> state.copy(isTimerOff = isTimerOff) }
+    fun setIsTimerOn(isTimerOff: Boolean){
+        _uiState.update { state -> state.copy(isTimerOn = isTimerOff) }
     }
 
     /** Este metodo actualiza el estado de la variable progressLevel **/

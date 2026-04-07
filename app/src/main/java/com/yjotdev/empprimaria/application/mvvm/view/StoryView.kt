@@ -31,13 +31,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import com.yjotdev.empprimaria.R
+import com.yjotdev.empprimaria.application.utils.ComponentPreview
 import com.yjotdev.empprimaria.application.components.ButtonView
 import com.yjotdev.empprimaria.application.components.TextView
 import com.yjotdev.empprimaria.domain.utils.data.Stories
 import com.yjotdev.empprimaria.domain.entity.StoryEntity
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.application.utils.ComponentPreview
+import com.yjotdev.empprimaria.R
 
 @Composable
 fun StoryView(
@@ -46,7 +46,6 @@ fun StoryView(
     myLife: Int,
     progressLevel: Float = 0f,
     isVisible: Boolean = false,
-    onIsTimerOff: (Boolean) -> Unit = {},
     onProcess: (Int, Boolean) -> Unit = {_,_ ->},
     onCallback: () -> Unit = {}
 ){
@@ -68,10 +67,7 @@ fun StoryView(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             IconButton(
-                onClick = {
-                    onIsTimerOff(true)
-                    onCallback()
-                },
+                onClick = onCallback,
                 modifier = Modifier.size(dimensionResource(id = R.dimen.dm_5))
             ) {
                 Icon(
@@ -141,7 +137,7 @@ private fun SectionView(section: StoryEntity, onResponse: (Boolean) -> Unit){
                 shape = ShapeDefaults.Large
             )
             .fillMaxWidth(0.85f),
-        text = section.paragraph
+        text = stringResource(section.paragraph)
     )
     Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_4)))
     TextView(
@@ -152,7 +148,7 @@ private fun SectionView(section: StoryEntity, onResponse: (Boolean) -> Unit){
                 shape = ShapeDefaults.Large
             )
             .fillMaxWidth(0.85f),
-        text = section.question
+        text = stringResource(section.question)
     )
     Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_4)))
     Column(

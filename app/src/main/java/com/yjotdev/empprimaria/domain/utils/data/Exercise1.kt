@@ -1,6 +1,7 @@
 package com.yjotdev.empprimaria.domain.utils.data
 
 import com.yjotdev.empprimaria.domain.entity.Exercise1Entity
+import com.yjotdev.empprimaria.R
 
 /**
  * Verdadero o falso
@@ -8,80 +9,60 @@ import com.yjotdev.empprimaria.domain.entity.Exercise1Entity
 object Exercise1 {
     val data = listOf(
         Exercise1Entity(
-            question = "Elija verdadero o falso \n" +
-                    "El ingreso es la cantidad de bienes obtenidos por el " +
-                    "precio de venta de un producto o servicio.",
+            question = R.string.exercise1_question1,
             answer = listOf(
-                Pair("Verdadero", true),
-                Pair("Falso", false)
+                Pair(R.string.exercise1_answer_true, true),
+                Pair(R.string.exercise1_answer_false, false)
             )
         ),
         Exercise1Entity(
-            question = "Elija verdadero o falso \n" +
-                    "El costo es la cantidad de bienes obtenidos por el " +
-                    "precio de venta de un producto o servicio.",
+            question = R.string.exercise1_question2,
             answer = listOf(
-                Pair("Verdadero", false),
-                Pair("Falso", true)
+                Pair(R.string.exercise1_answer_true, false),
+                Pair(R.string.exercise1_answer_false, true)
             )
         ),
         Exercise1Entity(
-            question = "Elija verdadero o falso \n" +
-                    "Los costos son todos los desembolsos que hace la empresa para producir un " +
-                    "bien o servicio que generará un beneficio económico, dentro de un ejercicio " +
-                    "contable.",
+            question = R.string.exercise1_question3,
             answer = listOf(
-                Pair("Verdadero", true),
-                Pair("Falso", false)
+                Pair(R.string.exercise1_answer_true, true),
+                Pair(R.string.exercise1_answer_false, false)
             )
         ),
         Exercise1Entity(
-            question = "Elija verdadero o falso \n" +
-                    "Los gastos son todos los desembolsos que hace la empresa para producir un " +
-                    "bien o servicio que generará un beneficio económico, dentro de un ejercicio " +
-                    "contable.",
+            question = R.string.exercise1_question4,
             answer = listOf(
-                Pair("Verdadero", false),
-                Pair("Falso", true)
+                Pair(R.string.exercise1_answer_true, false),
+                Pair(R.string.exercise1_answer_false, true)
             )
         ),
         Exercise1Entity(
-            question = "Elija verdadero o falso \n" +
-                    "Un gasto es el desembolso que debe hacer el emprendimiento para poder " +
-                    "llevar a cabo sus actividades, y que no se relacionen directamente con la fabri" +
-                    "cación o compra de productos.",
+            question = R.string.exercise1_question5,
             answer = listOf(
-                Pair("Verdadero", true),
-                Pair("Falso", false)
+                Pair(R.string.exercise1_answer_true, true),
+                Pair(R.string.exercise1_answer_false, false)
             )
         ),
         Exercise1Entity(
-            question = "Elija verdadero o falso \n" +
-                    "Una inversión es el desembolso que debe hacer el emprendimiento para poder " +
-                    "llevar a cabo sus actividades, y que no se relacionen directamente con la fabri" +
-                    "cación o compra de productos.",
+            question = R.string.exercise1_question6,
             answer = listOf(
-                Pair("Verdadero", false),
-                Pair("Falso", true)
+                Pair(R.string.exercise1_answer_true, false),
+                Pair(R.string.exercise1_answer_false, true)
             )
         ),
         Exercise1Entity(
-            question = "Elija verdadero o falso \n" +
-                    "La inversión consiste en asignar un capital a una actividad que genere un em" +
-                    "prendimiento y permita alcanzar los objetivos propuestos.",
+            question = R.string.exercise1_question7,
             answer = listOf(
-                Pair("Verdadero", true),
-                Pair("Falso", false)
+                Pair(R.string.exercise1_answer_true, true),
+                Pair(R.string.exercise1_answer_false, false)
             )
         ),
         Exercise1Entity(
-            question = "Elija verdadero o falso \n" +
-                    "El ingreso consiste en asignar un capital a una actividad que genere un em" +
-                    "prendimiento y permita alcanzar los objetivos propuestos.",
+            question = R.string.exercise1_question8,
             answer = listOf(
-                Pair("Verdadero", false),
-                Pair("Falso", true)
+                Pair(R.string.exercise1_answer_true, false),
+                Pair(R.string.exercise1_answer_false, true)
             )
-        ),
+        )
     )
 }

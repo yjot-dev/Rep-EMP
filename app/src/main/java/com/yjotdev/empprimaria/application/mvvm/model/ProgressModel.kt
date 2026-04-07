@@ -17,7 +17,7 @@ data class ProgressModel(
     val isDialogDisplayed: Boolean = false,
     val isLoading: Boolean = false,
     val isBtnNextDisplayed: Boolean = false,
-    val isTimerOff: Boolean = false,
+    val isTimerOn: Boolean = false,
     val progressLevel: Float = 0f,
     val currentLevelNum: Int = 0
 )

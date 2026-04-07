@@ -77,4 +77,145 @@
     <string name="some_opinion">Any feedback?</string>
     <string name="my_score">Score</string>
     <string name="game_over">Game over</string>
+    <string name="exercise1_question1">
+        Choose true or false \nIncome is the amount of goods obtained by the
+        price of a product or service.
+    </string>
+    <string name="exercise1_question2">
+        Choose true or false \nCost is the amount of goods obtained by the
+        sale price of a product or service.
+    </string>
+    <string name="exercise1_question3">
+        Choose true or false \nCosts are all the outlays made by the company
+        to produce a good or service that will generate an economic benefit,
+        within an accounting period.
+    </string>
+    <string name="exercise1_question4">
+        Choose true or false \nExpenses are all the outlays made by the company
+        to produce a good or service that will generate an economic benefit,
+        within an accounting period.
+    </string>
+    <string name="exercise1_question5">
+        Choose true or false \nAn expense is the outlay that the venture
+        must make to carry out its activities, and that are not directly
+        related to the manufacture or purchase of products.
+    </string>
+    <string name="exercise1_question6">
+        Choose true or false \nAn investment is the outlay that the venture
+        must make to carry out its activities, and that are not directly
+        related to the manufacture or purchase of products.
+    </string>
+    <string name="exercise1_question7">
+        Choose true or false \nInvestment consists of allocating capital to
+        an activity that generates a venture and allows achieving the
+        proposed objectives.
+    </string>
+    <string name="exercise1_question8">
+        Choose true or false \nIncome consists of allocating capital to
+        an activity that generates a venture and allows achieving the
+        proposed objectives.
+    </string>
+    <string name="exercise1_answer_true">True</string>
+    <string name="exercise1_answer_false">False</string>
+    <string name="exercise2_question1">
+        Choose the correct answer \nIt is the amount of goods obtained by the
+        selling price of a product or service.
+    </string>
+    <string name="exercise2_question2">
+        Choose the correct answer \nThese are all the outlays made by the company
+        to produce a good or service that will generate an economic benefit,
+        within an accounting period.
+    </string>
+    <string name="exercise2_question3">
+        Choose the correct answer \nIt is the outlay that the venture
+        must make to carry out its activities, and that are not directly
+        related to the manufacture or purchase of products.
+    </string>
+    <string name="exercise2_question4">
+        Choose the correct answer \nIt consists of allocating capital to an
+        activity that generates a venture and allows achieving the proposed objectives.
+    </string>
+    <string name="exercise2_answer1">Costs</string>
+    <string name="exercise2_answer2">Expenses</string>
+    <string name="exercise2_answer3">Investment</string>
+    <string name="exercise2_answer4">Income</string>
+    <string name="exercise3_question1">
+        Write the correct answer \nIt is the amount of goods obtained by the
+        selling price of a product or service.
+    </string>
+    <string name="exercise3_question2">
+        Write the correct answer \nThese are all the outlays made by the
+        company to produce a good or service that will generate an economic
+        benefit, within an accounting period.
+    </string>
+    <string name="exercise3_question3">
+        Write the correct answer \nIt is the outlay that the venture
+        must make to carry out its activities, and that are not directly
+        related to the manufacture or purchase of products.
+    </string>
+    <string name="exercise3_question4">
+        Write the correct answer \nIt consists of allocating capital to an
+        activity that generates a venture and allows achieving the proposed
+        objectives.
+    </string>
+    <string name="exercise3_answer1">Income</string>
+    <string name="exercise3_answer2">Costs</string>
+    <string name="exercise3_answer3">Expenses</string>
+    <string name="exercise3_answer4">Investment</string>
+    <string name="project_title1">Creative Recycling Bins</string>
+    <string name="project_description1">
+        Description: Create and decorate recycling bins for different types of materials (plastic, paper,
+        glass) and place them at school.\nObjectives: Promote environmental care and ecological
+        awareness.\nSkills Developed: Creativity, social responsibility, collaborative work.
+    </string>
+    <string name="project_title2">School Magazine</string>
+    <string name="project_description2">
+        Description: Publish a school magazine where students write articles, conduct
+        interviews, and design the layout.\nObjectives: Develop communication, writing,
+        and graphic design skills.\nSkills Developed: Creativity, project management,
+        communication skills.
+    </string>
+    <string name="project_title3">School Garden</string>
+    <string name="project_description3">
+        Description: Create and maintain a garden at school, where students grow and care for
+        various plants.\nObjectives: Learn about agriculture, sustainability, and healthy eating.
+        \nSkills Developed: Teamwork, responsibility, environmental care.
+    </string>
+    <string name="project_title4">Solidarity Initiative</string>
+    <string name="project_description4">
+        Description: Organize a fundraising campaign or donations for a charitable cause.
+        \nObjectives: Foster empathy and solidarity.\nSkills Developed: Project management,
+        communication skills, social responsibility.
+    </string>
+    <string name="project_title5">Entrepreneur Day</string>
+    <string name="project_description5">
+        Description: Organize an event at school where students present their business ideas
+        or innovative projects to their peers and teachers.\nObjectives: Develop
+        presentation and idea defense skills.\nSkills Developed: Creativity, presentation skills,
+        self-confidence.
+    </string>
+    <string name="project_title6">Used Book Store</string>
+    <string name="project_description6">
+        Description: Create a temporary store where used books donated by students and
+        teachers are sold.\nObjectives: Foster a love for reading and reuse.
+        \nSkills Developed: Inventory management, sales skills, money management.
+    </string>
+    <string name="story_paragraph1">
+        Steve Jobs was a visionary and charismatic entrepreneur who left an
+        indelible mark on the technology industry. Together with Steve Wozniak and
+        Ronald Wayne, Jobs founded Apple Computer, Inc. in 1976 in the garage of his home.
+    </string>
+    <string name="story_question1">In what year did Steve Jobs found Apple Computer, Inc.?</string>
+    <string name="story_paragraph2">
+        Jobs played a crucial role in the development of iconic products such as the
+        Apple I, Apple II, iMac, iPod, iPhone, and iPad. These products revolutionized
+        their respective markets and changed the way we interact with technology.
+    </string>
+    <string name="story_question2">Which of the following products are iconic to Apple Computer, Inc.?</string>
+    <string name="story_paragraph3">
+        In addition to Apple, Jobs also acquired Pixar in 1986, which became
+        a successful animation company, producing films such as \"Toy Story\"
+        and \"Finding Nemo\".
+    </string>
+    <string name="story_question3">What was the name of the company that Steve Jobs acquired in 1986?</string>
 </resources>

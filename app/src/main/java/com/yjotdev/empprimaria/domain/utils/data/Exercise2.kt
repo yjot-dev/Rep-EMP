@@ -1,6 +1,7 @@
 package com.yjotdev.empprimaria.domain.utils.data
 
 import com.yjotdev.empprimaria.domain.entity.Exercise2Entity
+import com.yjotdev.empprimaria.R
 
 /**
  * Elegir opcion correcta
@@ -8,50 +9,40 @@ import com.yjotdev.empprimaria.domain.entity.Exercise2Entity
 object Exercise2 {
     val data = listOf(
         Exercise2Entity(
-            question = "Elija la respuesta correcta \n" +
-                    "Es la cantidad de bienes obtenidos por el precio de venta de un " +
-                    "producto o servicio.",
+            question = R.string.exercise2_question1,
             answer = listOf(
-                Pair("Costos", false),
-                Pair("Gastos", false),
-                Pair("Inversión", false),
-                Pair("Ingresos", true)
+                Pair(R.string.exercise2_answer1, false),
+                Pair(R.string.exercise2_answer2, false),
+                Pair(R.string.exercise2_answer3, false),
+                Pair(R.string.exercise2_answer4, true)
             )
         ),
         Exercise2Entity(
-            question = "Elija la respuesta correcta \n" +
-                    "Son todos los desembolsos que hace la empresa para producir un " +
-                    "bien o servicio que generará un beneficio económico, dentro de un ejercicio " +
-                    "contable.",
+            question = R.string.exercise2_question2,
             answer = listOf(
-                Pair("Costos", true),
-                Pair("Gastos", false),
-                Pair("Inversión", false),
-                Pair("Ingresos", false)
+                Pair(R.string.exercise2_answer1, true),
+                Pair(R.string.exercise2_answer2, false),
+                Pair(R.string.exercise2_answer3, false),
+                Pair(R.string.exercise2_answer4, false)
             )
         ),
         Exercise2Entity(
-            question = "Elija la respuesta correcta \n" +
-                    "Es el desembolso que debe hacer el emprendimiento para poder " +
-                    "llevar a cabo sus actividades, y que no se relacionen directamente con la fabri" +
-                    "cación o compra de productos.",
+            question = R.string.exercise2_question3,
             answer = listOf(
-                Pair("Costos", false),
-                Pair("Gastos", true),
-                Pair("Inversión", false),
-                Pair("Ingresos", false)
+                Pair(R.string.exercise2_answer1, false),
+                Pair(R.string.exercise2_answer2, true),
+                Pair(R.string.exercise2_answer3, false),
+                Pair(R.string.exercise2_answer4, false)
             )
         ),
         Exercise2Entity(
-            question = "Elija la respuesta correcta \n" +
-                    "Consiste en asignar un capital a una actividad que genere un em" +
-                    "prendimiento y permita alcanzar los objetivos propuestos.",
+            question = R.string.exercise2_question4,
             answer = listOf(
-                Pair("Costos", false),
-                Pair("Gastos", false),
-                Pair("Inversión", true),
-                Pair("Ingresos", false)
+                Pair(R.string.exercise2_answer1, false),
+                Pair(R.string.exercise2_answer2, false),
+                Pair(R.string.exercise2_answer3, true),
+                Pair(R.string.exercise2_answer4, false)
             )
-        ),
+        )
     )
 }

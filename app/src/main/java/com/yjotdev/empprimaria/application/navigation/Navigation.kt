@@ -43,6 +43,7 @@ import com.yjotdev.empprimaria.application.mvvm.view.StoryView
 import com.yjotdev.empprimaria.application.mvvm.view.UnitsView
 import com.yjotdev.empprimaria.application.mvvm.view.UserInfoView
 import com.yjotdev.empprimaria.application.mvvm.viewmodel.ProgressViewModel
+import com.yjotdev.empprimaria.application.mvvm.model.ProgressModel
 import com.yjotdev.empprimaria.R
 
 @Composable
@@ -57,10 +58,15 @@ fun Navigation(
     val currentScreen = ViewRoutes.valueOf(
         currentRoute.substringBefore("/")
     )
+    val totalLevels = 5
     // Obtiene estados del viewmodel
     val state by viewModel.uiState.collectAsState()
+    // Obtiene progreso de la unidad
+    val progressUnit = (state.currentLevelNum * 100)/totalLevels //Progreso de la unidad
     // Observa temporizador
-    ObserveTimerState(viewModel = viewModel)
+    ObserveTimerState(state = state) {
+        viewModel.setTimeSpent(state.timeSpent + 1)
+    }
     // Observa estados asincronicos
     ObserveViewModelState(
         viewModel = viewModel,
@@ -207,11 +213,11 @@ fun Navigation(
                     onNavigationToLevel = { levelId ->
                         when(levelId){
                             "1.1", "1.2", "1.3", "1.4" -> {
-                                viewModel.setTimeSpent(1)
+                                viewModel.setIsTimerOn(true)
                                 navController.navigate("${ViewRoutes.Level.name}/$levelId")
                             }
                             "1.5" -> {
-                                viewModel.setTimeSpent(1)
+                                viewModel.setIsTimerOn(true)
                                 navController.navigate("${ViewRoutes.Story.name}/$levelId")
                             }
                         }
@@ -279,9 +285,6 @@ fun Navigation(
                     onIsBtnNextDisplayed = { displayed ->
                         viewModel.setIsBtnNextDisplayed(displayed)
                     },
-                    onIsTimerOff = { isTimerOff ->
-                        viewModel.setIsTimerOff(isTimerOff)
-                    },
                     onProcess = { idExercise, correct ->
                         val progressLevel = when(idExercise){
                             1 -> 0.33f
@@ -299,7 +302,10 @@ fun Navigation(
                     onCallback = {
                         viewModel.setProgressLevel(0f)
                         viewModel.setIsBtnNextDisplayed(false)
-                        viewModel.setIsTimerOff(false)
+                        viewModel.setIsTimerOn(false)
+                        if (state.progressLevel == 1f) {
+                            viewModel.setCourseCompleted(progressUnit)
+                        }
                         navController.navigateUp()
                     }
                 )
@@ -317,9 +323,6 @@ fun Navigation(
                     myLife = state.life,
                     isVisible = state.isBtnNextDisplayed,
                     progressLevel = state.progressLevel,
-                    onIsTimerOff = { isTimerOff ->
-                        viewModel.setIsTimerOff(isTimerOff)
-                    },
                     onProcess = { idSection, correct ->
                         val progressLevel = when(idSection){
                             1 -> 0.33f
@@ -337,7 +340,10 @@ fun Navigation(
                     onCallback = {
                         viewModel.setProgressLevel(0f)
                         viewModel.setIsBtnNextDisplayed(false)
-                        viewModel.setIsTimerOff(false)
+                        viewModel.setIsTimerOn(false)
+                        if (state.progressLevel == 1f) {
+                            viewModel.setCourseCompleted(progressUnit)
+                        }
                         navController.navigateUp()
                     }
                 )
@@ -348,27 +354,18 @@ fun Navigation(
 
 @Composable
 private fun ObserveTimerState(
-    viewModel: ProgressViewModel
+    state: ProgressModel,
+    onProcess: () -> Unit
 ){
-    val state by viewModel.uiState.collectAsState()
-    val totalLevels = 5
-    val progressUnit = (state.currentLevelNum * 100)/totalLevels //Progreso de la unidad
-    LaunchedEffect(
-        key1 = state.timeSpent
-    ) {
-        // No ejecutar si timeSpent es 0 (estado inicial)
-        if (state.timeSpent == 0) return@LaunchedEffect
+    LaunchedEffect(key1 = state.isTimerOn) {
+        // Si el temporizador está apagado, no hacemos nada y salimos.
+        if (!state.isTimerOn) return@LaunchedEffect
         // Aplicamos el temporizador
-        do{
-            //Demora un segundo para actualizar timeSpent
-            delay(1000)
-            viewModel.setTimeSpent(state.timeSpent + 1)
-            if (state.progressLevel == 1f) {
-                viewModel.setCourseCompleted(progressUnit)
-                viewModel.setIsTimerOff(true)
-                viewModel.setIsBtnNextDisplayed(true)
-            }
-        }while(!state.isTimerOff)
+        while (true) {
+            val minutes: Long = 1000 * 60
+            delay(minutes) // Espera 1 minuto
+            onProcess()
+        }
     }
 }
 

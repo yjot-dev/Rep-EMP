@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,11 +19,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import com.yjotdev.empprimaria.R
+import com.yjotdev.empprimaria.application.utils.ComponentPreview
 import com.yjotdev.empprimaria.domain.utils.data.Exercise2
 import com.yjotdev.empprimaria.domain.entity.Exercise2Entity
 import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
-import com.yjotdev.empprimaria.application.utils.ComponentPreview
+import com.yjotdev.empprimaria.R
 
 @Composable
 fun Exercise2View(
@@ -39,29 +40,25 @@ fun Exercise2View(
     val secondHalf = exercise2.answer.drop(half)
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Row(
-            modifier = Modifier.fillMaxWidth(0.85f),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            GifImage(
-                idImage = R.drawable.person_two,
-                isPreview = isPreview
-            )
-            TextView(
-                modifier = Modifier
-                    .background(
-                        color = MaterialTheme.colorScheme.surface
-                            .copy(alpha = 0.8f),
-                        shape = ShapeDefaults.Large
-                    )
-                    .fillMaxWidth(0.85f),
-                text = exercise2.question
-            )
-        }
+        GifImage(
+            idImage = R.drawable.person_two,
+            isPreview = isPreview
+        )
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_3)))
+        TextView(
+            modifier = Modifier
+                .background(
+                    color = MaterialTheme.colorScheme.surface
+                        .copy(alpha = 0.8f),
+                    shape = ShapeDefaults.Large
+                )
+                .fillMaxWidth(0.85f),
+            text = stringResource(exercise2.question)
+        )
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_3)))
         Column(
             verticalArrangement = Arrangement
                 .spacedBy(dimensionResource(id = R.dimen.dm_2))
@@ -74,11 +71,12 @@ fun Exercise2View(
                 firstHalf.forEach { answer ->
                     ButtonView(
                         modifier = Modifier.height(dimensionResource(id = R.dimen.dm_5)),
+                        enabled = isVisible, //se desactiva al responder correcto
                         click = {
                             isCorrect = answer.second
                             isEnabled = true
                         },
-                        text = answer.first
+                        text = stringResource(answer.first)
                     )
                 }
             }
@@ -90,21 +88,23 @@ fun Exercise2View(
                 secondHalf.forEach { answer ->
                     ButtonView(
                         modifier = Modifier.height(dimensionResource(id = R.dimen.dm_5)),
+                        enabled = isVisible, //se desactiva al responder correcto
                         click = {
                             isCorrect = answer.second
                             isEnabled = true
                         },
-                        text = answer.first
+                        text = stringResource(answer.first)
                     )
                 }
             }
         }
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_3)))
         if(isVisible) {
             ButtonView(
                 modifier = Modifier
                     .height(dimensionResource(id = R.dimen.dm_5))
                     .fillMaxWidth(0.85f),
-                enabled = isEnabled,
+                enabled = isEnabled, //se desactiva al responder incorrecto
                 click = {
                     onResponse(isCorrect)
                     if (isCorrect) isVisible = false
