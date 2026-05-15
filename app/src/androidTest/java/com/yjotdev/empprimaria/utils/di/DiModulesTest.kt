@@ -5,13 +5,13 @@ import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import dagger.Binds
 import javax.inject.Singleton
-import com.yjotdev.empprimaria.domain.port.EmailPort
-import com.yjotdev.empprimaria.domain.port.StringPort
-import com.yjotdev.empprimaria.domain.port.UserPort
-import com.yjotdev.empprimaria.infrastructure.di.DiModules
-import com.yjotdev.empprimaria.utils.repositories.FakeEmailRepository
-import com.yjotdev.empprimaria.utils.repositories.FakeStringRepository
-import com.yjotdev.empprimaria.utils.repositories.FakeUserRepository
+import com.yjotdev.empprimaria.domain.repository.EmailRepository
+import com.yjotdev.empprimaria.domain.repository.StringRepository
+import com.yjotdev.empprimaria.domain.repository.UserRepository
+import com.yjotdev.empprimaria.data.di.DiModules
+import com.yjotdev.empprimaria.utils.repositories.FakeEmailRepositoryImpl
+import com.yjotdev.empprimaria.utils.repositories.FakeStringRepositoryImpl
+import com.yjotdev.empprimaria.utils.repositories.FakeUserRepositoryImpl
 
 @Module
 @TestInstallIn(
@@ -20,21 +20,26 @@ import com.yjotdev.empprimaria.utils.repositories.FakeUserRepository
 )
 @Suppress("unused")
 abstract class DiModulesTest {
+
+    // --- BINDINGS (Abstracciones) ---
     @Binds
     @Singleton
     abstract fun bindFakeUserRepository(
-        impl: FakeUserRepository
-    ): UserPort
+        impl: FakeUserRepositoryImpl
+    ): UserRepository
 
     @Binds
     @Singleton
     abstract fun bindFakeEmailRepository(
-        impl: FakeEmailRepository
-    ): EmailPort
+        impl: FakeEmailRepositoryImpl
+    ): EmailRepository
 
     @Binds
     @Singleton
     abstract fun bindFakeStringRepository(
-        impl: FakeStringRepository
-    ): StringPort
+        impl: FakeStringRepositoryImpl
+    ): StringRepository
+
+    // --- PROVIDERS (Instancias externas) ---
+    // No son necesarios aqui
 }

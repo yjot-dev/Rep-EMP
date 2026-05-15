@@ -33,6 +33,7 @@ android {
         debug {
             applicationIdSuffix = ".debug"
             isDebuggable = true
+            buildConfigField("String", "API_BASE_URL", "\"${project.findProperty("API_BASE_URL_DEBUG")}\"")
         }
         release {
             signingConfig = signingConfigs.getByName("release")
@@ -45,6 +46,7 @@ android {
             ndk {
                 debugSymbolLevel = "FULL"
             }
+            buildConfigField("String", "API_BASE_URL", "\"${project.findProperty("API_BASE_URL_RELEASE")}\"")
         }
     }
     compileOptions {

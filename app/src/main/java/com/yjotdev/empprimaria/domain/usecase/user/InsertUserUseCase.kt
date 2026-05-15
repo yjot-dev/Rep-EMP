@@ -3,14 +3,14 @@ package com.yjotdev.empprimaria.domain.usecase.user
 import javax.inject.Inject
 import javax.inject.Singleton
 import com.yjotdev.empprimaria.domain.core.Result
-import com.yjotdev.empprimaria.domain.entity.UserEntity
-import com.yjotdev.empprimaria.domain.port.UserPort
+import com.yjotdev.empprimaria.domain.model.UserModel
+import com.yjotdev.empprimaria.domain.repository.UserRepository
 
 @Singleton
 class InsertUserUseCase @Inject constructor(
-    private val userPort: UserPort
+    private val userRepository: UserRepository
 ) {
-    suspend operator fun invoke(user: UserEntity): Result<Unit> {
-        return userPort.insertUser(user)
+    suspend operator fun invoke(user: UserModel): Result<Unit> {
+        return userRepository.insertUser(user)
     }
 }

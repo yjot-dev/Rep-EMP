@@ -3,15 +3,15 @@ package com.yjotdev.empprimaria.domain.usecase.user
 import javax.inject.Inject
 import javax.inject.Singleton
 import com.yjotdev.empprimaria.domain.core.Result
-import com.yjotdev.empprimaria.domain.entity.LoginEntity
-import com.yjotdev.empprimaria.domain.entity.UserEntity
-import com.yjotdev.empprimaria.domain.port.UserPort
+import com.yjotdev.empprimaria.domain.model.LoginModel
+import com.yjotdev.empprimaria.domain.model.UserModel
+import com.yjotdev.empprimaria.domain.repository.UserRepository
 
 @Singleton
 class FindUserUseCase @Inject constructor(
-    private val userPort: UserPort
+    private val userRepository: UserRepository
 ) {
-    suspend operator fun invoke(login: LoginEntity): Result<UserEntity>{
-        return userPort.findUser(login)
+    suspend operator fun invoke(login: LoginModel): Result<UserModel>{
+        return userRepository.findUser(login)
     }
 }

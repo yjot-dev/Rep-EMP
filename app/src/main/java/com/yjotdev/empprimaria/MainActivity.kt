@@ -11,8 +11,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.WindowCompat
 import dagger.hilt.android.AndroidEntryPoint
-import com.yjotdev.empprimaria.application.navigation.PermissionView
-import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.presentation.navigation.PermissionView
+import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

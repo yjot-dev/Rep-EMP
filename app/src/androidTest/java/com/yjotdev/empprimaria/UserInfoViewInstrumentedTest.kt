@@ -21,9 +21,9 @@ import org.junit.runner.RunWith
 import dagger.hilt.android.testing.HiltAndroidRule
 import org.junit.Before
 import dagger.hilt.android.testing.HiltAndroidTest
-import com.yjotdev.empprimaria.application.navigation.PermissionView
-import com.yjotdev.empprimaria.application.navigation.ViewRoutes
-import com.yjotdev.empprimaria.application.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.presentation.navigation.PermissionView
+import com.yjotdev.empprimaria.presentation.navigation.ViewRoutes
+import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)

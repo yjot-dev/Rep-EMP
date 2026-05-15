@@ -5,9 +5,10 @@ EMP es una aplicación móvil educativa y gamificada, diseñada para enseñar co
 - 🪟 Interfaz moderna con Jetpack Compose
 - 🌐 Navegación con Navigation Component
 - 📊 Integración con ViewModel + StateFlow
-- 🎨 Patrón de diseño arquitectónico con MVVM + Hexagonal
-- 🧩 Inyección de dependencias con Hilt
-- 💽 Base de datos remota con MySQL y la API RESTful con Node
+- 🎨 Patrón de diseño arquitectónico con MVVM + Clean Architecture
+- 💉 Inyección de dependencias con Hilt
+- 💽 Base de datos remota con MySQL
+- 🧩 API RESTful con Node.JS
 - 📱 Compatible con Android 7.0 (API 24) en adelante
 
 # Instalación
