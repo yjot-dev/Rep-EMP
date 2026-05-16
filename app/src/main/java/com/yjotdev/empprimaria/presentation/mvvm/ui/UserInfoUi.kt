@@ -163,7 +163,7 @@ fun UserInfoView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
                 .fillMaxWidth(0.85f),
-            enabled = !isError2,
+            enabled = !isError2 && !userInfo.isInvited,
             click = {
                 onSendCode(userInfo.email, code)
                 onIsDialogDisplayed(true)

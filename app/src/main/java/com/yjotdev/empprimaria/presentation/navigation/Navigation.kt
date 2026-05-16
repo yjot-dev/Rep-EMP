@@ -398,10 +398,9 @@ private fun ObserveViewModelState(
 
 private fun navigateToMainScreen(navController: NavHostController, route: String) {
     navController.navigate(route) {
-        popUpTo(navController.graph.startDestinationId) {
-            saveState = true
+        popUpTo(route) {
+            inclusive = false
         }
         launchSingleTop = true
-        restoreState = true
     }
 }
