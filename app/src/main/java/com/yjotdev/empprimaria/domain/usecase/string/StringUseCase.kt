@@ -1,10 +1,8 @@
 package com.yjotdev.empprimaria.domain.usecase.string
 
 import javax.inject.Inject
-import javax.inject.Singleton
 import com.yjotdev.empprimaria.domain.repository.StringRepository
 
-@Singleton
 class StringUseCase @Inject constructor(
     private val stringRepository: StringRepository
 ) {
