@@ -14,8 +14,8 @@ android {
         applicationId = "com.yjotdev.empprimaria"
         minSdk = 24
         targetSdk = 36
-        versionCode = 7
-        versionName = "1.7"
+        versionCode = 8
+        versionName = "1.8"
         testInstrumentationRunner = "com.yjotdev.empprimaria.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
