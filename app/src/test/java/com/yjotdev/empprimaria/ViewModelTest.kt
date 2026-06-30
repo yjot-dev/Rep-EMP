@@ -40,7 +40,7 @@ import com.yjotdev.empprimaria.domain.model.RecoveryModel
 class ViewModelTest {
 
     @RelaxedMockK
-    private lateinit var getString: StringUseCase
+    private lateinit var stringUseCase: StringUseCase
 
     @RelaxedMockK
     private lateinit var findUserUseCase: FindUserUseCase
@@ -71,7 +71,7 @@ class ViewModelTest {
         Dispatchers.setMain(testDispatcher)
         // Crea la instancia del ViewModel con los mocks.
         viewModel = UiViewModel(
-            getString,
+            stringUseCase,
             findUserUseCase,
             insertUserUseCase,
             updateUserUseCase,
@@ -169,7 +169,7 @@ class ViewModelTest {
         val userToInsert = UserModel(0, "newUser", "new@test.com", "Pass123")
 
         coEvery { insertUserUseCase(userToInsert) } returns Result.Success(Unit)
-        coEvery { getString(R.string.alert_user_registered) } returns "User registered successfully"
+        coEvery { stringUseCase(R.string.alert_user_registered) } returns "User registered successfully"
 
         // Then
         val job1 = launch {
@@ -199,7 +199,7 @@ class ViewModelTest {
         job2.cancel()
 
         coVerify(exactly = 1) { insertUserUseCase(userToInsert) }
-        coVerify(exactly = 1) { getString(R.string.alert_user_registered) }
+        coVerify(exactly = 1) { stringUseCase(R.string.alert_user_registered) }
     }
 
     @Test
@@ -208,7 +208,7 @@ class ViewModelTest {
         val userToInsert = UserModel(0, "newUser", "new@test.com", "Pass123")
         val exception = Exception("DB error")
         coEvery { insertUserUseCase(userToInsert) } returns Result.Error(exception)
-        coEvery { getString(R.string.error_user_registered) } returns "Error registering user"
+        coEvery { stringUseCase(R.string.error_user_registered) } returns "Error registering user"
 
         // Then
         val job1 = launch {
@@ -238,7 +238,7 @@ class ViewModelTest {
         job2.cancel()
 
         coVerify(exactly = 1) { insertUserUseCase(userToInsert) }
-        coVerify(exactly = 1) { getString(R.string.error_user_registered) }
+        coVerify(exactly = 1) { stringUseCase(R.string.error_user_registered) }
     }
 
     @Test
@@ -246,7 +246,7 @@ class ViewModelTest {
         // Given
         val userToUpdate = UserModel(1, "testUser", "test@test.com", "Pass123")
         coEvery { updateUserUseCase(userToUpdate.id, userToUpdate) } returns Result.Success(Unit)
-        coEvery { getString(R.string.alert_user_updated) } returns "User updated successfully"
+        coEvery { stringUseCase(R.string.alert_user_updated) } returns "User updated successfully"
 
         // Then
         val job1 = launch {
@@ -278,7 +278,7 @@ class ViewModelTest {
         job2.cancel()
 
         coVerify(exactly = 1) { updateUserUseCase(userToUpdate.id, userToUpdate) }
-        coVerify(exactly = 1) { getString(R.string.alert_user_updated) }
+        coVerify(exactly = 1) { stringUseCase(R.string.alert_user_updated) }
     }
 
     @Test
@@ -287,7 +287,7 @@ class ViewModelTest {
         val userToUpdate = UserModel(1, "testUser", "test@test.com", "Pass123")
         val exception = Exception("DB error")
         coEvery { updateUserUseCase(userToUpdate.id, userToUpdate) } returns Result.Error(exception)
-        coEvery { getString(R.string.error_user_updated) } returns "Error updating user"
+        coEvery { stringUseCase(R.string.error_user_updated) } returns "Error updating user"
 
         // Then
         val job1 = launch {
@@ -320,7 +320,7 @@ class ViewModelTest {
         job2.cancel()
 
         coVerify(exactly = 1) { updateUserUseCase(userToUpdate.id, userToUpdate) }
-        coVerify(exactly = 1) { getString(R.string.error_user_updated) }
+        coVerify(exactly = 1) { stringUseCase(R.string.error_user_updated) }
     }
 
     @Test
@@ -328,7 +328,7 @@ class ViewModelTest {
         // Given
         val userToUpdate = RecoveryModel("test@test.com", "Pass123")
         coEvery { changePasswordUserUseCase(userToUpdate) } returns Result.Success(Unit)
-        coEvery { getString(R.string.alert_user_changed_password) } returns "Password updated successfully"
+        coEvery { stringUseCase(R.string.alert_user_changed_password) } returns "Password updated successfully"
 
         // Then
         val job1 = launch {
@@ -354,7 +354,7 @@ class ViewModelTest {
         job2.cancel()
 
         coVerify(exactly = 1) { changePasswordUserUseCase(userToUpdate) }
-        coVerify(exactly = 1) { getString(R.string.alert_user_changed_password) }
+        coVerify(exactly = 1) { stringUseCase(R.string.alert_user_changed_password) }
     }
 
     @Test
@@ -363,7 +363,7 @@ class ViewModelTest {
         val userToUpdate = RecoveryModel("test@test.com", "Pass123")
         val exception = Exception("DB error")
         coEvery { changePasswordUserUseCase(userToUpdate) } returns Result.Error(exception)
-        coEvery { getString(R.string.error_user_changed_password) } returns "Error changing password"
+        coEvery { stringUseCase(R.string.error_user_changed_password) } returns "Error changing password"
 
         // Then
         val job1 = launch {
@@ -390,7 +390,7 @@ class ViewModelTest {
         job2.cancel()
 
         coVerify(exactly = 1) { changePasswordUserUseCase(userToUpdate) }
-        coVerify(exactly = 1) { getString(R.string.error_user_changed_password) }
+        coVerify(exactly = 1) { stringUseCase(R.string.error_user_changed_password) }
     }
 
     @Test
@@ -398,7 +398,7 @@ class ViewModelTest {
         // Given
         val userToDelete = UserModel(1, "testUser", "test@test.com", "Pass123")
         coEvery { deleteUserUseCase(userToDelete.id) } returns Result.Success(Unit)
-        coEvery { getString(R.string.alert_user_deleted) } returns "User deleted successfully"
+        coEvery { stringUseCase(R.string.alert_user_deleted) } returns "User deleted successfully"
 
         // Then
         val job1 = launch {
@@ -424,7 +424,7 @@ class ViewModelTest {
         job2.cancel()
 
         coVerify(exactly = 1) { deleteUserUseCase(userToDelete.id) }
-        coVerify(exactly = 1) { getString(R.string.alert_user_deleted) }
+        coVerify(exactly = 1) { stringUseCase(R.string.alert_user_deleted) }
     }
 
     @Test
@@ -433,7 +433,7 @@ class ViewModelTest {
         val userToDelete = UserModel(1, "testUser", "test@test.com", "Pass123")
         val exception = Exception("DB error")
         coEvery { deleteUserUseCase(userToDelete.id) } returns Result.Error(exception)
-        coEvery { getString(R.string.error_user_deleted) } returns "Error deleting user"
+        coEvery { stringUseCase(R.string.error_user_deleted) } returns "Error deleting user"
 
         // Then
         val job1 = launch {
@@ -460,7 +460,7 @@ class ViewModelTest {
         job2.cancel()
 
         coVerify(exactly = 1) { deleteUserUseCase(userToDelete.id) }
-        coVerify(exactly = 1) { getString(R.string.error_user_deleted) }
+        coVerify(exactly = 1) { stringUseCase(R.string.error_user_deleted) }
     }
 
     @Test
@@ -472,7 +472,7 @@ class ViewModelTest {
             text = "Test Body"
         )
         coEvery { sendEmailUseCase(email) } returns Result.Success(Unit)
-        coEvery { getString(R.string.alert_code_sent) } returns "Email sent successfully"
+        coEvery { stringUseCase(R.string.alert_code_sent) } returns "Email sent successfully"
 
         // Then
         val job1 = launch {
@@ -498,7 +498,7 @@ class ViewModelTest {
         job2.cancel()
 
         coVerify(exactly = 1) { sendEmailUseCase(email) }
-        coVerify(exactly = 1) { getString(R.string.alert_code_sent) }
+        coVerify(exactly = 1) { stringUseCase(R.string.alert_code_sent) }
     }
 
     @Test
@@ -511,7 +511,7 @@ class ViewModelTest {
         )
         val exception = Exception("Email error")
         coEvery { sendEmailUseCase(email) } returns Result.Error(exception)
-        coEvery { getString(R.string.error_code_sent) } returns "Error sending email"
+        coEvery { stringUseCase(R.string.error_code_sent) } returns "Error sending email"
 
         // Then
         val job1 = launch {
@@ -538,7 +538,7 @@ class ViewModelTest {
         job2.cancel()
 
         coVerify(exactly = 1) { sendEmailUseCase(email) }
-        coVerify(exactly = 1) { getString(R.string.error_code_sent) }
+        coVerify(exactly = 1) { stringUseCase(R.string.error_code_sent) }
     }
 
     @Test

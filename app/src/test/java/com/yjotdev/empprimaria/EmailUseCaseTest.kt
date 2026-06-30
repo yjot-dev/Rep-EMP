@@ -27,15 +27,33 @@ class EmailUseCaseTest {
     }
 
     @Test
-    fun whenSendEmailUseCaseIsInvokedThenPortMethodIsCalled() = runTest {
+    fun whenSendEmailUseCaseIsInvokedSuccessfullyThenPortMethodIsCalled() = runTest {
         // Given
         val email = EmailModel("to@example.com", "Subject", "Body")
         coEvery { emailRepository.sendEmail(email) } returns Result.Success(Unit)
 
         // When
-        sendEmailUseCase(email)
+        val result = sendEmailUseCase(email)
 
         // Then
+        assert(result is Result.Success)
+        assert(Unit == (result as Result.Success).data)
+        coVerify(exactly = 1) { emailRepository.sendEmail(email) }
+    }
+
+    @Test
+    fun whenSendEmailUseCaseIsInvokedWithErrorThenTheExceptionIsCalled() = runTest {
+        // Given
+        val email = EmailModel("to@example.com", "Subject", "Body")
+        val exception = Exception("Error enviando email")
+        coEvery { emailRepository.sendEmail(email) } returns Result.Error(exception)
+
+        // When
+        val result = sendEmailUseCase(email)
+
+        // Then
+        assert(result is Result.Error)
+        assert(exception == (result as Result.Error).exception)
         coVerify(exactly = 1) { emailRepository.sendEmail(email) }
     }
 }

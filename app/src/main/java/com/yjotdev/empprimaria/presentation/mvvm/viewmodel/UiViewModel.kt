@@ -30,7 +30,7 @@ import com.yjotdev.empprimaria.R
 
 @HiltViewModel
 class UiViewModel @Inject constructor(
-    private val getString: StringUseCase,
+    private val stringUseCase: StringUseCase,
     private val findUserUseCase: FindUserUseCase,
     private val insertUserUseCase: InsertUserUseCase,
     private val updateUserUseCase: UpdateUserUseCase,
@@ -170,7 +170,7 @@ class UiViewModel @Inject constructor(
                         it.copy(isLoading = false)
                     }
                     _eventChannel.send(UiEvent.ShowToast(
-                        getString(R.string.alert_user_registered))
+                        stringUseCase(R.string.alert_user_registered))
                     )
                 }
                 is Result.Error -> {
@@ -178,7 +178,7 @@ class UiViewModel @Inject constructor(
                         it.copy(isLoading = false)
                     }
                     _eventChannel.send(UiEvent.ShowToast(
-                        getString(R.string.error_user_registered))
+                        stringUseCase(R.string.error_user_registered))
                     )
                     _eventChannel.send(UiEvent.ShowLog(
                         result.exception.message!!)
@@ -205,7 +205,7 @@ class UiViewModel @Inject constructor(
                         it.copy(isLoading = false)
                     }
                     _eventChannel.send(UiEvent.ShowToast(
-                        getString(R.string.alert_user_updated))
+                        stringUseCase(R.string.alert_user_updated))
                     )
                 }
                 is Result.Error -> {
@@ -213,7 +213,7 @@ class UiViewModel @Inject constructor(
                         it.copy(isLoading = false)
                     }
                     _eventChannel.send(UiEvent.ShowToast(
-                        getString(R.string.error_user_updated))
+                        stringUseCase(R.string.error_user_updated))
                     )
                     _eventChannel.send(UiEvent.ShowLog(
                         result.exception.message!!)
@@ -237,7 +237,7 @@ class UiViewModel @Inject constructor(
                         it.copy(isLoading = false)
                     }
                     _eventChannel.send(UiEvent.ShowToast(
-                        getString(R.string.alert_user_changed_password))
+                        stringUseCase(R.string.alert_user_changed_password))
                     )
                 }
                 is Result.Error -> {
@@ -245,7 +245,7 @@ class UiViewModel @Inject constructor(
                         it.copy(isLoading = false)
                     }
                     _eventChannel.send(UiEvent.ShowToast(
-                        getString(R.string.error_user_changed_password))
+                        stringUseCase(R.string.error_user_changed_password))
                     )
                     _eventChannel.send(UiEvent.ShowLog(
                         result.exception.message!!)
@@ -265,7 +265,7 @@ class UiViewModel @Inject constructor(
                         it.copy(isLoading = false)
                     }
                     _eventChannel.send(UiEvent.ShowToast(
-                        getString(R.string.alert_user_deleted))
+                        stringUseCase(R.string.alert_user_deleted))
                     )
                 }
                 is Result.Error -> {
@@ -273,7 +273,7 @@ class UiViewModel @Inject constructor(
                         it.copy(isLoading = false)
                     }
                     _eventChannel.send(UiEvent.ShowToast(
-                        getString(R.string.error_user_deleted))
+                        stringUseCase(R.string.error_user_deleted))
                     )
                     _eventChannel.send(UiEvent.ShowLog(
                         result.exception.message!!)
@@ -294,7 +294,7 @@ class UiViewModel @Inject constructor(
                         it.copy(isLoading = false)
                     }
                     _eventChannel.send(UiEvent.ShowToast(
-                        getString(R.string.alert_code_sent))
+                        stringUseCase(R.string.alert_code_sent))
                     )
                 }
                 is Result.Error -> {
@@ -302,7 +302,7 @@ class UiViewModel @Inject constructor(
                         it.copy(isLoading = false)
                     }
                     _eventChannel.send(UiEvent.ShowToast(
-                        getString(R.string.error_code_sent))
+                        stringUseCase(R.string.error_code_sent))
                     )
                     _eventChannel.send(UiEvent.ShowLog(
                         result.exception.message!!)
