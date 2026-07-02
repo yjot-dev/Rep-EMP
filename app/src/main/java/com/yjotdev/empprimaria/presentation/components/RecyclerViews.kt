@@ -39,6 +39,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import com.yjotdev.empprimaria.presentation.utils.Helper
+import com.yjotdev.empprimaria.presentation.utils.TestTags
 import com.yjotdev.empprimaria.R
 
 @Composable
@@ -184,7 +185,7 @@ fun AlertDialogView(
             TextFieldView(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("InputCode"),
+                    .testTag(TestTags.ALERT_DIALOG_INPUT_CODE),
                 value = code,
                 onValueChange = { code = it },
                 labelId = R.string.text_field_code,
@@ -199,7 +200,7 @@ fun AlertDialogView(
                 modifier = Modifier
                     .height(dimensionResource(id = R.dimen.dm_5))
                     .fillMaxWidth()
-                    .testTag("CodeCheck"),
+                    .testTag(TestTags.ALERT_DIALOG_CODE_CHECK),
                 click = { onConfirm(code) },
                 enabled = !isError,
                 text = stringResource(id = R.string.button_verify_code)

@@ -15,9 +15,11 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.testTag
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.presentation.utils.ComponentPreview
+import com.yjotdev.empprimaria.presentation.utils.TestTags
 
 @Composable
 fun TopBarProgress(
@@ -25,7 +27,7 @@ fun TopBarProgress(
     progressLevel: Float,
     myLife: Int
 ) {
-    //Color de la barra de progreso segun su avance
+    //Color de la barra de progreso según su avance
     val colorLinearProgress = when(progressLevel){
         0.33f -> colorResource(id = R.color.red)
         0.66f -> colorResource(id = R.color.orange)
@@ -37,7 +39,9 @@ fun TopBarProgress(
         verticalAlignment = Alignment.CenterVertically,
     ){
         LinearProgressIndicator(
-            modifier = Modifier.height(dimensionResource(id = R.dimen.dm_3)),
+            modifier = Modifier
+                .height(dimensionResource(id = R.dimen.dm_3))
+                .testTag(TestTags.TOP_BAR_PROGRESS_INDICATOR),
             progress = { progressLevel },
             color = colorLinearProgress,
             trackColor = colorResource(R.color.white)

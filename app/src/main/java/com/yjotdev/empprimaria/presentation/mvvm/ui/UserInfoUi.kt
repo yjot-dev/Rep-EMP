@@ -31,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.core.graphics.drawable.toBitmap
+import androidx.compose.ui.platform.testTag
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
@@ -43,6 +44,7 @@ import com.yjotdev.empprimaria.presentation.components.TextFieldView
 import com.yjotdev.empprimaria.presentation.utils.ComponentPreview
 import com.yjotdev.empprimaria.presentation.utils.Helper.convertToBase64
 import com.yjotdev.empprimaria.presentation.utils.Helper.convertToBitmap
+import com.yjotdev.empprimaria.presentation.utils.TestTags
 import com.yjotdev.empprimaria.domain.model.UserModel
 
 @Composable
@@ -67,7 +69,7 @@ fun UserInfoView(
     var isError1 by remember { mutableStateOf(false) }
     var isError2 by remember { mutableStateOf(false) }
     var isError3 by remember { mutableStateOf(false) }
-    //Bloque asincronico para actualizar la foto
+    //Bloque asincrónico para actualizar la foto
     val context = LocalContext.current
     var photoSelector by remember { mutableStateOf<Uri?>(null) }
     val launchPhotoSelector = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()){
@@ -83,7 +85,7 @@ fun UserInfoView(
             photo = (result.toBitmap()).copy(Bitmap.Config.ARGB_8888, true)
         }
     }
-    //Muestra el dialogo para enviar el codigo
+    //Muestra el diálogo para enviar el código
     if(isDialogDisplayed){
         AlertDialogView(
             onDismiss = { onIsDialogDisplayed(false) },
@@ -100,7 +102,10 @@ fun UserInfoView(
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        IconButton(onClick = { launchPhotoSelector.launch("image/*") }) {
+        IconButton(
+            onClick = { launchPhotoSelector.launch("image/*") },
+            modifier = Modifier.testTag(TestTags.USER_INFO_PHOTO_BUTTON)
+        ) {
             if(photo == null) {
                 Icon(
                     painter = painterResource(id = R.drawable.login_icon),
@@ -118,7 +123,8 @@ fun UserInfoView(
         TextFieldView(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
-                .focusRequester(focusRequest1),
+                .focusRequester(focusRequest1)
+                .testTag(TestTags.USER_INFO_NAME_FIELD),
             value = userInfo.name,
             onValueChange = { name -> onUserInfo(1, name) },
             onNext = { focusRequest2.requestFocus() },
@@ -130,7 +136,8 @@ fun UserInfoView(
         TextFieldView(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
-                .focusRequester(focusRequest2),
+                .focusRequester(focusRequest2)
+                .testTag(TestTags.USER_INFO_EMAIL_FIELD),
             value = userInfo.email,
             onValueChange = { email -> onUserInfo(2, email) },
             onNext = { focusRequest3.requestFocus() },
@@ -142,7 +149,8 @@ fun UserInfoView(
         TextFieldView(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
-                .focusRequester(focusRequest3),
+                .focusRequester(focusRequest3)
+                .testTag(TestTags.USER_INFO_PASSWORD_FIELD),
             value = userInfo.password,
             onValueChange = { password -> onUserInfo(3, password) },
             imeAction = ImeAction.Done,
@@ -155,14 +163,16 @@ fun UserInfoView(
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
-                .fillMaxWidth(0.85f),
+                .fillMaxWidth(0.85f)
+                .testTag(TestTags.USER_INFO_LOGOUT_BUTTON),
             click = onLogout,
             text = stringResource(id = R.string.button_logout)
         )
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
-                .fillMaxWidth(0.85f),
+                .fillMaxWidth(0.85f)
+                .testTag(TestTags.USER_INFO_SEND_CODE_BUTTON),
             enabled = !isError2 && !userInfo.isInvited,
             click = {
                 onSendCode(userInfo.email, code)
@@ -173,7 +183,8 @@ fun UserInfoView(
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
-                .fillMaxWidth(0.85f),
+                .fillMaxWidth(0.85f)
+                .testTag(TestTags.USER_INFO_UPDATE_BUTTON),
             enabled = enabled && !isError1 && !isError2 && !isError3,
             click = { onUpdate(userInfo.name, userInfo.email, userInfo.password, convertToBase64(photo)) },
             text = stringResource(id = R.string.button_update)
@@ -181,7 +192,8 @@ fun UserInfoView(
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
-                .fillMaxWidth(0.85f),
+                .fillMaxWidth(0.85f)
+                .testTag(TestTags.USER_INFO_DELETE_BUTTON),
             enabled = enabled,
             click = onDelete,
             text = stringResource(id = R.string.button_delete)

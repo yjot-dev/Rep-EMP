@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.testTag
 import com.yjotdev.empprimaria.presentation.utils.ComponentPreview
 import com.yjotdev.empprimaria.domain.model.Exercise1Model
 import com.yjotdev.empprimaria.domain.model.Exercise2Model
@@ -27,6 +28,7 @@ import com.yjotdev.empprimaria.presentation.components.Exercise1View
 import com.yjotdev.empprimaria.presentation.components.ButtonView
 import com.yjotdev.empprimaria.presentation.components.Exercise2View
 import com.yjotdev.empprimaria.presentation.components.Exercise3View
+import com.yjotdev.empprimaria.presentation.utils.TestTags
 import com.yjotdev.empprimaria.R
 
 @Composable
@@ -82,6 +84,7 @@ fun LevelView(
                     myTimeSpent = myTimeSpent,
                     myCourseCompleted = myCourseCompleted,
                     modifier = Modifier.fillMaxWidth(0.85f)
+                        .testTag(TestTags.OPINION_PROGRESS_CARD)
                 )
             }
             myLife == 0 -> {
@@ -95,7 +98,8 @@ fun LevelView(
             ButtonView(
                 modifier = Modifier
                     .height(dimensionResource(id = R.dimen.dm_5))
-                    .fillMaxWidth(0.85f),
+                    .fillMaxWidth(0.85f)
+                    .testTag(TestTags.LEVEL_NEXT_BUTTON),
                 click = {
                     if (myLife == 0 || nextExercise == scoreId) {
                         onCallback()

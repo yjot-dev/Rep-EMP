@@ -27,12 +27,14 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.testTag
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.presentation.components.ButtonView
 import com.yjotdev.empprimaria.presentation.components.TextFieldView
 import com.yjotdev.empprimaria.presentation.components.TitleView
 import com.yjotdev.empprimaria.presentation.utils.ComponentPreview
+import com.yjotdev.empprimaria.presentation.utils.TestTags
 
 @Composable
 fun OpinionView(
@@ -53,7 +55,8 @@ fun OpinionView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.secondary),
+                .background(MaterialTheme.colorScheme.secondary)
+                .testTag(TestTags.OPINION_TITLE),
             title = stringResource(id = R.string.my_progress)
         )
         UserProgress(
@@ -61,6 +64,7 @@ fun OpinionView(
             myTimeSpent = myTimeSpent,
             myCourseCompleted = myCourseCompleted,
             modifier = Modifier.fillMaxWidth(0.85f)
+                .testTag(TestTags.OPINION_PROGRESS_CARD)
         )
         TitleView(
             modifier = Modifier
@@ -77,7 +81,8 @@ fun OpinionView(
             maxLines = 6,
             modifier = Modifier
                 .verticalScroll(ScrollState(0))
-                .fillMaxWidth(0.85f),
+                .fillMaxWidth(0.85f)
+                .testTag(TestTags.OPINION_COMMENTARY_FIELD),
             onIsError = { isError = it }
         )
         ButtonView(
@@ -85,7 +90,8 @@ fun OpinionView(
             text = stringResource(id = R.string.button_send_opinion),
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
-                .fillMaxWidth(0.85f),
+                .fillMaxWidth(0.85f)
+                .testTag(TestTags.OPINION_SUBMIT_BUTTON),
             enabled = !isError
         )
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_7)))

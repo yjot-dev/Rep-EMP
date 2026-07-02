@@ -21,11 +21,13 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.platform.testTag
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.presentation.components.ButtonView
 import com.yjotdev.empprimaria.presentation.components.TextFieldView
 import com.yjotdev.empprimaria.presentation.utils.ComponentPreview
+import com.yjotdev.empprimaria.presentation.utils.TestTags
 
 @Composable
 fun LoginView(
@@ -54,7 +56,8 @@ fun LoginView(
         TextFieldView(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
-                .focusRequester(focusRequest1),
+                .focusRequester(focusRequest1)
+                .testTag(TestTags.LOGIN_USER_EMAIL_FIELD),
             value = nameOrEmail,
             onValueChange = { nameOrEmail = it },
             onNext = { focusRequest2.requestFocus() },
@@ -66,7 +69,8 @@ fun LoginView(
         TextFieldView(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
-                .focusRequester(focusRequest2),
+                .focusRequester(focusRequest2)
+                .testTag(TestTags.LOGIN_PASSWORD_FIELD),
             value = password,
             onValueChange = { password = it },
             imeAction = ImeAction.Done,
@@ -79,7 +83,8 @@ fun LoginView(
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
-                .fillMaxWidth(0.85f),
+                .fillMaxWidth(0.85f)
+                .testTag(TestTags.LOGIN_SUBMIT_BUTTON),
             click = { onLogin(nameOrEmail, password) },
             enabled = !isError1 && !isError2 &&
                     nameOrEmail.isNotEmpty() && password.isNotEmpty(),
@@ -88,14 +93,16 @@ fun LoginView(
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
-                .fillMaxWidth(0.85f),
+                .fillMaxWidth(0.85f)
+                .testTag(TestTags.LOGIN_REGISTER_BUTTON),
             click = onRegister,
             text = stringResource(id = R.string.button_register)
         )
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
-                .fillMaxWidth(0.85f),
+                .fillMaxWidth(0.85f)
+                .testTag(TestTags.LOGIN_RECOVER_KEY_BUTTON),
             click = onRecoverKey,
             text = stringResource(id = R.string.button_recover_key)
         )

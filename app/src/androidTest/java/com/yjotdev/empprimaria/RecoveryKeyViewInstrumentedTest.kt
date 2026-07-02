@@ -1,14 +1,12 @@
 package com.yjotdev.empprimaria
 
-import android.content.Context
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -20,6 +18,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import com.yjotdev.empprimaria.presentation.navigation.PermissionView
 import com.yjotdev.empprimaria.presentation.navigation.ViewRoutes
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.presentation.utils.TestTags
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
@@ -32,7 +31,6 @@ class RecoveryKeyViewInstrumentedTest {
     val composeTestRule = createAndroidComposeRule<HiltTestActivity>()
 
     private lateinit var navController: TestNavHostController // NavController del Test
-    private val context: Context = ApplicationProvider.getApplicationContext() // Contexto del test de la app
 
     @Before
     fun init() {
@@ -53,35 +51,28 @@ class RecoveryKeyViewInstrumentedTest {
                 )
             }
         }
-        //Hace click en el boton Recuperar clave
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.button_recover_key)
-        ).performClick()
-        //Verifica si la navegacion a Recuperar clave fue exitosa
+        //Hace clic en el botón Recuperar clave
+        composeTestRule.onNodeWithTag(TestTags.LOGIN_RECOVER_KEY_BUTTON)
+            .performClick()
+        //Verifica si la navegación a Recuperar clave fue exitosa
         assertEquals(ViewRoutes.RecoverKey.name, navController.currentDestination?.route)
         //Escribe el email de usuario
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.text_field_email)
-        ).performTextInput("2010guabo@gmail.com")
-        //Click en el boton Enviar codigo
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.button_send_code)
-        ).performClick()
-        //Escribe el codigo de verificacion en el AlertDialog
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.text_field_code)
-        ).performTextInput(code)
-        //Click en el boton Verificar del AlertDialog
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.button_verify_code)
-        ).performClick()
+        composeTestRule.onNodeWithTag(TestTags.RECOVER_EMAIL_FIELD)
+            .performTextInput("2010guabo@gmail.com")
+        //Clic en el botón Enviar código
+        composeTestRule.onNodeWithTag(TestTags.RECOVER_SEND_CODE_BUTTON)
+            .performClick()
+        //Escribe el código de verificación en el AlertDialog
+        composeTestRule.onNodeWithTag(TestTags.ALERT_DIALOG_INPUT_CODE)
+            .performTextInput(code)
+        //Clic en el botón Verificar del AlertDialog
+        composeTestRule.onNodeWithTag(TestTags.ALERT_DIALOG_CODE_CHECK)
+            .performClick()
         //Escribe nueva contraseña
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.text_field_password_new)
-        ).performTextInput("Yjot2025")
-        //Click en el boton Cambiar contraseña
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.button_change_password)
-        ).performClick()
+        composeTestRule.onNodeWithTag(TestTags.RECOVER_PASSWORD_FIELD)
+            .performTextInput("Yjot2025")
+        //Clic en el botón Cambiar contraseña
+        composeTestRule.onNodeWithTag(TestTags.RECOVER_CHANGE_PASSWORD_BUTTON)
+            .performClick()
     }
 }

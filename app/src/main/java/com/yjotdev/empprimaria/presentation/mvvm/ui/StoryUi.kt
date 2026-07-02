@@ -31,12 +31,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.testTag
 import com.yjotdev.empprimaria.presentation.utils.ComponentPreview
 import com.yjotdev.empprimaria.presentation.components.ButtonView
 import com.yjotdev.empprimaria.presentation.components.TextView
 import com.yjotdev.empprimaria.domain.utils.Stories
 import com.yjotdev.empprimaria.domain.model.StoryModel
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.presentation.utils.TestTags
 import com.yjotdev.empprimaria.R
 
 @Composable
@@ -50,7 +52,7 @@ fun StoryView(
     onCallback: () -> Unit = {}
 ){
     val scrollState = rememberScrollState()
-    //Color de la barra de progreso segun su avance
+    //Color de la barra de progreso según su avance
     val colorLinearProgress = when(progressLevel){
         0.33f -> colorResource(id = R.color.red)
         0.66f -> colorResource(id = R.color.orange)
@@ -111,7 +113,8 @@ fun StoryView(
                 ButtonView(
                     modifier = Modifier
                         .height(dimensionResource(id = R.dimen.dm_5))
-                        .fillMaxWidth(0.85f),
+                        .fillMaxWidth(0.85f)
+                        .testTag(TestTags.STORY_NEXT_BUTTON),
                     click = { onCallback() },
                     text = stringResource(id = R.string.button_next)
                 )
@@ -123,6 +126,7 @@ fun StoryView(
 
 @Composable
 private fun SectionView(section: StoryModel, onResponse: (Boolean) -> Unit){
+    val tag = TestTags.STORY_ANSWER_BUTTON.substring(0, 20)
     var isCorrect by remember { mutableStateOf(false) }
     var isEnabled by remember { mutableStateOf(false) }
     var isVisible by remember { mutableStateOf(true) }
@@ -160,9 +164,11 @@ private fun SectionView(section: StoryModel, onResponse: (Boolean) -> Unit){
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            firstHalf.forEach { answer ->
+            firstHalf.forEachIndexed { index, answer ->
                 ButtonView(
-                    modifier = Modifier.height(dimensionResource(id = R.dimen.dm_5)),
+                    modifier = Modifier
+                        .height(dimensionResource(id = R.dimen.dm_5))
+                        .testTag(tag + index),
                     click = {
                         isCorrect = answer.second
                         isEnabled = true
@@ -176,9 +182,11 @@ private fun SectionView(section: StoryModel, onResponse: (Boolean) -> Unit){
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            secondHalf.forEach { answer ->
+            secondHalf.forEachIndexed { index, answer ->
                 ButtonView(
-                    modifier = Modifier.height(dimensionResource(id = R.dimen.dm_5)),
+                    modifier = Modifier
+                        .height(dimensionResource(id = R.dimen.dm_5))
+                        .testTag(tag + (index + half)),
                     click = {
                         isCorrect = answer.second
                         isEnabled = true
@@ -193,7 +201,8 @@ private fun SectionView(section: StoryModel, onResponse: (Boolean) -> Unit){
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
-                .fillMaxWidth(0.85f),
+                .fillMaxWidth(0.85f)
+                .testTag(TestTags.STORY_VERIFY_BUTTON),
             enabled = isEnabled,
             click = {
                 onResponse(isCorrect)

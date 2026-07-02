@@ -18,10 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.testTag
 import com.yjotdev.empprimaria.presentation.utils.ComponentPreview
 import com.yjotdev.empprimaria.domain.utils.Exercise3
 import com.yjotdev.empprimaria.domain.model.Exercise3Model
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.presentation.utils.TestTags
 import com.yjotdev.empprimaria.R
 
 @Composable
@@ -53,6 +55,7 @@ fun Exercise3View(
         )
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_3)))
         TextFieldView(
+            modifier = Modifier.testTag(TestTags.EXERCISE_RESPONSE_FIELD),
             enabled = isVisible, //se desactiva al responder correcto
             value = responseText,
             onValueChange = { text ->
@@ -69,7 +72,8 @@ fun Exercise3View(
             ButtonView(
                 modifier = Modifier
                     .height(dimensionResource(id = R.dimen.dm_5))
-                    .fillMaxWidth(0.85f),
+                    .fillMaxWidth(0.85f)
+                    .testTag(TestTags.EXERCISE_VERIFY_BUTTON),
                 enabled = isEnabled && !isError, //se desactiva al responder incorrecto
                 click = {
                     onResponse(isCorrect)

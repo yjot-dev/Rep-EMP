@@ -16,8 +16,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.testTag
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.presentation.navigation.ViewRoutes
+import com.yjotdev.empprimaria.presentation.utils.TestTags
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,7 +87,9 @@ fun TitleBar(
             if(canNavigateBack) {
                 IconButton(
                     onClick = navigateUp,
-                    modifier = Modifier.size(dimensionResource(id = R.dimen.dm_5))
+                    modifier = Modifier
+                        .size(dimensionResource(id = R.dimen.dm_5))
+                        .testTag(TestTags.TITLE_BAR_BACK_BUTTON)
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.arrow_back),

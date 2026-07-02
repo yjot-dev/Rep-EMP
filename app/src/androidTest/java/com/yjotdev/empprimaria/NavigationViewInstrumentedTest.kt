@@ -1,15 +1,12 @@
 package com.yjotdev.empprimaria
 
-import android.content.Context
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -21,6 +18,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import com.yjotdev.empprimaria.presentation.navigation.PermissionView
 import com.yjotdev.empprimaria.presentation.navigation.ViewRoutes
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.presentation.utils.TestTags
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
@@ -33,7 +31,6 @@ class NavigationViewInstrumentedTest {
     val composeTestRule = createAndroidComposeRule<HiltTestActivity>()
 
     private lateinit var navController: TestNavHostController // NavController del Test
-    private val context: Context = ApplicationProvider.getApplicationContext() // Contexto del test de la app
 
     @Before
     fun init() {
@@ -44,100 +41,88 @@ class NavigationViewInstrumentedTest {
     fun navigateLoginToMenu() {
         loadTestActivity()
         //Escribe nombre de usuario
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.text_field_user_email)
-        ).performTextInput("yasser")
+        composeTestRule.onNodeWithTag(TestTags.LOGIN_USER_EMAIL_FIELD)
+            .performTextInput("yasser")
         //Escribe clave de usuario
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.text_field_password)
-        ).performTextInput("Yjot1997")
-        //Hace click en el boton Iniciar Sesión
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.button_login)
-        ).performClick()
-        //Espera a que la corutina del boton Iniciar Sesión finalice
+        composeTestRule.onNodeWithTag(TestTags.LOGIN_PASSWORD_FIELD)
+            .performTextInput("Yjot1997")
+        //Hace clic en el botón Iniciar Sesión
+        composeTestRule.onNodeWithTag(TestTags.LOGIN_SUBMIT_BUTTON)
+            .performClick()
+        //Espera a que la corutina del botón Iniciar Sesión finalice
         composeTestRule.waitUntil(5000L) {
             navController.currentDestination?.route == ViewRoutes.UserInfo.name
         }
-        //Verifica si la navegacion a UserInfo fue exitosa
+        //Verifica si la navegación a UserInfo fue exitosa
         assertEquals(ViewRoutes.UserInfo.name, navController.currentDestination?.route)
     }
 
     @Test
     fun navigateLoginToRegister() {
         loadTestActivity()
-        //Hace click en el boton Registrarse
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.button_register)
-        ).performClick()
-        //Verifica si la navegacion a Registrarse fue exitosa
+        //Hace clic en el botón Registrarse
+        composeTestRule.onNodeWithTag(TestTags.LOGIN_REGISTER_BUTTON)
+            .performClick()
+        //Verifica si la navegación a Registrarse fue exitosa
         assertEquals(ViewRoutes.Register.name, navController.currentDestination?.route)
     }
 
     @Test
     fun navigationLoginToRecoverKey() {
         loadTestActivity()
-        //Hace click en el boton Recuperar clave
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.button_recover_key)
-        ).performClick()
-        //Verifica si la navegacion a Recuperar clave fue exitosa
+        //Hace clic en el botón Recuperar clave
+        composeTestRule.onNodeWithTag(TestTags.LOGIN_RECOVER_KEY_BUTTON)
+            .performClick()
+        //Verifica si la navegación a Recuperar clave fue exitosa
         assertEquals(ViewRoutes.RecoverKey.name, navController.currentDestination?.route)
     }
 
     @Test
     fun navigationMenuToUserInfo() {
         navigateLoginToMenu()
-        //Hace click en el boton para ver la info del Usuario
-        composeTestRule.onNodeWithContentDescription(
-            context.getString(R.string.button_user_info)
-        ).performClick()
+        //Hace clic en el botón para ver la info del Usuario
+        composeTestRule.onNodeWithTag(TestTags.TOP_BAR_USER_INFO)
+            .performClick()
         //Verifica que esta en la vista de la info del Usuario
-        composeTestRule.onNodeWithContentDescription(
-            context.getString(R.string.image_user_info)
-        ).assertExists()
+        composeTestRule.onNodeWithTag(TestTags.USER_INFO_PHOTO_BUTTON)
+            .assertExists()
     }
 
     @Test
     fun navigationMenuToEducationalModules() {
         navigateLoginToMenu()
-        //Hace click en el boton para ver los modulos educativos
-        composeTestRule.onNodeWithContentDescription(
-            context.getString(R.string.button_units)
-        ).performClick()
-        //Verifica que esta en la vista de los modulos educativos
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.unit, "1")
-        ).assertExists()
+        //Hace clic en el botón para ver los módulos educativos
+        composeTestRule.onNodeWithTag(TestTags.TOP_BAR_UNITS)
+            .performClick()
+        //Verifica que está en la vista de los módulos educativos
+        composeTestRule.onNodeWithTag(TestTags.UNIT_TITLE)
+            .assertExists()
     }
 
     @Test
     fun navigationMenuToPracticalProjects() {
         navigateLoginToMenu()
-        //Hace click en el boton para ver los proyectos practicos
-        composeTestRule.onNodeWithContentDescription(
-            context.getString(R.string.button_projects)
-        ).performClick()
-        //Verifica que esta en la vista de los proyectos practicos
-        composeTestRule.onNodeWithText("Revista Escolar")
+        //Hace clic en el botón para ver los proyectos prácticos
+        composeTestRule.onNodeWithTag(TestTags.TOP_BAR_PROJECTS)
+            .performClick()
+        //Verifica que está en la vista de los proyectos prácticos
+        composeTestRule.onNodeWithTag(TestTags.PROJECT_ITEM)
             .assertExists()
     }
 
     @Test
     fun navigationMenuToTrackingAndSupport() {
         navigateLoginToMenu()
-        //Hace click en el boton para ver el seguimiento y soporte
-        composeTestRule.onNodeWithContentDescription(
-            context.getString(R.string.button_opinion)
-        ).performClick()
-        //Verifica que esta en la vista del seguimiento y soporte
-        composeTestRule.onNodeWithText(
-            context.getString(R.string.my_progress)
-        ).assertExists()
+        //Hace clic en el botón para ver el seguimiento y soporte
+        composeTestRule.onNodeWithTag(TestTags.TOP_BAR_OPINION)
+            .performClick()
+        //Verifica que está en la vista del seguimiento y soporte
+        composeTestRule.onNodeWithTag(TestTags.OPINION_TITLE)
+            .assertExists()
     }
 
     /**
-     * Funcion para cargar la vista de prueba.
+     * Función para cargar la vista de prueba.
      * Evita errores de aserción inmediata antes de que la vista se cargue.
      */
     private fun loadTestActivity() {

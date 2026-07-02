@@ -29,9 +29,11 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import coil.size.Size
+import androidx.compose.ui.platform.testTag
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.presentation.utils.ComponentPreview
+import com.yjotdev.empprimaria.presentation.utils.TestTags
 
 @Composable
 fun AnimationView(
@@ -45,7 +47,8 @@ fun AnimationView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(
-            modifier = Modifier.fillMaxWidth(0.8f),
+            modifier = Modifier.fillMaxWidth(0.8f)
+                .testTag(TestTags.ANIMATION_TITLE_CARD),
             shape = ShapeDefaults.ExtraLarge
         ){
             Text(

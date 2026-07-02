@@ -19,10 +19,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.testTag
 import com.yjotdev.empprimaria.presentation.utils.ComponentPreview
 import com.yjotdev.empprimaria.domain.utils.Exercise1
 import com.yjotdev.empprimaria.domain.model.Exercise1Model
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
+import com.yjotdev.empprimaria.presentation.utils.TestTags
 import com.yjotdev.empprimaria.R
 
 @Composable
@@ -32,6 +34,7 @@ fun Exercise1View(
     isPreview: Boolean = false,
     onResponse: (Boolean) -> Unit
 ) {
+    val tag = TestTags.EXERCISE_ANSWER_BUTTON.substring(0, 23)
     var isCorrect by remember { mutableStateOf(false) }
     var isEnabled by remember { mutableStateOf(false) }
     var isVisible by remember { mutableStateOf(true) }
@@ -61,9 +64,11 @@ fun Exercise1View(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ){
-            exercise1.answer.forEach { answer ->
+            exercise1.answer.forEachIndexed { index, answer ->
                 ButtonView(
-                    modifier = Modifier.height(dimensionResource(id = R.dimen.dm_5)),
+                    modifier = Modifier
+                        .height(dimensionResource(id = R.dimen.dm_5))
+                        .testTag(tag + index),
                     enabled = isVisible, //se desactiva al responder correcto
                     click = {
                         isCorrect = answer.second
@@ -78,7 +83,8 @@ fun Exercise1View(
             ButtonView(
                 modifier = Modifier
                     .height(dimensionResource(id = R.dimen.dm_5))
-                    .fillMaxWidth(0.85f),
+                    .fillMaxWidth(0.85f)
+                    .testTag(TestTags.EXERCISE_VERIFY_BUTTON),
                 enabled = isEnabled, //se desactiva al responder incorrecto
                 click = {
                     onResponse(isCorrect)

@@ -26,6 +26,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.delay
 import com.yjotdev.empprimaria.domain.utils.Stories
 import com.yjotdev.empprimaria.domain.utils.Exercise1
@@ -67,13 +68,13 @@ fun Navigation(
     ObserveTimerState(state = state) {
         viewModel.setTimeSpent(state.timeSpent + 1)
     }
-    // Observa estados asincronicos
+    // Observa estados asincrónicos
     ObserveViewModelState(
         viewModel = viewModel,
         navController = navController,
         context = context
     )
-    // Define las rutas que no mostrarán el boton regresar
+    // Define las rutas que no mostrarán el botón regresar
     val screensWithoutNavigateBack = setOf(
         ViewRoutes.Login,
         ViewRoutes.UserInfo,
@@ -362,8 +363,7 @@ private fun ObserveTimerState(
         if (!state.isTimerOn) return@LaunchedEffect
         // Aplicamos el temporizador
         while (true) {
-            val minutes: Long = 1000 * 60
-            delay(minutes) // Espera 1 minuto
+            delay(1.minutes) // Espera 1 minuto
             onProcess()
         }
     }
@@ -379,13 +379,13 @@ private fun ObserveViewModelState(
         viewModel.eventChannel.collect { event ->
             when (event) {
                 /*
-                Login -> UserInfo (Revisar ProgressViewModel.kt lineas 134 - 137)
-                UserInfo -> Login (Revisar ProgressViewModel.kt lineas 117 - 124)
+                Login -> UserInfo (Revisar ProgressViewModel.kt líneas 134 - 137)
+                UserInfo -> Login (Revisar ProgressViewModel.kt líneas 117 - 124)
                 */
                 is UiEvent.Navigate -> navController.navigate(event.route){
                     popUpTo(event.routePopUp){ inclusive = true }
                 }
-                // Muestra un mensaje de exito o error en el Toast
+                // Muestra un mensaje de éxito o error en el Toast
                 is UiEvent.ShowToast -> Toast.makeText(
                     context, event.message, Toast.LENGTH_SHORT
                 ).show()

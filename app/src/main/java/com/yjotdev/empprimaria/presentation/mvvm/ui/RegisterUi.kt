@@ -18,12 +18,14 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.platform.testTag
 import kotlin.random.Random
 import com.yjotdev.empprimaria.presentation.components.AlertDialogView
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.presentation.components.ButtonView
 import com.yjotdev.empprimaria.presentation.components.TextFieldView
 import com.yjotdev.empprimaria.presentation.utils.ComponentPreview
+import com.yjotdev.empprimaria.presentation.utils.TestTags
 import com.yjotdev.empprimaria.R
 
 @Composable
@@ -43,7 +45,7 @@ fun RegisterView(
     var isError1 by remember { mutableStateOf(false) }
     var isError2 by remember { mutableStateOf(false) }
     var isError3 by remember { mutableStateOf(false) }
-    //Muestra el dialogo para enviar el codigo
+    //Muestra el diálogo para enviar el código
     if(sendCode){
         AlertDialogView(
             onDismiss = { sendCode = false },
@@ -64,7 +66,8 @@ fun RegisterView(
         TextFieldView(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
-                .focusRequester(focusRequest1),
+                .focusRequester(focusRequest1)
+                .testTag(TestTags.REGISTER_USER_FIELD),
             value = name,
             onValueChange = { name = it },
             onNext = { focusRequest2.requestFocus() },
@@ -76,7 +79,8 @@ fun RegisterView(
         TextFieldView(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
-                .focusRequester(focusRequest2),
+                .focusRequester(focusRequest2)
+                .testTag(TestTags.REGISTER_EMAIL_FIELD),
             value = email,
             onValueChange = { email = it },
             onNext = { focusRequest3.requestFocus() },
@@ -88,7 +92,8 @@ fun RegisterView(
         TextFieldView(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
-                .focusRequester(focusRequest3),
+                .focusRequester(focusRequest3)
+                .testTag(TestTags.REGISTER_PASSWORD_FIELD),
             value = password,
             onValueChange = { password = it },
             imeAction = ImeAction.Done,
@@ -101,7 +106,8 @@ fun RegisterView(
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
-                .fillMaxWidth(0.85f),
+                .fillMaxWidth(0.85f)
+                .testTag(TestTags.REGISTER_SUBMIT_BUTTON),
             click = {
                 onSendCode(email, code)
                 sendCode = true

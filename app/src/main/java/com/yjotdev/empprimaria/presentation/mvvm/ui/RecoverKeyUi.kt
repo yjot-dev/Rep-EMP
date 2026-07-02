@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.testTag
 import kotlin.random.Random
 import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
@@ -22,6 +23,7 @@ import com.yjotdev.empprimaria.presentation.components.AlertDialogView
 import com.yjotdev.empprimaria.presentation.components.ButtonView
 import com.yjotdev.empprimaria.presentation.components.TextFieldView
 import com.yjotdev.empprimaria.presentation.utils.ComponentPreview
+import com.yjotdev.empprimaria.presentation.utils.TestTags
 
 @Composable
 fun RecoverKeyView(
@@ -36,7 +38,7 @@ fun RecoverKeyView(
     val code by remember { mutableStateOf(Random.nextInt(100000, 999999).toString()) }
     var isError1 by remember { mutableStateOf(false) }
     var isError2 by remember { mutableStateOf(false) }
-    //Muestra el dialogo para enviar el codigo
+    //Muestra el diálogo para enviar el código
     if(sendCode){
         AlertDialogView(
             onDismiss = { sendCode = false },
@@ -55,7 +57,9 @@ fun RecoverKeyView(
     ){
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_5)))
         TextFieldView(
-            modifier = Modifier.fillMaxWidth(0.85f),
+            modifier = Modifier
+                .fillMaxWidth(0.85f)
+                .testTag(TestTags.RECOVER_EMAIL_FIELD),
             value = email,
             onValueChange = { email = it },
             validateCase = 3,
@@ -66,7 +70,8 @@ fun RecoverKeyView(
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
-                .fillMaxWidth(0.85f),
+                .fillMaxWidth(0.85f)
+                .testTag(TestTags.RECOVER_SEND_CODE_BUTTON),
             click = {
                 onSendCode(email, code)
                 sendCode = true
@@ -75,7 +80,9 @@ fun RecoverKeyView(
             text = stringResource(id = R.string.button_send_code)
         )
         TextFieldView(
-            modifier = Modifier.fillMaxWidth(0.85f),
+            modifier = Modifier
+                .fillMaxWidth(0.85f)
+                .testTag(TestTags.RECOVER_PASSWORD_FIELD),
             enabled = enabled,
             value = password,
             onValueChange = { password = it },
@@ -87,7 +94,8 @@ fun RecoverKeyView(
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
-                .fillMaxWidth(0.85f),
+                .fillMaxWidth(0.85f)
+                .testTag(TestTags.RECOVER_CHANGE_PASSWORD_BUTTON),
             enabled = enabled && !isError2 && password.isNotEmpty(),
             click = { onChangePassword(email, password) },
             text = stringResource(id = R.string.button_change_password)
