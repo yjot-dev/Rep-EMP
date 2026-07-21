@@ -19,11 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.platform.testTag
-import com.yjotdev.empprimaria.presentation.utils.ComponentPreview
 import com.yjotdev.empprimaria.domain.utils.Exercise3
 import com.yjotdev.empprimaria.domain.model.Exercise3Model
+import com.yjotdev.empprimaria.presentation.utils.ComponentPreview
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.presentation.utils.TestTags
+import com.yjotdev.empprimaria.presentation.utils.Helper
 import com.yjotdev.empprimaria.R
 
 @Composable
@@ -36,8 +37,8 @@ fun Exercise3View(
     var isEnabled by remember { mutableStateOf(false) }
     var isVisible by remember { mutableStateOf(true) }
     var responseText by remember { mutableStateOf("") }
-    var isError by remember { mutableStateOf(false) }
     val answer = stringResource(exercise3.answer)
+    val isValidMessage = Helper.isValidMessage(responseText)
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
@@ -63,9 +64,9 @@ fun Exercise3View(
                 isCorrect = text.equals(answer, ignoreCase = true)
                 isEnabled = true
             },
+            validateCase = isValidMessage,
             labelId = R.string.text_field_response,
-            infoId = R.string.valid_response,
-            onIsError = { isError = it }
+            infoId = R.string.valid_response
         )
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_3)))
         if(isVisible) {
@@ -74,7 +75,7 @@ fun Exercise3View(
                     .height(dimensionResource(id = R.dimen.dm_5))
                     .fillMaxWidth(0.85f)
                     .testTag(TestTags.EXERCISE_VERIFY_BUTTON),
-                enabled = isEnabled && !isError, //se desactiva al responder incorrecto
+                enabled = isEnabled && isValidMessage, //se desactiva al responder incorrecto
                 click = {
                     onResponse(isCorrect)
                     if (isCorrect) isVisible = false

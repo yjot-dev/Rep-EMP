@@ -94,14 +94,12 @@ fun TextFieldView(
     maxLines: Int = 1,
     imeAction: ImeAction = ImeAction.Next,
     onNext: () -> Unit = {},
-    validateCase: Int = 0,
-    onIsError: (Boolean) -> Unit,
+    validateCase: Boolean,
     @StringRes labelId: Int,
     @StringRes infoId: Int
 ){
     val keyboardController = LocalSoftwareKeyboardController.current
     var passwordVisible by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf("") }
     val errorId = R.string.error_fields
     TextField(
         modifier = modifier,
@@ -140,20 +138,13 @@ fun TextFieldView(
             }
         },
         value = value,
-        onValueChange = { text ->
-            onValueChange(text)
-            errorMessage = Helper.validateText(text, validateCase)
-        },
-        isError = errorMessage.isNotEmpty(),
+        onValueChange = { text -> onValueChange(text) },
+        isError = !validateCase && value.isNotEmpty(),
         supportingText = {
             Text(
-                if(errorMessage.isEmpty()){
-                    stringResource(id = infoId)
-                }else{
-                    stringResource(id = errorId)
-                }
+                if(validateCase || value.isEmpty()) stringResource(id = infoId)
+                else stringResource(id = errorId)
             )
-            onIsError(errorMessage.isNotEmpty())
         },
         keyboardOptions = KeyboardOptions(imeAction = imeAction),
         keyboardActions = KeyboardActions(
@@ -170,7 +161,7 @@ fun AlertDialogView(
     onConfirm: (String) -> Unit
 ){
     var code by remember { mutableStateOf("") }
-    var isError by remember { mutableStateOf(false) }
+    val isValidCode = Helper.isValidCode(code)
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
@@ -190,9 +181,8 @@ fun AlertDialogView(
                 onValueChange = { code = it },
                 labelId = R.string.text_field_code,
                 infoId = R.string.valid_number,
-                validateCase = 4,
-                imeAction = ImeAction.Done,
-                onIsError = { isError = it }
+                validateCase = isValidCode,
+                imeAction = ImeAction.Done
             )
         },
         confirmButton = {
@@ -202,7 +192,7 @@ fun AlertDialogView(
                     .fillMaxWidth()
                     .testTag(TestTags.ALERT_DIALOG_CODE_CHECK),
                 click = { onConfirm(code) },
-                enabled = !isError,
+                enabled = isValidCode,
                 text = stringResource(id = R.string.button_verify_code)
             )
         }

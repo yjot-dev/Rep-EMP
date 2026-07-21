@@ -28,13 +28,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.platform.testTag
-import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.presentation.components.ButtonView
 import com.yjotdev.empprimaria.presentation.components.TextFieldView
 import com.yjotdev.empprimaria.presentation.components.TitleView
 import com.yjotdev.empprimaria.presentation.utils.ComponentPreview
+import com.yjotdev.empprimaria.presentation.utils.Helper
 import com.yjotdev.empprimaria.presentation.utils.TestTags
+import com.yjotdev.empprimaria.R
 
 @Composable
 fun OpinionView(
@@ -45,7 +46,7 @@ fun OpinionView(
     onSendOpinion: (String) -> Unit
 ){
     var commentary by remember { mutableStateOf("") }
-    var isError by remember { mutableStateOf(false) }
+    val isValidMessage = Helper.isValidMessage(commentary)
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween,
@@ -79,11 +80,11 @@ fun OpinionView(
             labelId = R.string.text_field_commentary,
             infoId = R.string.valid_commentary,
             maxLines = 6,
+            validateCase = isValidMessage,
             modifier = Modifier
                 .verticalScroll(ScrollState(0))
                 .fillMaxWidth(0.85f)
-                .testTag(TestTags.OPINION_COMMENTARY_FIELD),
-            onIsError = { isError = it }
+                .testTag(TestTags.OPINION_COMMENTARY_FIELD)
         )
         ButtonView(
             click = { onSendOpinion(commentary) },
@@ -92,7 +93,7 @@ fun OpinionView(
                 .height(dimensionResource(id = R.dimen.dm_5))
                 .fillMaxWidth(0.85f)
                 .testTag(TestTags.OPINION_SUBMIT_BUTTON),
-            enabled = !isError
+            enabled = isValidMessage
         )
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dm_7)))
     }

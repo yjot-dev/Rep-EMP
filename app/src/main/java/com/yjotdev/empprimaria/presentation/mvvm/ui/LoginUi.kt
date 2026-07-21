@@ -22,12 +22,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.platform.testTag
-import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.presentation.components.ButtonView
 import com.yjotdev.empprimaria.presentation.components.TextFieldView
 import com.yjotdev.empprimaria.presentation.utils.ComponentPreview
+import com.yjotdev.empprimaria.presentation.utils.Helper
 import com.yjotdev.empprimaria.presentation.utils.TestTags
+import com.yjotdev.empprimaria.R
 
 @Composable
 fun LoginView(
@@ -40,8 +41,8 @@ fun LoginView(
     val focusRequest2 = remember { FocusRequester() }
     var nameOrEmail by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var isError1 by remember { mutableStateOf(false) }
-    var isError2 by remember { mutableStateOf(false) }
+    val isValidUserOrEmail = Helper.isValidUserOrEmail(nameOrEmail)
+    val isValidPassword = Helper.isValidPassword(password)
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceEvenly,
@@ -61,10 +62,9 @@ fun LoginView(
             value = nameOrEmail,
             onValueChange = { nameOrEmail = it },
             onNext = { focusRequest2.requestFocus() },
-            validateCase = 1,
+            validateCase = isValidUserOrEmail,
             labelId = R.string.text_field_user_email,
-            infoId = R.string.valid_user_email,
-            onIsError = { isError1 = it }
+            infoId = R.string.valid_user_email
         )
         TextFieldView(
             modifier = Modifier
@@ -74,11 +74,10 @@ fun LoginView(
             value = password,
             onValueChange = { password = it },
             imeAction = ImeAction.Done,
-            validateCase = 5,
+            validateCase = isValidPassword,
             isPassword = true,
             labelId = R.string.text_field_password,
-            infoId = R.string.valid_password,
-            onIsError = { isError2 = it }
+            infoId = R.string.valid_password
         )
         ButtonView(
             modifier = Modifier
@@ -86,8 +85,7 @@ fun LoginView(
                 .fillMaxWidth(0.85f)
                 .testTag(TestTags.LOGIN_SUBMIT_BUTTON),
             click = { onLogin(nameOrEmail, password) },
-            enabled = !isError1 && !isError2 &&
-                    nameOrEmail.isNotEmpty() && password.isNotEmpty(),
+            enabled = isValidUserOrEmail && isValidPassword,
             text = stringResource(id = R.string.button_login)
         )
         ButtonView(

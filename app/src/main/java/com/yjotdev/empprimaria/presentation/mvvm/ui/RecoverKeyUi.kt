@@ -17,13 +17,14 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.platform.testTag
 import kotlin.random.Random
-import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.presentation.components.AlertDialogView
 import com.yjotdev.empprimaria.presentation.components.ButtonView
 import com.yjotdev.empprimaria.presentation.components.TextFieldView
 import com.yjotdev.empprimaria.presentation.utils.ComponentPreview
+import com.yjotdev.empprimaria.presentation.utils.Helper
 import com.yjotdev.empprimaria.presentation.utils.TestTags
+import com.yjotdev.empprimaria.R
 
 @Composable
 fun RecoverKeyView(
@@ -36,8 +37,8 @@ fun RecoverKeyView(
     var sendCode by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(false) }
     val code by remember { mutableStateOf(Random.nextInt(100000, 999999).toString()) }
-    var isError1 by remember { mutableStateOf(false) }
-    var isError2 by remember { mutableStateOf(false) }
+    val isValidEmail = Helper.isValidEmail(email)
+    val isValidPassword = Helper.isValidPassword(password)
     //Muestra el diálogo para enviar el código
     if(sendCode){
         AlertDialogView(
@@ -62,10 +63,9 @@ fun RecoverKeyView(
                 .testTag(TestTags.RECOVER_EMAIL_FIELD),
             value = email,
             onValueChange = { email = it },
-            validateCase = 3,
+            validateCase = isValidEmail,
             labelId = R.string.text_field_email,
-            infoId = R.string.valid_email,
-            onIsError = { isError1 = it }
+            infoId = R.string.valid_email
         )
         ButtonView(
             modifier = Modifier
@@ -76,7 +76,7 @@ fun RecoverKeyView(
                 onSendCode(email, code)
                 sendCode = true
             },
-            enabled = !isError1 && email.isNotEmpty(),
+            enabled = isValidEmail,
             text = stringResource(id = R.string.button_send_code)
         )
         TextFieldView(
@@ -86,17 +86,16 @@ fun RecoverKeyView(
             enabled = enabled,
             value = password,
             onValueChange = { password = it },
-            validateCase = 5,
+            validateCase = isValidPassword,
             labelId = R.string.text_field_password_new,
-            infoId = R.string.valid_password,
-            onIsError = { isError2 = it }
+            infoId = R.string.valid_password
         )
         ButtonView(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
                 .fillMaxWidth(0.85f)
                 .testTag(TestTags.RECOVER_CHANGE_PASSWORD_BUTTON),
-            enabled = enabled && !isError2 && password.isNotEmpty(),
+            enabled = enabled && isValidPassword,
             click = { onChangePassword(email, password) },
             text = stringResource(id = R.string.button_change_password)
         )

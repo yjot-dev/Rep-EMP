@@ -36,7 +36,6 @@ import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 import kotlin.random.Random
-import com.yjotdev.empprimaria.R
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.presentation.components.AlertDialogView
 import com.yjotdev.empprimaria.presentation.components.ButtonView
@@ -46,6 +45,8 @@ import com.yjotdev.empprimaria.presentation.utils.Helper.convertToBase64
 import com.yjotdev.empprimaria.presentation.utils.Helper.convertToBitmap
 import com.yjotdev.empprimaria.presentation.utils.TestTags
 import com.yjotdev.empprimaria.domain.model.UserModel
+import com.yjotdev.empprimaria.presentation.utils.Helper
+import com.yjotdev.empprimaria.R
 
 @Composable
 fun UserInfoView(
@@ -66,9 +67,9 @@ fun UserInfoView(
     var photo by remember { mutableStateOf(convertToBitmap(userInfo.photo)) }
     var enabled by remember { mutableStateOf(false) }
     val code by remember { mutableStateOf(Random.nextInt(100000, 999999).toString()) }
-    var isError1 by remember { mutableStateOf(false) }
-    var isError2 by remember { mutableStateOf(false) }
-    var isError3 by remember { mutableStateOf(false) }
+    val isValidUser = Helper.isValidUser(userInfo.name)
+    val isValidEmail = Helper.isValidEmail(userInfo.email)
+    val isValidPassword = Helper.isValidPassword(userInfo.password)
     //Bloque asincrónico para actualizar la foto
     val context = LocalContext.current
     var photoSelector by remember { mutableStateOf<Uri?>(null) }
@@ -128,10 +129,9 @@ fun UserInfoView(
             value = userInfo.name,
             onValueChange = { name -> onUserInfo(1, name) },
             onNext = { focusRequest2.requestFocus() },
-            validateCase = 2,
+            validateCase = isValidUser,
             labelId = R.string.text_field_user,
             infoId = R.string.valid_user,
-            onIsError = { isError1 = it }
         )
         TextFieldView(
             modifier = Modifier
@@ -141,10 +141,9 @@ fun UserInfoView(
             value = userInfo.email,
             onValueChange = { email -> onUserInfo(2, email) },
             onNext = { focusRequest3.requestFocus() },
-            validateCase = 3,
+            validateCase = isValidEmail,
             labelId = R.string.text_field_email,
-            infoId = R.string.valid_email,
-            onIsError = { isError2 = it }
+            infoId = R.string.valid_email
         )
         TextFieldView(
             modifier = Modifier
@@ -154,11 +153,10 @@ fun UserInfoView(
             value = userInfo.password,
             onValueChange = { password -> onUserInfo(3, password) },
             imeAction = ImeAction.Done,
-            validateCase = 5,
+            validateCase = isValidPassword,
             labelId = R.string.text_field_password,
             infoId = R.string.valid_password,
-            isPassword = true,
-            onIsError = { isError3 = it }
+            isPassword = true
         )
         ButtonView(
             modifier = Modifier
@@ -173,7 +171,7 @@ fun UserInfoView(
                 .height(dimensionResource(id = R.dimen.dm_5))
                 .fillMaxWidth(0.85f)
                 .testTag(TestTags.USER_INFO_SEND_CODE_BUTTON),
-            enabled = !isError2 && !userInfo.isInvited,
+            enabled = isValidEmail && !userInfo.isInvited,
             click = {
                 onSendCode(userInfo.email, code)
                 onIsDialogDisplayed(true)
@@ -185,7 +183,7 @@ fun UserInfoView(
                 .height(dimensionResource(id = R.dimen.dm_5))
                 .fillMaxWidth(0.85f)
                 .testTag(TestTags.USER_INFO_UPDATE_BUTTON),
-            enabled = enabled && !isError1 && !isError2 && !isError3,
+            enabled = enabled && isValidUser && isValidEmail && isValidPassword,
             click = { onUpdate(userInfo.name, userInfo.email, userInfo.password, convertToBase64(photo)) },
             text = stringResource(id = R.string.button_update)
         )

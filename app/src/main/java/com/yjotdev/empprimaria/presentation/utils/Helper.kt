@@ -6,25 +6,24 @@ import android.util.Base64
 import java.io.ByteArrayOutputStream
 
 object Helper {
-    fun validateText(text: String, case: Int): String{
-        val messageRegex = Regex("^[A-Za-z.,\\s]{1,300}$")
-        val userOrEmailRegex = Regex("^(?=.{3,50}$)([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,7}|[A-Za-z0-9._%+-]{3,50})$")
-        val userRegex = Regex("^[a-zA-Z]{3,}$")
-        val emailRegex = Regex("^[A-Za-z0-9+_.-]+@(.+)$")
-        val passwordRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")
-        val numberRegex = Regex("^[0-9]{6}$")
-        return if(text.isNotEmpty()){
-            when(case){
-                0 -> if(!messageRegex.matches(text)) "error" else ""
-                1 -> if(!userOrEmailRegex.matches(text)) "error" else ""
-                2 -> if(!userRegex.matches(text)) "error" else ""
-                3 -> if(!emailRegex.matches(text)) "error" else ""
-                4 -> if(!numberRegex.matches(text)) "error" else ""
-                else -> if(!passwordRegex.matches(text)) "error" else ""
-            }
-        }else ""
+    fun isValidUser(input: String): Boolean{
+        return Regex("^[A-Za-z]{3,10}$").matches(input)
     }
-
+    fun isValidEmail(input: String): Boolean{
+        return Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$").matches(input)
+    }
+    fun isValidUserOrEmail(input: String): Boolean{
+        return Regex("^([A-Za-z]{3,10}|[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+)$").matches(input)
+    }
+    fun isValidPassword(input: String): Boolean{
+        return Regex("^[A-Za-z0-9@#_]{8,16}$").matches(input)
+    }
+    fun isValidCode(input: String): Boolean{
+        return Regex("^[0-9]{6}$").matches(input)
+    }
+    fun isValidMessage(input: String): Boolean{
+        return Regex("^[A-Za-z.,\\s]{1,300}$").matches(input)
+    }
     fun convertToBitmap(base64: String): Bitmap? {
         return if(base64.isNotEmpty()){
             val byteArray = Base64.decode(base64, Base64.DEFAULT)
@@ -33,7 +32,6 @@ object Helper {
             null
         }
     }
-
     fun convertToBase64(bitmap: Bitmap?): String{
         return bitmap?.let {
             val outputStream = ByteArrayOutputStream()
