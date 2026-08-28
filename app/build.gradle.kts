@@ -98,7 +98,6 @@ dependencies {
     //Coil
     implementation(libs.io.coil.kt.compose)
     implementation(libs.io.coil.kt.gif)
-    implementation(libs.core.ktx)
     //Logging Interceptor
     implementation(libs.squareup.okhttp3.logging.interceptor)
     //Hilt
@@ -119,4 +118,10 @@ dependencies {
     kspAndroidTest(libs.dagger.hilt.android.compiler)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+configurations.all {
+    resolutionStrategy {
+        force("androidx.concurrent:concurrent-futures:1.1.0")
+    }
 }
