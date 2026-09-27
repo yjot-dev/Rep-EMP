@@ -58,7 +58,7 @@ fun UserInfoView(
     onLogout: () -> Unit,
     onUpdate: (String, String, String, String) -> Unit,
     onDelete: () -> Unit,
-    onSendCode: (String, String) -> Unit
+    onSendCode: (String, String, String, String) -> Unit
 ){
     val focusRequest1 = remember { FocusRequester() }
     val focusRequest2 = remember { FocusRequester() }
@@ -70,6 +70,8 @@ fun UserInfoView(
     val isValidUser = Helper.isValidUser(userInfo.name)
     val isValidEmail = Helper.isValidEmail(userInfo.email)
     val isValidPassword = Helper.isValidPassword(userInfo.password)
+    val subject = stringResource(R.string.alert_dialog_code)
+    val text = stringResource(R.string.body_email, userInfo.name.uppercase(), code)
     //Bloque asincrónico para actualizar la foto
     val context = LocalContext.current
     var photoSelector by remember { mutableStateOf<Uri?>(null) }
@@ -173,7 +175,7 @@ fun UserInfoView(
                 .testTag(TestTags.USER_INFO_SEND_CODE_BUTTON),
             enabled = isValidEmail && !userInfo.isInvited,
             click = {
-                onSendCode(userInfo.email, code)
+                onSendCode(userInfo.email, code, subject, text)
                 onIsDialogDisplayed(true)
             },
             text = stringResource(id = R.string.button_send_code)
@@ -217,7 +219,7 @@ private fun PreviewUserInfoView(){
             onLogout = {},
             onUpdate = {_, _, _, _ ->},
             onDelete = {},
-            onSendCode = {_, _ ->}
+            onSendCode = {_, _, _, _ ->}
         )
     }
 }

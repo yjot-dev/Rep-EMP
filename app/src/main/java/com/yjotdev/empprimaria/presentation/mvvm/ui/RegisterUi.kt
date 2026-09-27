@@ -32,7 +32,7 @@ import com.yjotdev.empprimaria.R
 @Composable
 fun RegisterView(
     modifier: Modifier = Modifier,
-    onSendCode: (String, String) -> Unit,
+    onSendCode: (String, String, String, String) -> Unit,
     onRegister: (String, String, String) -> Unit
 ){
     val focusRequest1 = remember { FocusRequester() }
@@ -46,6 +46,9 @@ fun RegisterView(
     val isValidUser = Helper.isValidUser(name)
     val isValidEmail = Helper.isValidEmail(email)
     val isValidPassword = Helper.isValidPassword(password)
+    val subject = stringResource(R.string.alert_dialog_code)
+    val text = stringResource(R.string.body_email,
+        "Usuario", code)
     //Muestra el diálogo para enviar el código
     if(sendCode){
         AlertDialogView(
@@ -107,7 +110,7 @@ fun RegisterView(
                 .fillMaxWidth(0.85f)
                 .testTag(TestTags.REGISTER_SUBMIT_BUTTON),
             click = {
-                onSendCode(email, code)
+                onSendCode(email, code, subject, text)
                 sendCode = true
             },
             enabled = isValidUser && isValidEmail && isValidPassword,
@@ -123,7 +126,7 @@ private fun PreviewRegisterView(){
     EmprendimientoPrimariaTheme{
         RegisterView(
             modifier = Modifier.fillMaxSize(),
-            onSendCode = { _, _ -> },
+            onSendCode = { _, _, _, _ -> },
             onRegister = { _, _, _ -> }
         )
     }

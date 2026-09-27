@@ -1,25 +1,27 @@
+import com.android.build.api.dsl.ApplicationExtension
+
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.ksp)
 }
 
-android {
+configure<ApplicationExtension> {
     namespace = "com.yjotdev.empprimaria"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.yjotdev.empprimaria"
         minSdk = 24
-        targetSdk = 36
-        versionCode = 8
-        versionName = "1.8"
+        targetSdk = 37
+        versionCode = 9
+        versionName = "1.9"
         testInstrumentationRunner = "com.yjotdev.empprimaria.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
+        androidResources.localeFilters += setOf("en", "es")
     }
     signingConfigs {
         create("release") {
@@ -53,9 +55,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = "21"
-    }
     buildFeatures {
         compose = true
         buildConfig = true
@@ -67,6 +66,9 @@ android {
         jniLibs {
             useLegacyPackaging = false
         }
+    }
+    testOptions {
+        animationsDisabled = true
     }
 }
 

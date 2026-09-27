@@ -30,7 +30,7 @@ import com.yjotdev.empprimaria.R
 fun RecoverKeyView(
     modifier: Modifier = Modifier,
     onChangePassword: (String, String) -> Unit,
-    onSendCode: (String, String) -> Unit
+    onSendCode: (String, String, String, String) -> Unit
 ){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -39,6 +39,8 @@ fun RecoverKeyView(
     val code by remember { mutableStateOf(Random.nextInt(100000, 999999).toString()) }
     val isValidEmail = Helper.isValidEmail(email)
     val isValidPassword = Helper.isValidPassword(password)
+    val subject = stringResource(R.string.alert_dialog_code)
+    val text = stringResource(R.string.body_email, "Usuario", code)
     //Muestra el diálogo para enviar el código
     if(sendCode){
         AlertDialogView(
@@ -73,7 +75,7 @@ fun RecoverKeyView(
                 .fillMaxWidth(0.85f)
                 .testTag(TestTags.RECOVER_SEND_CODE_BUTTON),
             click = {
-                onSendCode(email, code)
+                onSendCode(email, code, subject, text)
                 sendCode = true
             },
             enabled = isValidEmail,
@@ -110,7 +112,7 @@ private fun PreviewRecoverKeyView(){
         RecoverKeyView(
             modifier = Modifier.fillMaxSize(),
             onChangePassword = {_, _ ->},
-            onSendCode = {_, _ ->}
+            onSendCode = {_, _, _, _ ->}
         )
     }
 }

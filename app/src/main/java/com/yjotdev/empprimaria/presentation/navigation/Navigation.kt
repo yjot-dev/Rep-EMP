@@ -45,7 +45,6 @@ import com.yjotdev.empprimaria.presentation.mvvm.ui.UnitsView
 import com.yjotdev.empprimaria.presentation.mvvm.ui.UserInfoView
 import com.yjotdev.empprimaria.presentation.mvvm.viewmodel.UiViewModel
 import com.yjotdev.empprimaria.presentation.mvvm.state.UiState
-import com.yjotdev.empprimaria.R
 
 @Composable
 fun Navigation(
@@ -135,11 +134,8 @@ fun Navigation(
                 ){
                     RegisterView(
                         modifier = Modifier.fillMaxSize(),
-                        onSendCode = { email, code ->
+                        onSendCode = { email, code, subject, text ->
                             onCode(code)
-                            val subject = context.getString(R.string.alert_dialog_code)
-                            val text = context.getString(R.string.body_email,
-                                "Usuario", code)
                             viewModel.sendEmail(email, subject, text)
                         },
                         onRegister = { name, email, password ->
@@ -159,11 +155,8 @@ fun Navigation(
                         onChangePassword = { email, password ->
                             viewModel.changePassword(email, password)
                         },
-                        onSendCode = { email, code ->
+                        onSendCode = { email, code, subject, text ->
                             onCode(code)
-                            val subject = context.getString(R.string.alert_dialog_code)
-                            val text = context.getString(R.string.body_email,
-                                "Usuario", code)
                             viewModel.sendEmail(email, subject, text)
                         }
                     )
@@ -194,11 +187,8 @@ fun Navigation(
                             viewModel.updateUser(state.user.id, name, email, password, photo)
                         },
                         onDelete = { viewModel.deleteUser(state.user.id) },
-                        onSendCode = { email, code ->
+                        onSendCode = { email, code, subject, text ->
                             onCode(code)
-                            val subject = context.getString(R.string.alert_dialog_code)
-                            val text = context.getString(R.string.body_email,
-                                    state.user.name.uppercase(), code)
                             viewModel.sendEmail(email, subject, text)
                         }
                     )
@@ -235,15 +225,11 @@ fun Navigation(
             composable(route = ViewRoutes.Opinion.name) {
                 OpinionView(
                     modifier = Modifier.fillMaxSize(),
+                    userInfo = state.user,
                     myExperience = state.experience,
                     myTimeSpent = state.timeSpent,
                     myCourseCompleted = state.courseCompleted,
-                    onSendOpinion = { text ->
-                        val to = "emprendimiento2020g7h2@gmail.com"
-                        val subject = context.getString(
-                            R.string.alert_dialog_opinion,
-                            state.user.name.uppercase()
-                        )
+                    onSendOpinion = { to, subject, text ->
                         viewModel.sendEmail(to, subject, text)
                     }
                 )

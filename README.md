@@ -36,7 +36,7 @@ El flujo de uso de la aplicación está diseñado para ser intuitivo y completo,
    - Proyectos Prácticos: Para inspirar la acción, esta sección ofrece una lista de ideas de proyectos de emprendimiento. Cada proyecto incluye información detallada que sirve como guía y ejemplo para que el usuario pueda empezar a conceptualizar su propio negocio.
    - Progreso y Feedback (Puntaje): Esta vista funciona como un panel de control del rendimiento del usuario. Muestra métricas clave como el puntaje total acumulado, el tiempo total de estudio en la app y el porcentaje de avance del curso. Además, incluye una función para que el usuario pueda enviar sus opiniones o sugerencias directamente al desarrollador.
 
-En resumen, Emprendimiento Primaria empodera a los usuarios en su camino de aprendizaje sobre negocios, combinando una sólida arquitectura técnica con una experiencia de usuario gamificada y fácil de seguir para reportar, aprender y monitorear su progreso de manera efectiva.
+En resumen, EMP empodera a los usuarios en su camino de aprendizaje sobre negocios, combinando una sólida arquitectura técnica con una experiencia de usuario gamificada y fácil de seguir para reportar, aprender y monitorear su progreso de manera efectiva.
   
 # Ver video Demo
 [Ver en YouTube](https://youtu.be/8ceBytM3tVI)

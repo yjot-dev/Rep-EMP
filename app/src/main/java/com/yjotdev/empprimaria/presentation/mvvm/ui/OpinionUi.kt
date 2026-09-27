@@ -36,15 +36,19 @@ import com.yjotdev.empprimaria.presentation.utils.ComponentPreview
 import com.yjotdev.empprimaria.presentation.utils.Helper
 import com.yjotdev.empprimaria.presentation.utils.TestTags
 import com.yjotdev.empprimaria.R
+import com.yjotdev.empprimaria.domain.model.UserModel
 
 @Composable
 fun OpinionView(
     modifier: Modifier = Modifier,
+    userInfo: UserModel,
     myExperience: Int,
     myTimeSpent: Int,
     myCourseCompleted: Int,
-    onSendOpinion: (String) -> Unit
+    onSendOpinion: (String, String, String) -> Unit
 ){
+    val to = "emprendimiento2020g7h2@gmail.com"
+    val subject = stringResource(R.string.alert_dialog_opinion, userInfo.name.uppercase())
     var commentary by remember { mutableStateOf("") }
     val isValidMessage = Helper.isValidMessage(commentary)
     Column(
@@ -87,7 +91,7 @@ fun OpinionView(
                 .testTag(TestTags.OPINION_COMMENTARY_FIELD)
         )
         ButtonView(
-            click = { onSendOpinion(commentary) },
+            click = { onSendOpinion(to, subject, commentary) },
             text = stringResource(id = R.string.button_send_opinion),
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.dm_5))
@@ -176,10 +180,11 @@ private fun PreviewTrackingAndSupportView(){
     EmprendimientoPrimariaTheme {
         OpinionView(
             modifier = Modifier.fillMaxSize(),
+            userInfo = UserModel(),
             myExperience = 0,
             myTimeSpent = 0,
             myCourseCompleted = 0,
-            onSendOpinion = {}
+            onSendOpinion = {_, _, _ ->}
         )
     }
 }
