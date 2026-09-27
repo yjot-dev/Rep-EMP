@@ -19,7 +19,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.platform.testTag
-import kotlin.random.Random
 import com.yjotdev.empprimaria.presentation.utils.Helper
 import com.yjotdev.empprimaria.presentation.components.AlertDialogView
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
@@ -32,8 +31,9 @@ import com.yjotdev.empprimaria.R
 @Composable
 fun RegisterView(
     modifier: Modifier = Modifier,
-    onSendCode: (String, String, String, String) -> Unit,
-    onRegister: (String, String, String) -> Unit
+    onSendCode: (String, String, String) -> Unit,
+    onRegister: (String, String, String) -> Unit,
+    isTest: Boolean = false
 ){
     val focusRequest1 = remember { FocusRequester() }
     val focusRequest2 = remember { FocusRequester() }
@@ -42,7 +42,7 @@ fun RegisterView(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var sendCode by remember { mutableStateOf(false) }
-    val code by remember { mutableStateOf(Random.nextInt(100000, 999999).toString()) }
+    val code = Helper.getRandomCode(isTest = isTest)
     val isValidUser = Helper.isValidUser(name)
     val isValidEmail = Helper.isValidEmail(email)
     val isValidPassword = Helper.isValidPassword(password)
@@ -110,7 +110,7 @@ fun RegisterView(
                 .fillMaxWidth(0.85f)
                 .testTag(TestTags.REGISTER_SUBMIT_BUTTON),
             click = {
-                onSendCode(email, code, subject, text)
+                onSendCode(email, subject, text)
                 sendCode = true
             },
             enabled = isValidUser && isValidEmail && isValidPassword,
@@ -126,7 +126,7 @@ private fun PreviewRegisterView(){
     EmprendimientoPrimariaTheme{
         RegisterView(
             modifier = Modifier.fillMaxSize(),
-            onSendCode = { _, _, _, _ -> },
+            onSendCode = { _, _, _ -> },
             onRegister = { _, _, _ -> }
         )
     }

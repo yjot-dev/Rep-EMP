@@ -35,7 +35,6 @@ import androidx.compose.ui.platform.testTag
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
-import kotlin.random.Random
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.presentation.components.AlertDialogView
 import com.yjotdev.empprimaria.presentation.components.ButtonView
@@ -52,13 +51,12 @@ import com.yjotdev.empprimaria.R
 fun UserInfoView(
     modifier: Modifier = Modifier,
     userInfo: UserModel,
-    isDialogDisplayed: Boolean,
-    onIsDialogDisplayed: (Boolean) -> Unit,
     onUserInfo: (Int, String) -> Unit,
     onLogout: () -> Unit,
     onUpdate: (String, String, String, String) -> Unit,
     onDelete: () -> Unit,
-    onSendCode: (String, String, String, String) -> Unit
+    onSendCode: (String, String, String) -> Unit,
+    isTest: Boolean = false
 ){
     val focusRequest1 = remember { FocusRequester() }
     val focusRequest2 = remember { FocusRequester() }
@@ -66,7 +64,8 @@ fun UserInfoView(
     val scrollState = rememberScrollState()
     var photo by remember { mutableStateOf(convertToBitmap(userInfo.photo)) }
     var enabled by remember { mutableStateOf(false) }
-    val code by remember { mutableStateOf(Random.nextInt(100000, 999999).toString()) }
+    var sendCode by remember { mutableStateOf(false) }
+    val code = Helper.getRandomCode(isTest = isTest)
     val isValidUser = Helper.isValidUser(userInfo.name)
     val isValidEmail = Helper.isValidEmail(userInfo.email)
     val isValidPassword = Helper.isValidPassword(userInfo.password)
@@ -89,13 +88,13 @@ fun UserInfoView(
         }
     }
     //Muestra el diálogo para enviar el código
-    if(isDialogDisplayed){
+    if(sendCode){
         AlertDialogView(
-            onDismiss = { onIsDialogDisplayed(false) },
+            onDismiss = { sendCode = false },
             onConfirm = { codeIn ->
                 if(code == codeIn){
                     enabled = true
-                    onIsDialogDisplayed(false)
+                    sendCode = false
                 }
             }
         )
@@ -175,8 +174,8 @@ fun UserInfoView(
                 .testTag(TestTags.USER_INFO_SEND_CODE_BUTTON),
             enabled = isValidEmail && !userInfo.isInvited,
             click = {
-                onSendCode(userInfo.email, code, subject, text)
-                onIsDialogDisplayed(true)
+                onSendCode(userInfo.email, subject, text)
+                sendCode = true
             },
             text = stringResource(id = R.string.button_send_code)
         )
@@ -213,13 +212,11 @@ private fun PreviewUserInfoView(){
                 password = "Test1000",
                 photo = ""
             ),
-            isDialogDisplayed = false,
-            onIsDialogDisplayed = {},
             onUserInfo = {_,_ ->},
             onLogout = {},
             onUpdate = {_, _, _, _ ->},
             onDelete = {},
-            onSendCode = {_, _, _, _ ->}
+            onSendCode = {_, _, _ ->}
         )
     }
 }

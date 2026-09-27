@@ -45,7 +45,6 @@ class UiViewModel @Inject constructor(
     val eventChannel = _eventChannel.receiveAsFlow()
 
     override fun onCleared() {
-        super.onCleared()
         resetViewModel()
     }
 
@@ -99,11 +98,6 @@ class UiViewModel @Inject constructor(
     /** Este metodo actualiza el estado de la variable progressLevel **/
     fun setProgressLevel(progressLevel: Float){
         _uiState.update { state -> state.copy(progressLevel = progressLevel) }
-    }
-
-    /** Este metodo actualiza el estado de la variable isDialogDisplayed **/
-    fun setIsDialogDisplayed(isDialogDisplayed: Boolean){
-        _uiState.update { it.copy(isDialogDisplayed = isDialogDisplayed) }
     }
 
     /** Este metodo actualiza el estado de la variable isBtnNextDisplayed **/

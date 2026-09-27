@@ -50,7 +50,7 @@ import com.yjotdev.empprimaria.presentation.mvvm.state.UiState
 fun Navigation(
     navController: NavHostController,
     viewModel: UiViewModel,
-    onCode: (String) -> Unit
+    isTest: Boolean
 ){
     val context = LocalContext.current
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -134,13 +134,13 @@ fun Navigation(
                 ){
                     RegisterView(
                         modifier = Modifier.fillMaxSize(),
-                        onSendCode = { email, code, subject, text ->
-                            onCode(code)
+                        onSendCode = { email, subject, text ->
                             viewModel.sendEmail(email, subject, text)
                         },
                         onRegister = { name, email, password ->
                             viewModel.insertUser(name, email, password)
-                        }
+                        },
+                        isTest = isTest
                     )
                     if(state.isLoading) LoadingScreen()
                 }
@@ -155,10 +155,10 @@ fun Navigation(
                         onChangePassword = { email, password ->
                             viewModel.changePassword(email, password)
                         },
-                        onSendCode = { email, code, subject, text ->
-                            onCode(code)
+                        onSendCode = { email, subject, text ->
                             viewModel.sendEmail(email, subject, text)
-                        }
+                        },
+                        isTest = isTest
                     )
                     if(state.isLoading) LoadingScreen()
                 }
@@ -171,10 +171,6 @@ fun Navigation(
                     UserInfoView(
                         modifier = Modifier.fillMaxSize(),
                         userInfo = state.user,
-                        isDialogDisplayed = state.isDialogDisplayed,
-                        onIsDialogDisplayed = { displayed ->
-                            viewModel.setIsDialogDisplayed(displayed)
-                        },
                         onUserInfo = { id, param ->
                             when (id) {
                                 1 -> viewModel.setUser(state.user.copy(name = param))
@@ -187,10 +183,10 @@ fun Navigation(
                             viewModel.updateUser(state.user.id, name, email, password, photo)
                         },
                         onDelete = { viewModel.deleteUser(state.user.id) },
-                        onSendCode = { email, code, subject, text ->
-                            onCode(code)
+                        onSendCode = { email, subject, text ->
                             viewModel.sendEmail(email, subject, text)
-                        }
+                        },
+                        isTest = isTest
                     )
                     if(state.isLoading) LoadingScreen()
                 }

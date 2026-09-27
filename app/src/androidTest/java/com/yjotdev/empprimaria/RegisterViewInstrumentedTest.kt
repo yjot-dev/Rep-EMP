@@ -54,7 +54,7 @@ class RegisterViewInstrumentedTest {
         assertEquals(ViewRoutes.Register.name, navController.currentDestination?.route)
         //Escribe nombre de usuario
         composeTestRule.onNodeWithTag(TestTags.REGISTER_USER_FIELD)
-            .performTextInput("juan")
+            .performTextInput("Juan")
         //Escribe email de usuario
         composeTestRule.onNodeWithTag(TestTags.REGISTER_EMAIL_FIELD)
             .performTextInput("juan@gmail.com")

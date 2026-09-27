@@ -39,7 +39,6 @@ class RecoveryKeyViewInstrumentedTest {
 
     @Test
     fun changePassword_RecoverKeyView() {
-        var code = ""
         composeTestRule.setContent {
             navController = TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(ComposeNavigator())
@@ -47,7 +46,7 @@ class RecoveryKeyViewInstrumentedTest {
             EmprendimientoPrimariaTheme {
                 PermissionView(
                     navController = navController,
-                    onCode = {code = it}
+                    isTest = true
                 )
             }
         }
@@ -58,13 +57,13 @@ class RecoveryKeyViewInstrumentedTest {
         assertEquals(ViewRoutes.RecoverKey.name, navController.currentDestination?.route)
         //Escribe el email de usuario
         composeTestRule.onNodeWithTag(TestTags.RECOVER_EMAIL_FIELD)
-            .performTextInput("2010guabo@gmail.com")
+            .performTextInput("yasser@gmail.com")
         //Clic en el botón Enviar código
         composeTestRule.onNodeWithTag(TestTags.RECOVER_SEND_CODE_BUTTON)
             .performClick()
         //Escribe el código de verificación en el AlertDialog
         composeTestRule.onNodeWithTag(TestTags.ALERT_DIALOG_INPUT_CODE)
-            .performTextInput(code)
+            .performTextInput("123456")
         //Clic en el botón Verificar del AlertDialog
         composeTestRule.onNodeWithTag(TestTags.ALERT_DIALOG_CODE_CHECK)
             .performClick()

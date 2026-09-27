@@ -14,7 +14,6 @@ data class UiState(
     //Estados de consultas a BD
     val user: UserModel = UserModel(),
     //Estados operativos
-    val isDialogDisplayed: Boolean = false,
     val isLoading: Boolean = false,
     val isBtnNextDisplayed: Boolean = false,
     val isTimerOn: Boolean = false,

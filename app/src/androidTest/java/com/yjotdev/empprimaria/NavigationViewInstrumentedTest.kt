@@ -42,7 +42,7 @@ class NavigationViewInstrumentedTest {
         loadTestActivity()
         //Escribe nombre de usuario
         composeTestRule.onNodeWithTag(TestTags.LOGIN_USER_EMAIL_FIELD)
-            .performTextInput("yasser")
+            .performTextInput("Yasser")
         //Escribe clave de usuario
         composeTestRule.onNodeWithTag(TestTags.LOGIN_PASSWORD_FIELD)
             .performTextInput("Yjot1997")

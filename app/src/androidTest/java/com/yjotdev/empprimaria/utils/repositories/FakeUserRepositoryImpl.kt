@@ -13,7 +13,13 @@ class FakeUserRepositoryImpl @Inject constructor() : UserRepository {
 
     override suspend fun findUser(login: LoginModel): Result<UserModel> {
         return if (login != LoginModel()){
-            Result.Success(UserModel())
+            Result.Success(
+                UserModel(
+                    id = 1,
+                    name = "Yasser",
+                    email = "yasser@gmail.com"
+                )
+            )
         }else {
             Result.Error(Exception("Error al encontrar el usuario"))
         }

@@ -33,15 +33,13 @@ class UserInfoViewInstrumentedTest {
     val composeTestRule = createAndroidComposeRule<HiltTestActivity>()
 
     private lateinit var navController: TestNavHostController // NavController del Test
-    private lateinit var code: String
 
     @Before
     fun init() {
         hiltRule.inject() // Inicializa Hilt
     }
 
-    @Test
-    fun navigateLoginToMenu() {
+    private fun navigateLoginToMenuInUserInfo() {
         composeTestRule.setContent {
             navController = TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(ComposeNavigator())
@@ -49,13 +47,13 @@ class UserInfoViewInstrumentedTest {
             EmprendimientoPrimariaTheme {
                 PermissionView(
                     navController = navController,
-                    onCode = {code = it}
+                    isTest = true
                 )
             }
         }
         //Escribe nombre de usuario
         composeTestRule.onNodeWithTag(TestTags.LOGIN_USER_EMAIL_FIELD)
-            .performTextInput("yasser")
+            .performTextInput("Yasser")
         //Escribe clave de usuario
         composeTestRule.onNodeWithTag(TestTags.LOGIN_PASSWORD_FIELD)
             .performTextInput("Yjot1997")
@@ -68,11 +66,6 @@ class UserInfoViewInstrumentedTest {
         }
         //Verifica si la navegación a UserInfo fue exitosa
         assertEquals(ViewRoutes.UserInfo.name, navController.currentDestination?.route)
-    }
-
-    @Test
-    fun navigationMenuToUserInfo() {
-        navigateLoginToMenu()
         //Hace clic en el botón para ver la info del Usuario
         composeTestRule.onNodeWithTag(TestTags.TOP_BAR_USER_INFO)
             .performClick()
@@ -83,7 +76,7 @@ class UserInfoViewInstrumentedTest {
 
     @Test
     fun logout_UserInfoView() {
-        navigationMenuToUserInfo()
+        navigateLoginToMenuInUserInfo()
         //Hace clic en el botón para cerrar sesión
         composeTestRule.onNodeWithTag(TestTags.USER_INFO_LOGOUT_BUTTON)
             .performClick()
@@ -93,7 +86,7 @@ class UserInfoViewInstrumentedTest {
 
     @Test
     fun updateUser_UserInfoView() {
-        navigationMenuToUserInfo()
+        navigateLoginToMenuInUserInfo()
         //Escribe nueva clave de usuario
         composeTestRule.onNodeWithTag(TestTags.USER_INFO_PASSWORD_FIELD)
             .performTextReplacement("Test1000")
@@ -102,7 +95,7 @@ class UserInfoViewInstrumentedTest {
             .performClick()
         //Escribe el código de verificación en el AlertDialog
         composeTestRule.onNodeWithTag(TestTags.ALERT_DIALOG_INPUT_CODE)
-            .performTextInput(code)
+            .performTextInput("123456")
         //Clic en el botón Verificar del AlertDialog
         composeTestRule.onNodeWithTag(TestTags.ALERT_DIALOG_CODE_CHECK)
             .performClick()
@@ -131,13 +124,13 @@ class UserInfoViewInstrumentedTest {
 
     @Test
     fun deleteUser_UserInfoView() {
-        navigationMenuToUserInfo()
+        navigateLoginToMenuInUserInfo()
         //Clic en el botón Enviar código
         composeTestRule.onNodeWithTag(TestTags.USER_INFO_SEND_CODE_BUTTON)
             .performClick()
         //Escribe el código de verificación en el AlertDialog
         composeTestRule.onNodeWithTag(TestTags.ALERT_DIALOG_INPUT_CODE)
-            .performTextInput(code)
+            .performTextInput("123456")
         //Clic en el botón Verificar del AlertDialog
         composeTestRule.onNodeWithTag(TestTags.ALERT_DIALOG_CODE_CHECK)
             .performClick()

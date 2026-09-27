@@ -21,7 +21,7 @@ import com.yjotdev.empprimaria.presentation.mvvm.viewmodel.UiViewModel
 fun PermissionView(
     navController: NavHostController = rememberNavController(),
     viewModel: UiViewModel = hiltViewModel(),
-    onCode: (String) -> Unit = {}
+    isTest: Boolean = false
 ){
     val context = LocalContext.current
     var hasPermissions by remember{ mutableStateOf(checkPermissions(context)) }
@@ -33,7 +33,7 @@ fun PermissionView(
         Navigation(
             navController = navController,
             viewModel = viewModel,
-            onCode = { code -> onCode(code) }
+            isTest = isTest
         )
     }else{
         // Solicitar permisos al usuario

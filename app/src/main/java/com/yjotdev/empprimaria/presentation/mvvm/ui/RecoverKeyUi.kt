@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.platform.testTag
-import kotlin.random.Random
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.presentation.components.AlertDialogView
 import com.yjotdev.empprimaria.presentation.components.ButtonView
@@ -30,13 +29,14 @@ import com.yjotdev.empprimaria.R
 fun RecoverKeyView(
     modifier: Modifier = Modifier,
     onChangePassword: (String, String) -> Unit,
-    onSendCode: (String, String, String, String) -> Unit
+    onSendCode: (String, String, String) -> Unit,
+    isTest: Boolean = false
 ){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var sendCode by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(false) }
-    val code by remember { mutableStateOf(Random.nextInt(100000, 999999).toString()) }
+    val code = Helper.getRandomCode(isTest = isTest)
     val isValidEmail = Helper.isValidEmail(email)
     val isValidPassword = Helper.isValidPassword(password)
     val subject = stringResource(R.string.alert_dialog_code)
@@ -75,7 +75,7 @@ fun RecoverKeyView(
                 .fillMaxWidth(0.85f)
                 .testTag(TestTags.RECOVER_SEND_CODE_BUTTON),
             click = {
-                onSendCode(email, code, subject, text)
+                onSendCode(email, subject, text)
                 sendCode = true
             },
             enabled = isValidEmail,
@@ -112,7 +112,7 @@ private fun PreviewRecoverKeyView(){
         RecoverKeyView(
             modifier = Modifier.fillMaxSize(),
             onChangePassword = {_, _ ->},
-            onSendCode = {_, _, _, _ ->}
+            onSendCode = {_, _, _ ->}
         )
     }
 }
