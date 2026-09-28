@@ -16,5 +16,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Emprendimiento Primaria"
+rootProject.name = "EMP"
 include(":app")
