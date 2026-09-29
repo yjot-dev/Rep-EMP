@@ -39,7 +39,7 @@ El flujo de uso de la aplicación está diseñado para ser intuitivo y completo,
 En resumen, EMP empodera a los usuarios en su camino de aprendizaje sobre negocios, combinando una sólida arquitectura técnica con una experiencia de usuario gamificada y fácil de seguir para reportar, aprender y monitorear su progreso de manera efectiva.
   
 # Ver video Demo
-[Ver en YouTube](https://youtu.be/8ceBytM3tVI)
+[Ver en YouTube](https://youtu.be/8DHY6T0Y6m4)
 
 # Contribución
 - Haz un fork del repositorio
