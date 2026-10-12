@@ -25,7 +25,7 @@ import com.yjotdev.empprimaria.presentation.utils.TestTags
 class RegisterViewInstrumentedTest {
 
     @get:Rule(order = 0)
-    var hiltRule: HiltAndroidRule = HiltAndroidRule(this)
+    val hiltRule: HiltAndroidRule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<HiltTestActivity>()

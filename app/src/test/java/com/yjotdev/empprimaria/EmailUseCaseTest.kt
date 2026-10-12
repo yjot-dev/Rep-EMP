@@ -8,7 +8,7 @@ import org.junit.Before
 import org.junit.Test
 import com.yjotdev.empprimaria.domain.core.Result
 import com.yjotdev.empprimaria.domain.model.EmailModel
-import com.yjotdev.empprimaria.domain.repository.EmailRepository
+import com.yjotdev.empprimaria.domain.repository.EmailApiRepository
 import com.yjotdev.empprimaria.domain.usecase.email.SendEmailUseCase
 
 /**
@@ -16,21 +16,21 @@ import com.yjotdev.empprimaria.domain.usecase.email.SendEmailUseCase
  */
 class EmailUseCaseTest {
 
-    private lateinit var emailRepository: EmailRepository
+    private lateinit var emailApiRepository: EmailApiRepository
 
     private lateinit var sendEmailUseCase: SendEmailUseCase
 
     @Before
     fun setUp() {
-        emailRepository = mockk()
-        sendEmailUseCase = SendEmailUseCase(emailRepository)
+        emailApiRepository = mockk()
+        sendEmailUseCase = SendEmailUseCase(emailApiRepository)
     }
 
     @Test
     fun whenSendEmailUseCaseIsInvokedSuccessfullyThenPortMethodIsCalled() = runTest {
         // Given
         val email = EmailModel("to@example.com", "Subject", "Body")
-        coEvery { emailRepository.sendEmail(email) } returns Result.Success(Unit)
+        coEvery { emailApiRepository.sendEmail(email) } returns Result.Success(Unit)
 
         // When
         val result = sendEmailUseCase(email)
@@ -38,7 +38,7 @@ class EmailUseCaseTest {
         // Then
         assert(result is Result.Success)
         assert(Unit == (result as Result.Success).data)
-        coVerify(exactly = 1) { emailRepository.sendEmail(email) }
+        coVerify(exactly = 1) { emailApiRepository.sendEmail(email) }
     }
 
     @Test
@@ -46,7 +46,7 @@ class EmailUseCaseTest {
         // Given
         val email = EmailModel("to@example.com", "Subject", "Body")
         val exception = Exception("Error enviando email")
-        coEvery { emailRepository.sendEmail(email) } returns Result.Error(exception)
+        coEvery { emailApiRepository.sendEmail(email) } returns Result.Error(exception)
 
         // When
         val result = sendEmailUseCase(email)
@@ -54,6 +54,6 @@ class EmailUseCaseTest {
         // Then
         assert(result is Result.Error)
         assert(exception == (result as Result.Error).exception)
-        coVerify(exactly = 1) { emailRepository.sendEmail(email) }
+        coVerify(exactly = 1) { emailApiRepository.sendEmail(email) }
     }
 }

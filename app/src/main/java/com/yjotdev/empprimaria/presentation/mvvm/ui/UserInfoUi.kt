@@ -56,7 +56,7 @@ fun UserInfoView(
     onUpdate: (String, String, String, String) -> Unit,
     onDelete: () -> Unit,
     onSendCode: (String, String, String) -> Unit,
-    isTest: Boolean = false
+    code: Int
 ){
     val focusRequest1 = remember { FocusRequester() }
     val focusRequest2 = remember { FocusRequester() }
@@ -65,12 +65,11 @@ fun UserInfoView(
     var photo by remember { mutableStateOf(convertToBitmap(userInfo.photo)) }
     var enabled by remember { mutableStateOf(false) }
     var sendCode by remember { mutableStateOf(false) }
-    val code = Helper.getRandomCode(isTest = isTest)
     val isValidUser = Helper.isValidUser(userInfo.name)
     val isValidEmail = Helper.isValidEmail(userInfo.email)
     val isValidPassword = Helper.isValidPassword(userInfo.password)
     val subject = stringResource(R.string.alert_dialog_code)
-    val text = stringResource(R.string.body_email, userInfo.name.uppercase(), code)
+    val text = stringResource(R.string.body_email, userInfo.name.uppercase(), code.toString())
     //Bloque asincrónico para actualizar la foto
     val context = LocalContext.current
     var photoSelector by remember { mutableStateOf<Uri?>(null) }
@@ -92,7 +91,7 @@ fun UserInfoView(
         AlertDialogView(
             onDismiss = { sendCode = false },
             onConfirm = { codeIn ->
-                if(code == codeIn){
+                if(code.toString() == codeIn){
                     enabled = true
                     sendCode = false
                 }
@@ -216,7 +215,8 @@ private fun PreviewUserInfoView(){
             onLogout = {},
             onUpdate = {_, _, _, _ ->},
             onDelete = {},
-            onSendCode = {_, _, _ ->}
+            onSendCode = {_, _, _ ->},
+            code = 0
         )
     }
 }

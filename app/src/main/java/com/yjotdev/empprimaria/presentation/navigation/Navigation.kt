@@ -49,8 +49,7 @@ import com.yjotdev.empprimaria.presentation.mvvm.state.UiState
 @Composable
 fun Navigation(
     navController: NavHostController,
-    viewModel: UiViewModel,
-    isTest: Boolean
+    viewModel: UiViewModel
 ){
     val context = LocalContext.current
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -111,7 +110,7 @@ fun Navigation(
             modifier = Modifier.padding(paddingValues)
         ){
             composable(route = ViewRoutes.Login.name) {
-                LaunchedEffect(Unit) { viewModel.resetViewModel() }
+                LaunchedEffect(Unit) { viewModel.cleanState() }
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -135,12 +134,13 @@ fun Navigation(
                     RegisterView(
                         modifier = Modifier.fillMaxSize(),
                         onSendCode = { email, subject, text ->
+                            viewModel.setRandomCode((100000..999999).random())
                             viewModel.sendEmail(email, subject, text)
                         },
                         onRegister = { name, email, password ->
                             viewModel.insertUser(name, email, password)
                         },
-                        isTest = isTest
+                        code = state.randomCode
                     )
                     if(state.isLoading) LoadingScreen()
                 }
@@ -156,9 +156,10 @@ fun Navigation(
                             viewModel.changePassword(email, password)
                         },
                         onSendCode = { email, subject, text ->
+                            viewModel.setRandomCode((100000..999999).random())
                             viewModel.sendEmail(email, subject, text)
                         },
-                        isTest = isTest
+                        code = state.randomCode
                     )
                     if(state.isLoading) LoadingScreen()
                 }
@@ -184,9 +185,10 @@ fun Navigation(
                         },
                         onDelete = { viewModel.deleteUser(state.user.id) },
                         onSendCode = { email, subject, text ->
+                            viewModel.setRandomCode((100000..999999).random())
                             viewModel.sendEmail(email, subject, text)
                         },
-                        isTest = isTest
+                        code = state.randomCode
                     )
                     if(state.isLoading) LoadingScreen()
                 }

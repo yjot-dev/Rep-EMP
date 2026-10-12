@@ -1,4 +1,4 @@
-package com.yjotdev.empprimaria.utils.repositories
+package com.yjotdev.empprimaria.utils.repository
 
 import javax.inject.Inject
 import javax.inject.Singleton

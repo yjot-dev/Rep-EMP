@@ -3,12 +3,12 @@ package com.yjotdev.empprimaria.domain.usecase.user
 import javax.inject.Inject
 import com.yjotdev.empprimaria.domain.core.Result
 import com.yjotdev.empprimaria.domain.model.RecoveryModel
-import com.yjotdev.empprimaria.domain.repository.UserRepository
+import com.yjotdev.empprimaria.domain.repository.UserApiRepository
 
-class ChangePasswordUserUseCase @Inject constructor(
-    private val userRepository: UserRepository
+class SetPasswordRemoteUserUseCase @Inject constructor(
+    private val userApiRepository: UserApiRepository
 ) {
     suspend operator fun invoke(recovery: RecoveryModel): Result<Unit> {
-        return userRepository.changePasswordUser(recovery)
+        return userApiRepository.setPasswordRemoteUser(recovery)
     }
 }

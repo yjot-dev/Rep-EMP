@@ -33,7 +33,7 @@ fun RegisterView(
     modifier: Modifier = Modifier,
     onSendCode: (String, String, String) -> Unit,
     onRegister: (String, String, String) -> Unit,
-    isTest: Boolean = false
+    code: Int
 ){
     val focusRequest1 = remember { FocusRequester() }
     val focusRequest2 = remember { FocusRequester() }
@@ -42,19 +42,18 @@ fun RegisterView(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var sendCode by remember { mutableStateOf(false) }
-    val code = Helper.getRandomCode(isTest = isTest)
     val isValidUser = Helper.isValidUser(name)
     val isValidEmail = Helper.isValidEmail(email)
     val isValidPassword = Helper.isValidPassword(password)
     val subject = stringResource(R.string.alert_dialog_code)
     val text = stringResource(R.string.body_email,
-        "Usuario", code)
+        "Usuario", code.toString())
     //Muestra el diálogo para enviar el código
     if(sendCode){
         AlertDialogView(
             onDismiss = { sendCode = false },
             onConfirm = { codeIn ->
-                if(code == codeIn){
+                if(code.toString() == codeIn){
                     onRegister(name, email, password)
                     sendCode = false
                 }
@@ -127,7 +126,8 @@ private fun PreviewRegisterView(){
         RegisterView(
             modifier = Modifier.fillMaxSize(),
             onSendCode = { _, _, _ -> },
-            onRegister = { _, _, _ -> }
+            onRegister = { _, _, _ -> },
+            code = 0
         )
     }
 }

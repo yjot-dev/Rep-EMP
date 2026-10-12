@@ -30,23 +30,22 @@ fun RecoverKeyView(
     modifier: Modifier = Modifier,
     onChangePassword: (String, String) -> Unit,
     onSendCode: (String, String, String) -> Unit,
-    isTest: Boolean = false
+    code: Int
 ){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var sendCode by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(false) }
-    val code = Helper.getRandomCode(isTest = isTest)
     val isValidEmail = Helper.isValidEmail(email)
     val isValidPassword = Helper.isValidPassword(password)
     val subject = stringResource(R.string.alert_dialog_code)
-    val text = stringResource(R.string.body_email, "Usuario", code)
+    val text = stringResource(R.string.body_email, "Usuario", code.toString())
     //Muestra el diálogo para enviar el código
     if(sendCode){
         AlertDialogView(
             onDismiss = { sendCode = false },
             onConfirm = { codeIn ->
-                if(code == codeIn){
+                if(code.toString() == codeIn){
                     enabled = true
                     sendCode = false
                 }
@@ -112,7 +111,8 @@ private fun PreviewRecoverKeyView(){
         RecoverKeyView(
             modifier = Modifier.fillMaxSize(),
             onChangePassword = {_, _ ->},
-            onSendCode = {_, _, _ ->}
+            onSendCode = {_, _, _ ->},
+            code = 0
         )
     }
 }

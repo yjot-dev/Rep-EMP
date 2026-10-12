@@ -12,34 +12,34 @@ import com.yjotdev.empprimaria.domain.core.Result
 import com.yjotdev.empprimaria.domain.model.LoginModel
 import com.yjotdev.empprimaria.domain.model.RecoveryModel
 import com.yjotdev.empprimaria.domain.model.UserModel
-import com.yjotdev.empprimaria.domain.repository.UserRepository
-import com.yjotdev.empprimaria.domain.usecase.user.ChangePasswordUserUseCase
-import com.yjotdev.empprimaria.domain.usecase.user.DeleteUserUseCase
-import com.yjotdev.empprimaria.domain.usecase.user.FindUserUseCase
-import com.yjotdev.empprimaria.domain.usecase.user.InsertUserUseCase
-import com.yjotdev.empprimaria.domain.usecase.user.UpdateUserUseCase
+import com.yjotdev.empprimaria.domain.repository.UserApiRepository
+import com.yjotdev.empprimaria.domain.usecase.user.SetPasswordRemoteUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.DeleteRemoteUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.GetRemoteUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.InsertRemoteUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.UpdateRemoteUserUseCase
 
 /**
  * Pruebas unitarias para los casos de uso CRUD de Usuarios.
  */
 class UserUseCaseTest {
 
-    private lateinit var userRepository: UserRepository
+    private lateinit var userApiRepository: UserApiRepository
 
-    private lateinit var findUserUseCase: FindUserUseCase
-    private lateinit var insertUserUseCase: InsertUserUseCase
-    private lateinit var updateUserUseCase: UpdateUserUseCase
-    private lateinit var changePasswordUserUseCase: ChangePasswordUserUseCase
-    private lateinit var deleteUserUseCase: DeleteUserUseCase
+    private lateinit var getRemoteUserUseCase: GetRemoteUserUseCase
+    private lateinit var insertRemoteUserUseCase: InsertRemoteUserUseCase
+    private lateinit var updateRemoteUserUseCase: UpdateRemoteUserUseCase
+    private lateinit var setPasswordRemoteUserUseCase: SetPasswordRemoteUserUseCase
+    private lateinit var deleteRemoteUserUseCase: DeleteRemoteUserUseCase
 
     @Before
     fun setUp() {
-        userRepository = mockk()
-        findUserUseCase = FindUserUseCase(userRepository)
-        insertUserUseCase = InsertUserUseCase(userRepository)
-        updateUserUseCase = UpdateUserUseCase(userRepository)
-        changePasswordUserUseCase = ChangePasswordUserUseCase(userRepository)
-        deleteUserUseCase = DeleteUserUseCase(userRepository)
+        userApiRepository = mockk()
+        getRemoteUserUseCase = GetRemoteUserUseCase(userApiRepository)
+        insertRemoteUserUseCase = InsertRemoteUserUseCase(userApiRepository)
+        updateRemoteUserUseCase = UpdateRemoteUserUseCase(userApiRepository)
+        setPasswordRemoteUserUseCase = SetPasswordRemoteUserUseCase(userApiRepository)
+        deleteRemoteUserUseCase = DeleteRemoteUserUseCase(userApiRepository)
     }
 
     @Test
@@ -47,15 +47,15 @@ class UserUseCaseTest {
         // Given
         val loginModel = LoginModel("testuser", "password")
         val fakeUser = UserModel(id = 1, name = "Test User", email = "test@example.com", password = "password")
-        coEvery { userRepository.findUser(loginModel) } returns Result.Success(fakeUser)
+        coEvery { userApiRepository.getRemoteUser(loginModel) } returns Result.Success(fakeUser)
 
         // When
-        val result = findUserUseCase(loginModel)
+        val result = getRemoteUserUseCase(loginModel)
 
         // Then
         assertTrue(result is Result.Success)
         assertEquals(fakeUser, (result as Result.Success).data)
-        coVerify(exactly = 1) { userRepository.findUser(loginModel) }
+        coVerify(exactly = 1) { userApiRepository.getRemoteUser(loginModel) }
     }
 
     @Test
@@ -63,30 +63,30 @@ class UserUseCaseTest {
         // Given
         val loginModel = LoginModel("testuser", "password")
         val exception = Exception("Error al encontrar el usuario")
-        coEvery { userRepository.findUser(loginModel) } returns Result.Error(exception)
+        coEvery { userApiRepository.getRemoteUser(loginModel) } returns Result.Error(exception)
 
         // When
-        val result = findUserUseCase(loginModel)
+        val result = getRemoteUserUseCase(loginModel)
 
         // Then
         assertTrue(result is Result.Error)
         assertEquals(exception, (result as Result.Error).exception)
-        coVerify(exactly = 1) { userRepository.findUser(loginModel) }
+        coVerify(exactly = 1) { userApiRepository.getRemoteUser(loginModel) }
     }
 
     @Test
     fun whenInsertUserUseCaseIsInvokedSuccessfullyThenPortMethodIsCalled() = runTest {
         // Given
         val newUser = UserModel(id = 0, name = "New User", email = "new@example.com", password = "newpassword")
-        coEvery { userRepository.insertUser(newUser) } returns Result.Success(Unit)
+        coEvery { userApiRepository.insertRemoteUser(newUser) } returns Result.Success(Unit)
 
         // When
-        val result = insertUserUseCase(newUser)
+        val result = insertRemoteUserUseCase(newUser)
 
         // Then
         assertTrue(result is Result.Success)
         assertEquals(Unit, (result as Result.Success).data)
-        coVerify(exactly = 1) { userRepository.insertUser(newUser) }
+        coVerify(exactly = 1) { userApiRepository.insertRemoteUser(newUser) }
     }
 
     @Test
@@ -94,30 +94,30 @@ class UserUseCaseTest {
         // Given
         val newUser = UserModel(id = 0, name = "New User", email = "new@example.com", password = "newpassword")
         val exception = Exception("Error al insertar el usuario")
-        coEvery { userRepository.insertUser(newUser) } returns Result.Error(exception)
+        coEvery { userApiRepository.insertRemoteUser(newUser) } returns Result.Error(exception)
 
         // When
-        val result = insertUserUseCase(newUser)
+        val result = insertRemoteUserUseCase(newUser)
 
         // Then
         assertTrue(result is Result.Error)
         assertEquals(exception, (result as Result.Error).exception)
-        coVerify(exactly = 1) { userRepository.insertUser(newUser) }
+        coVerify(exactly = 1) { userApiRepository.insertRemoteUser(newUser) }
     }
 
     @Test
     fun whenUpdateUserUseCaseIsInvokedSuccessfullyThenPortMethodIsCalled() = runTest {
         // Given
         val userToUpdate = UserModel(id = 1, name = "Updated User", email = "updated@example.com", password = "updatedpassword")
-        coEvery { userRepository.updateUser(userToUpdate.id, userToUpdate) } returns Result.Success(Unit)
+        coEvery { userApiRepository.updateRemoteUser(userToUpdate.id, userToUpdate) } returns Result.Success(Unit)
 
         // When
-        val result = updateUserUseCase(userToUpdate.id, userToUpdate)
+        val result = updateRemoteUserUseCase(userToUpdate.id, userToUpdate)
 
         // Then
         assertTrue(result is Result.Success)
         assertEquals(Unit, (result as Result.Success).data)
-        coVerify(exactly = 1) { userRepository.updateUser(userToUpdate.id, userToUpdate) }
+        coVerify(exactly = 1) { userApiRepository.updateRemoteUser(userToUpdate.id, userToUpdate) }
     }
 
     @Test
@@ -125,30 +125,30 @@ class UserUseCaseTest {
         // Given
         val userToUpdate = UserModel(id = 1, name = "Updated User", email = "updated@example.com", password = "updatedpassword")
         val exception = Exception("Error al actualizar el usuario")
-        coEvery { userRepository.updateUser(userToUpdate.id, userToUpdate) } returns Result.Error(exception)
+        coEvery { userApiRepository.updateRemoteUser(userToUpdate.id, userToUpdate) } returns Result.Error(exception)
 
         // When
-        val result = updateUserUseCase(userToUpdate.id, userToUpdate)
+        val result = updateRemoteUserUseCase(userToUpdate.id, userToUpdate)
 
         // Then
         assertTrue(result is Result.Error)
         assertEquals(exception, (result as Result.Error).exception)
-        coVerify(exactly = 1) { userRepository.updateUser(userToUpdate.id, userToUpdate) }
+        coVerify(exactly = 1) { userApiRepository.updateRemoteUser(userToUpdate.id, userToUpdate) }
     }
 
     @Test
     fun whenChangePasswordUserUseCaseIsInvokedSuccessfullyThenPortMethodIsCalled() = runTest {
         // Given
         val recoveryModel = RecoveryModel(email = "test@example.com", password = "newpassword")
-        coEvery { userRepository.changePasswordUser(recoveryModel) } returns Result.Success(Unit)
+        coEvery { userApiRepository.setPasswordRemoteUser(recoveryModel) } returns Result.Success(Unit)
 
         // When
-        val result = changePasswordUserUseCase(recoveryModel)
+        val result = setPasswordRemoteUserUseCase(recoveryModel)
 
         // Then
         assertTrue(result is Result.Success)
         assertEquals(Unit, (result as Result.Success).data)
-        coVerify(exactly = 1) { userRepository.changePasswordUser(recoveryModel) }
+        coVerify(exactly = 1) { userApiRepository.setPasswordRemoteUser(recoveryModel) }
     }
 
     @Test
@@ -156,30 +156,30 @@ class UserUseCaseTest {
         // Given
         val recoveryModel = RecoveryModel(email = "test@example.com", password = "newpassword")
         val exception = Exception("Error al cambiar la contraseña")
-        coEvery { userRepository.changePasswordUser(recoveryModel) } returns Result.Error(exception)
+        coEvery { userApiRepository.setPasswordRemoteUser(recoveryModel) } returns Result.Error(exception)
 
         // When
-        val result = changePasswordUserUseCase(recoveryModel)
+        val result = setPasswordRemoteUserUseCase(recoveryModel)
 
         // Then
         assertTrue(result is Result.Error)
         assertEquals(exception, (result as Result.Error).exception)
-        coVerify(exactly = 1) { userRepository.changePasswordUser(recoveryModel) }
+        coVerify(exactly = 1) { userApiRepository.setPasswordRemoteUser(recoveryModel) }
     }
 
     @Test
     fun whenDeleteUserUseCaseIsInvokedSuccessfullyThenPortMethodIsCalled() = runTest {
         // Given
         val userId = 1
-        coEvery { userRepository.deleteUser(userId) } returns Result.Success(Unit)
+        coEvery { userApiRepository.deleteRemoteUser(userId) } returns Result.Success(Unit)
 
         // When
-        val result = deleteUserUseCase(userId)
+        val result = deleteRemoteUserUseCase(userId)
 
         // Then
         assertTrue(result is Result.Success)
         assertEquals(Unit, (result as Result.Success).data)
-        coVerify(exactly = 1) { userRepository.deleteUser(userId) }
+        coVerify(exactly = 1) { userApiRepository.deleteRemoteUser(userId) }
     }
 
     @Test
@@ -187,14 +187,14 @@ class UserUseCaseTest {
         // Given
         val userId = 1
         val exception = Exception("Error al eliminar el usuario")
-        coEvery { userRepository.deleteUser(userId) } returns Result.Error(exception)
+        coEvery { userApiRepository.deleteRemoteUser(userId) } returns Result.Error(exception)
 
         // When
-        val result = deleteUserUseCase(userId)
+        val result = deleteRemoteUserUseCase(userId)
 
         // Then
         assertTrue(result is Result.Error)
         assertEquals(exception, (result as Result.Error).exception)
-        coVerify(exactly = 1) { userRepository.deleteUser(userId) }
+        coVerify(exactly = 1) { userApiRepository.deleteRemoteUser(userId) }
     }
 }

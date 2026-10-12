@@ -1,6 +1,7 @@
 package com.yjotdev.empprimaria
 
 import app.cash.turbine.test
+import io.mockk.every
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.RelaxedMockK
@@ -14,6 +15,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -26,15 +28,20 @@ import com.yjotdev.empprimaria.domain.model.LoginModel
 import com.yjotdev.empprimaria.domain.model.UserModel
 import com.yjotdev.empprimaria.domain.usecase.email.SendEmailUseCase
 import com.yjotdev.empprimaria.domain.usecase.string.StringUseCase
-import com.yjotdev.empprimaria.domain.usecase.user.ChangePasswordUserUseCase
-import com.yjotdev.empprimaria.domain.usecase.user.DeleteUserUseCase
-import com.yjotdev.empprimaria.domain.usecase.user.FindUserUseCase
-import com.yjotdev.empprimaria.domain.usecase.user.InsertUserUseCase
-import com.yjotdev.empprimaria.domain.usecase.user.UpdateUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.SetPasswordRemoteUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.DeleteRemoteUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.DeleteLocalUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.GetRemoteUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.GetLocalUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.InsertRemoteUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.InsertLocalUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.UpdateRemoteUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.UpdateLocalUserUseCase
 import com.yjotdev.empprimaria.presentation.mvvm.viewmodel.UiViewModel
 import com.yjotdev.empprimaria.presentation.navigation.ViewRoutes
 import com.yjotdev.empprimaria.domain.model.EmailModel
 import com.yjotdev.empprimaria.domain.model.RecoveryModel
+import kotlinx.coroutines.flow.flowOf
 
 @ExperimentalCoroutinesApi
 class ViewModelTest {
@@ -43,25 +50,38 @@ class ViewModelTest {
     private lateinit var stringUseCase: StringUseCase
 
     @RelaxedMockK
-    private lateinit var findUserUseCase: FindUserUseCase
+    private lateinit var getRemoteUserUseCase: GetRemoteUserUseCase
 
     @RelaxedMockK
-    private lateinit var insertUserUseCase: InsertUserUseCase
+    private lateinit var getLocalUserUseCase: GetLocalUserUseCase
 
     @RelaxedMockK
-    private lateinit var updateUserUseCase: UpdateUserUseCase
+    private lateinit var insertRemoteUserUseCase: InsertRemoteUserUseCase
 
     @RelaxedMockK
-    private lateinit var changePasswordUserUseCase: ChangePasswordUserUseCase
+    private lateinit var insertLocalUserUseCase: InsertLocalUserUseCase
 
     @RelaxedMockK
-    private lateinit var deleteUserUseCase: DeleteUserUseCase
+    private lateinit var updateRemoteUserUseCase: UpdateRemoteUserUseCase
+
+    @RelaxedMockK
+    private lateinit var updateLocalUserUseCase: UpdateLocalUserUseCase
+
+    @RelaxedMockK
+    private lateinit var setPasswordRemoteUserUseCase: SetPasswordRemoteUserUseCase
+
+    @RelaxedMockK
+    private lateinit var deleteRemoteUserUseCase: DeleteRemoteUserUseCase
+
+    @RelaxedMockK
+    private lateinit var deleteLocalUserUseCase: DeleteLocalUserUseCase
 
     @RelaxedMockK
     private lateinit var sendEmailUseCase: SendEmailUseCase
 
     private lateinit var viewModel: UiViewModel
     private val testDispatcher = StandardTestDispatcher()
+    private var localUserFlow = MutableStateFlow(UserModel())
 
     @Before
     fun setUp() {
@@ -69,14 +89,21 @@ class ViewModelTest {
         MockKAnnotations.init(this)
         // Establece el dispatcher de prueba como el principal para controlar las corutinas.
         Dispatchers.setMain(testDispatcher)
+        // Configura el comportamiento de los mocks.
+        localUserFlow = MutableStateFlow(UserModel())
+        every { getLocalUserUseCase() } returns localUserFlow
         // Crea la instancia del ViewModel con los mocks.
         viewModel = UiViewModel(
             stringUseCase,
-            findUserUseCase,
-            insertUserUseCase,
-            updateUserUseCase,
-            changePasswordUserUseCase,
-            deleteUserUseCase,
+            getRemoteUserUseCase,
+            getLocalUserUseCase,
+            insertRemoteUserUseCase,
+            insertLocalUserUseCase,
+            updateRemoteUserUseCase,
+            updateLocalUserUseCase,
+            setPasswordRemoteUserUseCase,
+            deleteRemoteUserUseCase,
+            deleteLocalUserUseCase,
             sendEmailUseCase
         )
     }
@@ -94,10 +121,13 @@ class ViewModelTest {
         // Given
         val fakeUserModel = UserModel(1, "testUser", "test@test.com", "Pass123")
         val loginModel = LoginModel("testUser", "Pass123")
-        coEvery { findUserUseCase(loginModel) } returns Result.Success(fakeUserModel)
+        coEvery { getRemoteUserUseCase(loginModel) } returns Result.Success(fakeUserModel)
+        coEvery { insertLocalUserUseCase(fakeUserModel) } answers {
+            localUserFlow.value = fakeUserModel
+        }
 
-        // Then
-        val job1 = launch {
+        // When
+        val eventJob = launch {
             viewModel.eventChannel.test {
                 assertEquals(UiEvent.Navigate(
                     ViewRoutes.UserInfo.name,
@@ -105,62 +135,47 @@ class ViewModelTest {
                 ), awaitItem())
             }
         }
-        val job2 = launch {
-            viewModel.uiState.test {
-                val loadingState = awaitItem()
-                assertTrue(loadingState.isLoading)
-
-                val successState = awaitItem()
-                assertFalse(successState.isLoading)
-                assertEquals(fakeUserModel, successState.user)
-            }
-        }
-
-        // When
         viewModel.loginUser(loginModel.name, loginModel.password)
         advanceUntilIdle()
+        eventJob.cancel()
 
-        job1.cancel()
-        job2.cancel()
-
-        coVerify(exactly = 1) { findUserUseCase(loginModel) }
+        // Then
+        assertEquals(fakeUserModel, viewModel.uiState.value.user)
+        assertFalse(viewModel.uiState.value.isLoading)
+        coVerify(exactly = 1) { getRemoteUserUseCase(loginModel) }
+        coVerify(exactly = 1) { insertLocalUserUseCase(fakeUserModel) }
     }
 
     @Test
     fun whenLoginUserFailsThenShowLogEventIsSent() = runTest {
         // Given
+        val fakeUserLocal = UserModel(
+            id = 0,
+            name = "",
+            email = "",
+            password = "",
+            isInvited = false,
+            isInWhiteList = false
+        )
         val loginModel = LoginModel("testUser", "Pass123")
         val exception = Exception("Incorrect user")
-        coEvery { findUserUseCase(loginModel) } returns Result.Error(exception)
+        every { getLocalUserUseCase() } returns flowOf(fakeUserLocal)
+        coEvery { getRemoteUserUseCase(loginModel) } returns Result.Error(exception)
 
-        // Then
-        val job1 = launch {
+        // When
+        val eventJob = launch {
             viewModel.eventChannel.test {
                 assertEquals(UiEvent.ShowLog(exception.message!!), awaitItem())
             }
         }
-        val job2 = launch {
-            viewModel.uiState.test {
-                val loadingState = awaitItem()
-                assertTrue(loadingState.isLoading)
-
-                val errorState = awaitItem()
-                assertFalse(errorState.isLoading)
-                assertEquals(UserModel(), errorState.user)
-            }
-        }
-
-        // When
-        viewModel.loginUser(
-            loginModel.name,
-            loginModel.password
-        )
+        viewModel.loginUser(loginModel.name, loginModel.password)
         advanceUntilIdle()
+        eventJob.cancel()
 
-        job1.cancel()
-        job2.cancel()
-
-        coVerify(exactly = 1) { findUserUseCase(loginModel) }
+        // Then
+        assertEquals(UserModel(), viewModel.uiState.value.user)
+        assertFalse(viewModel.uiState.value.isLoading)
+        coVerify(exactly = 1) { getRemoteUserUseCase(loginModel) }
     }
 
     @Test
@@ -168,7 +183,7 @@ class ViewModelTest {
         // Given
         val userToInsert = UserModel(0, "newUser", "new@test.com", "Pass123")
 
-        coEvery { insertUserUseCase(userToInsert) } returns Result.Success(Unit)
+        coEvery { insertRemoteUserUseCase(userToInsert) } returns Result.Success(Unit)
         coEvery { stringUseCase(R.string.alert_user_registered) } returns "User registered successfully"
 
         // Then
@@ -198,7 +213,7 @@ class ViewModelTest {
         job1.cancel()
         job2.cancel()
 
-        coVerify(exactly = 1) { insertUserUseCase(userToInsert) }
+        coVerify(exactly = 1) { insertRemoteUserUseCase(userToInsert) }
         coVerify(exactly = 1) { stringUseCase(R.string.alert_user_registered) }
     }
 
@@ -207,7 +222,7 @@ class ViewModelTest {
         // Given
         val userToInsert = UserModel(0, "newUser", "new@test.com", "Pass123")
         val exception = Exception("DB error")
-        coEvery { insertUserUseCase(userToInsert) } returns Result.Error(exception)
+        coEvery { insertRemoteUserUseCase(userToInsert) } returns Result.Error(exception)
         coEvery { stringUseCase(R.string.error_user_registered) } returns "Error registering user"
 
         // Then
@@ -237,7 +252,7 @@ class ViewModelTest {
         job1.cancel()
         job2.cancel()
 
-        coVerify(exactly = 1) { insertUserUseCase(userToInsert) }
+        coVerify(exactly = 1) { insertRemoteUserUseCase(userToInsert) }
         coVerify(exactly = 1) { stringUseCase(R.string.error_user_registered) }
     }
 
@@ -245,7 +260,7 @@ class ViewModelTest {
     fun whenUpdateUserIsSuccessfulThenShowToastEventIsSent() = runTest {
         // Given
         val userToUpdate = UserModel(1, "testUser", "test@test.com", "Pass123")
-        coEvery { updateUserUseCase(userToUpdate.id, userToUpdate) } returns Result.Success(Unit)
+        coEvery { updateRemoteUserUseCase(userToUpdate.id, userToUpdate) } returns Result.Success(Unit)
         coEvery { stringUseCase(R.string.alert_user_updated) } returns "User updated successfully"
 
         // Then
@@ -277,7 +292,7 @@ class ViewModelTest {
         job1.cancel()
         job2.cancel()
 
-        coVerify(exactly = 1) { updateUserUseCase(userToUpdate.id, userToUpdate) }
+        coVerify(exactly = 1) { updateRemoteUserUseCase(userToUpdate.id, userToUpdate) }
         coVerify(exactly = 1) { stringUseCase(R.string.alert_user_updated) }
     }
 
@@ -286,7 +301,7 @@ class ViewModelTest {
         // Given
         val userToUpdate = UserModel(1, "testUser", "test@test.com", "Pass123")
         val exception = Exception("DB error")
-        coEvery { updateUserUseCase(userToUpdate.id, userToUpdate) } returns Result.Error(exception)
+        coEvery { updateRemoteUserUseCase(userToUpdate.id, userToUpdate) } returns Result.Error(exception)
         coEvery { stringUseCase(R.string.error_user_updated) } returns "Error updating user"
 
         // Then
@@ -319,7 +334,7 @@ class ViewModelTest {
         job1.cancel()
         job2.cancel()
 
-        coVerify(exactly = 1) { updateUserUseCase(userToUpdate.id, userToUpdate) }
+        coVerify(exactly = 1) { updateRemoteUserUseCase(userToUpdate.id, userToUpdate) }
         coVerify(exactly = 1) { stringUseCase(R.string.error_user_updated) }
     }
 
@@ -327,7 +342,7 @@ class ViewModelTest {
     fun whenChangePasswordIsSuccessfulThenShowToastEventIsSent() = runTest {
         // Given
         val userToUpdate = RecoveryModel("test@test.com", "Pass123")
-        coEvery { changePasswordUserUseCase(userToUpdate) } returns Result.Success(Unit)
+        coEvery { setPasswordRemoteUserUseCase(userToUpdate) } returns Result.Success(Unit)
         coEvery { stringUseCase(R.string.alert_user_changed_password) } returns "Password updated successfully"
 
         // Then
@@ -353,7 +368,7 @@ class ViewModelTest {
         job1.cancel()
         job2.cancel()
 
-        coVerify(exactly = 1) { changePasswordUserUseCase(userToUpdate) }
+        coVerify(exactly = 1) { setPasswordRemoteUserUseCase(userToUpdate) }
         coVerify(exactly = 1) { stringUseCase(R.string.alert_user_changed_password) }
     }
 
@@ -362,7 +377,7 @@ class ViewModelTest {
         // Given
         val userToUpdate = RecoveryModel("test@test.com", "Pass123")
         val exception = Exception("DB error")
-        coEvery { changePasswordUserUseCase(userToUpdate) } returns Result.Error(exception)
+        coEvery { setPasswordRemoteUserUseCase(userToUpdate) } returns Result.Error(exception)
         coEvery { stringUseCase(R.string.error_user_changed_password) } returns "Error changing password"
 
         // Then
@@ -389,7 +404,7 @@ class ViewModelTest {
         job1.cancel()
         job2.cancel()
 
-        coVerify(exactly = 1) { changePasswordUserUseCase(userToUpdate) }
+        coVerify(exactly = 1) { setPasswordRemoteUserUseCase(userToUpdate) }
         coVerify(exactly = 1) { stringUseCase(R.string.error_user_changed_password) }
     }
 
@@ -397,7 +412,7 @@ class ViewModelTest {
     fun whenDeleteUserIsSuccessfulThenShowToastEventIsSent() = runTest {
         // Given
         val userToDelete = UserModel(1, "testUser", "test@test.com", "Pass123")
-        coEvery { deleteUserUseCase(userToDelete.id) } returns Result.Success(Unit)
+        coEvery { deleteRemoteUserUseCase(userToDelete.id) } returns Result.Success(Unit)
         coEvery { stringUseCase(R.string.alert_user_deleted) } returns "User deleted successfully"
 
         // Then
@@ -423,7 +438,7 @@ class ViewModelTest {
         job1.cancel()
         job2.cancel()
 
-        coVerify(exactly = 1) { deleteUserUseCase(userToDelete.id) }
+        coVerify(exactly = 1) { deleteRemoteUserUseCase(userToDelete.id) }
         coVerify(exactly = 1) { stringUseCase(R.string.alert_user_deleted) }
     }
 
@@ -432,7 +447,7 @@ class ViewModelTest {
         // Given
         val userToDelete = UserModel(1, "testUser", "test@test.com", "Pass123")
         val exception = Exception("DB error")
-        coEvery { deleteUserUseCase(userToDelete.id) } returns Result.Error(exception)
+        coEvery { deleteRemoteUserUseCase(userToDelete.id) } returns Result.Error(exception)
         coEvery { stringUseCase(R.string.error_user_deleted) } returns "Error deleting user"
 
         // Then
@@ -459,7 +474,7 @@ class ViewModelTest {
         job1.cancel()
         job2.cancel()
 
-        coVerify(exactly = 1) { deleteUserUseCase(userToDelete.id) }
+        coVerify(exactly = 1) { deleteRemoteUserUseCase(userToDelete.id) }
         coVerify(exactly = 1) { stringUseCase(R.string.error_user_deleted) }
     }
 

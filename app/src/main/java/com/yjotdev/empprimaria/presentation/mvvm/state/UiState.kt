@@ -13,7 +13,9 @@ data class UiState(
     val life: Int = 3,
     //Estados de consultas a BD
     val user: UserModel = UserModel(),
+    val isCompletedLogin: Boolean = false,
     //Estados operativos
+    val randomCode: Int = 0,
     val isLoading: Boolean = false,
     val isBtnNextDisplayed: Boolean = false,
     val isTimerOn: Boolean = false,

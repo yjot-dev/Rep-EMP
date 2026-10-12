@@ -21,21 +21,30 @@ import com.yjotdev.empprimaria.domain.model.LoginModel
 import com.yjotdev.empprimaria.domain.model.RecoveryModel
 import com.yjotdev.empprimaria.domain.usecase.email.SendEmailUseCase
 import com.yjotdev.empprimaria.domain.usecase.string.StringUseCase
-import com.yjotdev.empprimaria.domain.usecase.user.ChangePasswordUserUseCase
-import com.yjotdev.empprimaria.domain.usecase.user.DeleteUserUseCase
-import com.yjotdev.empprimaria.domain.usecase.user.FindUserUseCase
-import com.yjotdev.empprimaria.domain.usecase.user.InsertUserUseCase
-import com.yjotdev.empprimaria.domain.usecase.user.UpdateUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.SetPasswordRemoteUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.DeleteRemoteUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.GetRemoteUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.InsertRemoteUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.UpdateRemoteUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.InsertLocalUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.UpdateLocalUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.DeleteLocalUserUseCase
+import com.yjotdev.empprimaria.domain.usecase.user.GetLocalUserUseCase
 import com.yjotdev.empprimaria.R
+import kotlinx.coroutines.flow.firstOrNull
 
 @HiltViewModel
 class UiViewModel @Inject constructor(
     private val stringUseCase: StringUseCase,
-    private val findUserUseCase: FindUserUseCase,
-    private val insertUserUseCase: InsertUserUseCase,
-    private val updateUserUseCase: UpdateUserUseCase,
-    private val changePasswordUserUseCase: ChangePasswordUserUseCase,
-    private val deleteUserUseCase: DeleteUserUseCase,
+    private val getRemoteUserUseCase: GetRemoteUserUseCase,
+    private val getLocalUserUseCase: GetLocalUserUseCase,
+    private val insertRemoteUserUseCase: InsertRemoteUserUseCase,
+    private val insertLocalUserUseCase: InsertLocalUserUseCase,
+    private val updateRemoteUserUseCase: UpdateRemoteUserUseCase,
+    private val updateLocalUserUseCase: UpdateLocalUserUseCase,
+    private val setPasswordRemoteUserUseCase: SetPasswordRemoteUserUseCase,
+    private val deleteRemoteUserUseCase: DeleteRemoteUserUseCase,
+    private val deleteLocalUserUseCase: DeleteLocalUserUseCase,
     private val sendEmailUseCase: SendEmailUseCase
 ): ViewModel() {
 
@@ -44,8 +53,23 @@ class UiViewModel @Inject constructor(
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
     val eventChannel = _eventChannel.receiveAsFlow()
 
+    init {
+        checkExistingUser()
+        observerFlowLocalUser()
+    }
+
     override fun onCleared() {
-        resetViewModel()
+        cleanState()
+    }
+
+    /** Limpia el estado del ViewModel **/
+    fun cleanState(){
+        _uiState.value = UiState()
+    }
+
+    /** Cambia estado del código aleatorio para el usuario **/
+    fun setRandomCode(randomCode: Int) {
+        _uiState.update { it.copy(randomCode = randomCode) }
     }
 
     /** Este metodo actualiza el estado de la variable experience **/
@@ -108,6 +132,8 @@ class UiViewModel @Inject constructor(
     /** Este metodo cierra la sesión del usuario **/
     fun logoutUser(){
         viewModelScope.launch {
+            deleteLocalUserUseCase(uiState.value.user)
+            cleanState()
             _eventChannel.send(UiEvent.Navigate(
                 route = ViewRoutes.Login.name,
                 routePopUp = ViewRoutes.UserInfo.name
@@ -123,28 +149,20 @@ class UiViewModel @Inject constructor(
         )
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            when (val result = findUserUseCase(login)) {
+            when (val result = getRemoteUserUseCase(login)) {
                 is Result.Success -> {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            user = result.data.copy(
-                                password = password
-                            )
-                        )
-                    }
-                    _eventChannel.send(UiEvent.Navigate(
-                        route = ViewRoutes.UserInfo.name,
-                        routePopUp = ViewRoutes.Login.name
-                    ))
+                    val user = result.data.copy(password = password)
+                    insertLocalUserUseCase(user)
+                    _uiState.update { it.copy(
+                        isCompletedLogin = true,
+                        isLoading = false
+                    )}
                 }
                 is Result.Error -> {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            user = UserModel()
-                        )
-                    }
+                    _uiState.update { it.copy(
+                        isCompletedLogin = false,
+                        isLoading = false
+                    )}
                     _eventChannel.send(UiEvent.ShowLog(
                         result.exception.message!!)
                     )
@@ -158,7 +176,7 @@ class UiViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch{
             val userToInsert = UserModel(0, name, email, password)
-            when (val result = insertUserUseCase(userToInsert)) {
+            when (val result = insertRemoteUserUseCase(userToInsert)) {
                 is Result.Success -> {
                     _uiState.update {
                         it.copy(isLoading = false)
@@ -192,9 +210,10 @@ class UiViewModel @Inject constructor(
     ){
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch{
-            val userToUpdate = UserModel(id, name, email, password, photo)
-            when (val result = updateUserUseCase(id, userToUpdate)) {
+            val user = UserModel(id, name, email, password, photo)
+            when (val result = updateRemoteUserUseCase(id, user)) {
                 is Result.Success -> {
+                    updateLocalUserUseCase(user)
                     _uiState.update {
                         it.copy(isLoading = false)
                     }
@@ -225,8 +244,10 @@ class UiViewModel @Inject constructor(
         )
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch{
-            when (val result = changePasswordUserUseCase(recovery)) {
+            when (val result = setPasswordRemoteUserUseCase(recovery)) {
                 is Result.Success -> {
+                    val user = uiState.value.user.copy(password = password)
+                    updateLocalUserUseCase(user)
                     _uiState.update {
                         it.copy(isLoading = false)
                     }
@@ -253,8 +274,9 @@ class UiViewModel @Inject constructor(
     fun deleteUser(id: Int){
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch{
-            when (val result = deleteUserUseCase(id)) {
+            when (val result = deleteRemoteUserUseCase(id)) {
                 is Result.Success -> {
+                    deleteLocalUserUseCase(uiState.value.user)
                     _uiState.update {
                         it.copy(isLoading = false)
                     }
@@ -306,8 +328,31 @@ class UiViewModel @Inject constructor(
         }
     }
 
-    /** Este metodo reinicia el estado del ProgressViewModel **/
-    fun resetViewModel(){
-        _uiState.value = UiState()
+    private fun checkExistingUser() {
+        viewModelScope.launch {
+            val user = getLocalUserUseCase().firstOrNull()
+            if (user != null && user != UserModel()) {
+                _eventChannel.send(UiEvent.Navigate(
+                    route = ViewRoutes.UserInfo.name,
+                    routePopUp = ViewRoutes.Login.name
+                ))
+            }
+        }
+    }
+
+    private fun observerFlowLocalUser() {
+        viewModelScope.launch {
+            getLocalUserUseCase().collect { user ->
+                _uiState.update { it.copy(user = user) }
+                // Solo navega en login inicial
+                if (uiState.value.user != UserModel() && uiState.value.isCompletedLogin) {
+                    _uiState.update { it.copy(isCompletedLogin = false) }
+                    _eventChannel.send(UiEvent.Navigate(
+                        route = ViewRoutes.UserInfo.name,
+                        routePopUp = ViewRoutes.Login.name
+                    ))
+                }
+            }
+        }
     }
 }

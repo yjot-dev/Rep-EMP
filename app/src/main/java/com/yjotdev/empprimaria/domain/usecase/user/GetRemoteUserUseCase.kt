@@ -4,12 +4,12 @@ import javax.inject.Inject
 import com.yjotdev.empprimaria.domain.core.Result
 import com.yjotdev.empprimaria.domain.model.LoginModel
 import com.yjotdev.empprimaria.domain.model.UserModel
-import com.yjotdev.empprimaria.domain.repository.UserRepository
+import com.yjotdev.empprimaria.domain.repository.UserApiRepository
 
-class FindUserUseCase @Inject constructor(
-    private val userRepository: UserRepository
+class GetRemoteUserUseCase @Inject constructor(
+    private val userApiRepository: UserApiRepository
 ) {
     suspend operator fun invoke(login: LoginModel): Result<UserModel>{
-        return userRepository.findUser(login)
+        return userApiRepository.getRemoteUser(login)
     }
 }

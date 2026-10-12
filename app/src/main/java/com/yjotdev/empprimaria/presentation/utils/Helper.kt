@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 import java.io.ByteArrayOutputStream
-import kotlin.random.Random
 
 object Helper {
     fun isValidUser(input: String): Boolean{
@@ -43,7 +42,4 @@ object Helper {
             ""
         }
     }
-    fun getRandomCode(isTest: Boolean) =
-        if(isTest) "123456"
-        else Random.nextInt(100000, 999999).toString()
 }

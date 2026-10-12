@@ -15,8 +15,8 @@ configure<ApplicationExtension> {
         applicationId = "com.yjotdev.empprimaria"
         minSdk = 24
         targetSdk = 37
-        versionCode = 9
-        versionName = "1.9"
+        versionCode = 10
+        versionName = "2.0"
         testInstrumentationRunner = "com.yjotdev.empprimaria.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -97,6 +97,10 @@ dependencies {
     implementation(libs.com.squareup.retrofit2)
     implementation(libs.com.squareup.retrofit2.gson)
     implementation(libs.google.code.gson)
+    //Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
     //Coil
     implementation(libs.io.coil.kt.compose)
     implementation(libs.io.coil.kt.gif)

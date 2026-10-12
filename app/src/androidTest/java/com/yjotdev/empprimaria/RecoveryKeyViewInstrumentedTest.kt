@@ -5,6 +5,8 @@ import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.hilt.lifecycle.viewmodel.HiltViewModelFactory
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,18 +21,21 @@ import com.yjotdev.empprimaria.presentation.navigation.PermissionView
 import com.yjotdev.empprimaria.presentation.navigation.ViewRoutes
 import com.yjotdev.empprimaria.presentation.theme.EmprendimientoPrimariaTheme
 import com.yjotdev.empprimaria.presentation.utils.TestTags
+import com.yjotdev.empprimaria.presentation.mvvm.viewmodel.UiViewModel
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class RecoveryKeyViewInstrumentedTest {
 
     @get:Rule(order = 0)
-    var hiltRule: HiltAndroidRule = HiltAndroidRule(this)
+    val hiltRule: HiltAndroidRule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<HiltTestActivity>()
 
     private lateinit var navController: TestNavHostController // NavController del Test
+
+    private lateinit var viewModel: UiViewModel
 
     @Before
     fun init() {
@@ -42,11 +47,18 @@ class RecoveryKeyViewInstrumentedTest {
         composeTestRule.setContent {
             navController = TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(ComposeNavigator())
+            viewModel = ViewModelProvider(
+                composeTestRule.activity,
+                HiltViewModelFactory(
+                    LocalContext.current,
+                    composeTestRule.activity.defaultViewModelProviderFactory
+                )
+            )[UiViewModel::class.java]
 
             EmprendimientoPrimariaTheme {
                 PermissionView(
                     navController = navController,
-                    isTest = true
+                    viewModel = viewModel
                 )
             }
         }
@@ -61,6 +73,7 @@ class RecoveryKeyViewInstrumentedTest {
         //Clic en el botón Enviar código
         composeTestRule.onNodeWithTag(TestTags.RECOVER_SEND_CODE_BUTTON)
             .performClick()
+        viewModel.setRandomCode(123456)
         //Escribe el código de verificación en el AlertDialog
         composeTestRule.onNodeWithTag(TestTags.ALERT_DIALOG_INPUT_CODE)
             .performTextInput("123456")
