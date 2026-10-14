@@ -15,17 +15,17 @@ import com.yjotdev.empprimaria.data.remote.dto.UserDto
 interface UserApi {
     @Headers("Content-Type: application/json")
     @POST("users/login")
-    suspend fun findUser(@Body login: LoginDto): Response<UserDto>
+    suspend fun getRemoteUser(@Body login: LoginDto): Response<UserDto>
 
     @POST("users")
-    suspend fun insertUser(@Body user: UserDto): Response<Unit>
+    suspend fun insertRemoteUser(@Body user: UserDto): Response<Unit>
 
     @PUT("users/{id}")
-    suspend fun updateUser(@Path("id") id:Int, @Body user: UserDto): Response<Unit>
+    suspend fun updateRemoteUser(@Path("id") id:Int, @Body user: UserDto): Response<Unit>
 
     @PATCH("users")
-    suspend fun changePasswordUser(@Body recovery: RecoveryDto): Response<Unit>
+    suspend fun setPasswordRemoteUser(@Body recovery: RecoveryDto): Response<Unit>
 
     @DELETE("users/{id}")
-    suspend fun deleteUser(@Path("id") id:Int): Response<Unit>
+    suspend fun deleteRemoteUser(@Path("id") id:Int): Response<Unit>
 }

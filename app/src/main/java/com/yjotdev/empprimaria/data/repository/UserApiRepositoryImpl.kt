@@ -20,23 +20,23 @@ class UserApiRepositoryImpl @Inject constructor(
 ): UserApiRepository {
 
     override suspend fun getRemoteUser(login: LoginModel): Result<UserModel> {
-        return safeApiCallForBody{ userApi.findUser(login.toDto()) }
+        return safeApiCallForBody{ userApi.getRemoteUser(login.toDto()) }
             .mapSuccess { result -> result.toDomain() }
     }
 
     override suspend fun insertRemoteUser(user: UserModel): Result<Unit> {
-        return safeApiCallForUnit{ userApi.insertUser(user.toDto()) }
+        return safeApiCallForUnit{ userApi.insertRemoteUser(user.toDto()) }
     }
 
     override suspend fun updateRemoteUser(id: Int, user: UserModel): Result<Unit> {
-        return safeApiCallForUnit{ userApi.updateUser(id, user.toDto()) }
+        return safeApiCallForUnit{ userApi.updateRemoteUser(id, user.toDto()) }
     }
 
     override suspend fun deleteRemoteUser(id: Int): Result<Unit> {
-        return safeApiCallForUnit{ userApi.deleteUser(id) }
+        return safeApiCallForUnit{ userApi.deleteRemoteUser(id) }
     }
 
     override suspend fun setPasswordRemoteUser(recovery: RecoveryModel): Result<Unit> {
-        return safeApiCallForUnit{ userApi.changePasswordUser(recovery.toDto()) }
+        return safeApiCallForUnit{ userApi.setPasswordRemoteUser(recovery.toDto()) }
     }
 }

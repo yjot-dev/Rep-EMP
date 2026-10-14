@@ -81,7 +81,7 @@ class ViewModelTest {
 
     private lateinit var viewModel: UiViewModel
     private val testDispatcher = StandardTestDispatcher()
-    private var localUserFlow = MutableStateFlow(UserModel())
+    private lateinit var localUserFlow: MutableStateFlow<UserModel>
 
     @Before
     fun setUp() {
